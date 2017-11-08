@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.fico.testCaseGenerator.AbstractTestData;
-import com.fico.testCaseGenerator.SimpleField;
-import com.fico.testCaseGenerator.TestData;
+import com.fico.testCaseGenerator.data.AbstractTestData;
+import com.fico.testCaseGenerator.data.SimpleField;
+import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.util.RandomFactory;
 
 public class CustomFunctionFactory {

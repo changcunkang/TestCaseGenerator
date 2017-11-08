@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fico.testCaseGenerator.SimpleField;
-import com.fico.testCaseGenerator.TestData;
+import com.fico.testCaseGenerator.data.SimpleField;
+import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.configuration.Extendtion;
 import com.fico.testCaseGenerator.factory.LoadConfiguration;
 

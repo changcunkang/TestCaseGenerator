@@ -3,19 +3,15 @@ package com.fico.testCaseGenerator.testCase;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import com.fico.testCaseGenerator.SimpleField;
-import com.fico.testCaseGenerator.TestData;
+import com.fico.testCaseGenerator.data.SimpleField;
+import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
-import com.fico.testCaseGenerator.CustomFunctionFactory.CustomFunctionFactory;
-import com.fico.testCaseGenerator.XMLTestCaseGenerator.XMLTestData;
-import com.fico.testCaseGenerator.configuration.Dependency;
-import com.fico.testCaseGenerator.configuration.Item;
+import com.fico.testCaseGenerator.data.xml.XMLTestData;
 import com.fico.testCaseGenerator.configuration.Restriction;
 import com.fico.testCaseGenerator.util.RandomFactory;
 

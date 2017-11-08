@@ -1,9 +1,6 @@
 package com.fico.testCaseGenerator.BOM;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,14 +9,12 @@ import java.util.Map;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 
-import com.fico.testCaseGenerator.SimpleField;
-import com.fico.testCaseGenerator.TestData;
-import com.fico.testCaseGenerator.XMLTestCaseGenerator.XMLSimpleField;
-import com.fico.testCaseGenerator.XMLTestCaseGenerator.XMLTestData;
+import com.fico.testCaseGenerator.data.SimpleField;
+import com.fico.testCaseGenerator.data.TestData;
+import com.fico.testCaseGenerator.data.xml.XMLSimpleField;
+import com.fico.testCaseGenerator.data.xml.XMLTestData;
 import com.fico.testCaseGenerator.configuration.Extendtion;
 import com.fico.testCaseGenerator.factory.LoadConfiguration;
 

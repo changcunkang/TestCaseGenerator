@@ -1,4 +1,4 @@
-package com.fico.testCaseGenerator;
+package com.fico.testCaseGenerator.data;
 
 import com.fico.testCaseGenerator.configuration.Extendtion;
 

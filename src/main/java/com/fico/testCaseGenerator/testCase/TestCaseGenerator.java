@@ -3,12 +3,11 @@ package com.fico.testCaseGenerator.testCase;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import com.fico.testCaseGenerator.AbstractTestData;
+import com.fico.testCaseGenerator.data.AbstractTestData;
 import com.fico.testCaseGenerator.CustomFunctionFactory.CustomFunctionFactory;
-import com.fico.testCaseGenerator.SimpleField;
-import com.fico.testCaseGenerator.TestData;
+import com.fico.testCaseGenerator.data.SimpleField;
+import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
-import com.fico.testCaseGenerator.XMLTestCaseGenerator.XMLTestData;
 import com.fico.testCaseGenerator.configuration.Dependency;
 import com.fico.testCaseGenerator.configuration.Item;
 import com.fico.testCaseGenerator.configuration.Restriction;

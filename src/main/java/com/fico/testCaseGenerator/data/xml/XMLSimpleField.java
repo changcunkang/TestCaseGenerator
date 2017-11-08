@@ -1,11 +1,11 @@
-package com.fico.testCaseGenerator.XMLTestCaseGenerator;
+package com.fico.testCaseGenerator.data.xml;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.dom4j.Element;
 
-import com.fico.testCaseGenerator.SimpleField;
+import com.fico.testCaseGenerator.data.SimpleField;
 
 public class XMLSimpleField extends SimpleField {
 

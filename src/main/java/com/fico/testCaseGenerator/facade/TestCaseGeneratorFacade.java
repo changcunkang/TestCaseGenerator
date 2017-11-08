@@ -23,9 +23,9 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.fico.testCaseGenerator.AbstractTestData;
-import com.fico.testCaseGenerator.SimpleField;
-import com.fico.testCaseGenerator.TestData;
+import com.fico.testCaseGenerator.data.AbstractTestData;
+import com.fico.testCaseGenerator.data.SimpleField;
+import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.factory.LoadConfiguration;
 import com.fico.testCaseGenerator.project.Project;
 import com.fico.testCaseGenerator.testCase.RIDOInstance;

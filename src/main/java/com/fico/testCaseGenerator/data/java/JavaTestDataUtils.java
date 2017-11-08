@@ -1,4 +1,4 @@
-package com.fico.testCaseGenerator.XMLTestCaseGenerator;
+package com.fico.testCaseGenerator.data.java;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;

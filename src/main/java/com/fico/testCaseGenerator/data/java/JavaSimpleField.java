@@ -1,11 +1,8 @@
-package com.fico.testCaseGenerator.XMLTestCaseGenerator;
+package com.fico.testCaseGenerator.data.java;
 
-import com.fico.testCaseGenerator.SimpleField;
-import org.dom4j.Element;
+import com.fico.testCaseGenerator.data.SimpleField;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

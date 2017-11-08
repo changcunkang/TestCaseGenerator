@@ -1,9 +1,8 @@
 package com.fico.testCaseGenerator.testCase;
 
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
-import com.fico.testCaseGenerator.SimpleField;
-import com.fico.testCaseGenerator.TestData;
-import com.fico.testCaseGenerator.XMLTestCaseGenerator.JavaTestData;
+import com.fico.testCaseGenerator.data.TestData;
+import com.fico.testCaseGenerator.data.java.JavaTestData;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -12,7 +11,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class JavaTestCaseGenerator extends TestCaseGenerator {

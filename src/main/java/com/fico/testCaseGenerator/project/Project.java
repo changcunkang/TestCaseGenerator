@@ -1,6 +1,5 @@
 package com.fico.testCaseGenerator.project;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,15 +13,13 @@ import com.blazesoft.server.base.NdServiceException;
 import com.blazesoft.server.base.NdServiceSessionException;
 import com.blazesoft.server.deploy.NdStatelessServer;
 import com.blazesoft.server.local.NdLocalServerException;
-import com.fico.testCaseGenerator.SimpleField;
-import com.fico.testCaseGenerator.TestData;
+import com.fico.testCaseGenerator.data.SimpleField;
+import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
-import com.fico.testCaseGenerator.BOM.XMLBOMGenerator;
 import com.fico.testCaseGenerator.configuration.Item;
 import com.fico.testCaseGenerator.configuration.Restriction;
 import com.fico.testCaseGenerator.factory.LoadConfiguration;
 import com.fico.testCaseGenerator.testCase.TestCaseGenerator;
-import com.fico.testCaseGenerator.testCase.XMLTestCaseGenerator;
 
 public class Project {
 

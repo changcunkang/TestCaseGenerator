@@ -1,12 +1,9 @@
 package com.fico.testCaseGenerator.BOM;
 
-import com.fico.testCaseGenerator.TestData;
-import com.fico.testCaseGenerator.XMLTestCaseGenerator.JavaTestData;
-import com.fico.testCaseGenerator.configuration.Extendtion;
+import com.fico.testCaseGenerator.data.TestData;
+import com.fico.testCaseGenerator.data.java.JavaTestData;
 import com.fico.testCaseGenerator.factory.LoadConfiguration;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class JavaBOMGenertor extends BOMGenerator {
