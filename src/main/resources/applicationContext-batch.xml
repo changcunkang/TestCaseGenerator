@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bean:beans xmlns="http://www.springframework.org/schema/batch"
+            xmlns:bean="http://www.springframework.org/schema/beans"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+            xmlns:aop="http://www.springframework.org/schema/aop"
+            xmlns:context="http://www.springframework.org/schema/context"
+            xmlns:task="http://www.springframework.org/schema/task"
+            xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+            xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd
+http://www.springframework.org/schema/batch
+http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+http://www.springframework.org/schema/task
+http://www.springframework.org/schema/task/spring-task.xsd
+http://www.springframework.org/schema/data/jpa
+http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+"
+>
+
+    <bean:import resource="applicationContext.xml"/>
+
+    <bean:bean id="dataSource"
+               class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <bean:property name="driverClassName" value="${jdbc.driver}"/>
+        <bean:property name="url" value="${jdbc.url}"/>
+        <bean:property name="username" value="${jdbc.username}"/>
+        <bean:property name="password" value="${jdbc.password}"/>
+    </bean:bean>
+
+    <bean:bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <bean:property name = "dataSource" ref="dataSource"/>
+    </bean:bean>
+
+    <bean:bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <bean:property name="location" value="classpath:jdbc.properties" />
+    </bean:bean>
+
+    <task:executor id="taskExecutor" pool-size="16" keep-alive="100" />
+
+    <job id="helloWorldJob">
+        <step id="step_constructData">
+            <tasklet transaction-manager="transactionManager">
+                <chunk commit-interval="10" reader="testCaseGeneratorItemReader" processor="asyncProcessor" writer="itemWriter" />
+            </tasklet>
+        </step>
+    </job>
+
+
+    <bean:bean id="asyncProcessor" class="org.springframework.batch.integration.async.AsyncItemProcessor">
+        <bean:property name="delegate" ref="ridoProcessor"/>
+        <bean:property name="taskExecutor" ref="taskExecutor"/>
+    </bean:bean>
+
+    <bean:bean id="ridoProcessor" class="com.fico.testCaseGenerator.batch.RIDORuleProcessor">
+    </bean:bean>
+
+    <bean:bean id="testCaseGeneratorItemReader" class="com.fico.testCaseGenerator.batch.TestCaseGeneratorItemReader">
+        <bean:property name="executionConfiguration" ref="executionConfiguration" />
+    </bean:bean>
+
+    <bean:bean id="jdbcSetterItemWriter"
+               class="com.fico.testCaseGenerator.batch.TestCaseGeneratorItemWriter">
+        <!--  <bean:property name="dataSource" ref="dataSource"/>
+             <bean:property name="sql" ref=" insert into Student(NAME,SEX,BIRTH,AGE,ORIGIN,REMARKS) values(?,?,?,?,?,?)"/>
+        <bean:property name="itemPreparedStatementSetter">
+            <bean:bean class="springbatch.DestCreditBillItemPreparedStatementSetter"/>
+        </bean:property>-->
+        <bean:property name="executionConfiguration" ref="executionConfiguration" />
+        <bean:property name="jdbcTemplate" ref="jdbcTemplate" />
+        <bean:property name="insertSQL" value="INSERT INTO testcaseinstance (projectID, isinput, content, appID, finalOutput, finalResult) VALUES ( ?,?,?,?,?,? )" />
+    </bean:bean>
+
+    <bean:bean id="itemWriter" class="org.springframework.batch.integration.async.AsyncItemWriter">
+        <bean:property name="delegate" ref="jdbcSetterItemWriter"/>
+    </bean:bean>
+
+    <bean:bean id="executionConfiguration" class="com.fico.testCaseGenerator.batch.ExecutionConfiguration" >
+        <bean:property name="targetNumCases" value="10" />
+    </bean:bean>
+
+    <!-- Spring Data JPA -->
+
+    <bean:bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <bean:property name="dataSource" ref="dataSource"></bean:property>
+        <bean:property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" ></bean:property>
+        <bean:property name="packagesToScan" value="com.cams.blaze.request"></bean:property>
+        <bean:property name="jpaProperties">
+            <bean:props>
+                <bean:prop key="hibernate.current_session_context_class" >thread</bean:prop>
+                <bean:prop key="hibernate.hbm2ddl.auto">create</bean:prop><!-- validate/update/create -->
+                <bean:prop key="hibernate.show_sql">false</bean:prop>
+                <bean:prop key="hibernate.format_sql">true</bean:prop>
+                <!-- 建表的命名规则 -->
+                <bean:prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</bean:prop>
+            </bean:props>
+        </bean:property>
+    </bean:bean>
+
+    <bean:bean id="hibernateJpaVendorAdapter"
+          class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <bean:property name="databasePlatform" value="${hibernate.dialect}"/>
+    </bean:bean>
+
+    <bean:bean id="jpaTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" >
+        <bean:property name="entityManagerFactory" ref="entityManagerFactory" ></bean:property>
+    </bean:bean>
+
+    <jpa:repositories base-package="com.fico.testCaseGenerator.repository" entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="jpaTransactionManager">
+
+    </jpa:repositories>
+
+
+</bean:beans>
