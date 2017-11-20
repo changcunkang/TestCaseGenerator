@@ -1,5 +1,7 @@
 package com.fico.testCaseGenerator.util;
 
+import org.apache.commons.math3.random.RandomDataGenerator;
+
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Random;
@@ -33,7 +35,11 @@ public class RandomFactory {
 		}
 		return random.nextInt( Math.abs(max - min) ) + Math.min(max, min) + 1 ;
 	}
-	
+
+	public static long randomLongBetween(long min, long max){
+		return new RandomDataGenerator().nextLong(min, max);
+	}
+
 	public static double randomDoubleBetween(double min, double max){
 	
 		if(max == min){

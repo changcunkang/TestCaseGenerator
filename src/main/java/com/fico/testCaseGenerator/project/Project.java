@@ -16,8 +16,8 @@ import com.blazesoft.server.local.NdLocalServerException;
 import com.fico.testCaseGenerator.data.SimpleField;
 import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
-import com.fico.testCaseGenerator.configuration.Item;
-import com.fico.testCaseGenerator.configuration.Restriction;
+import com.fico.testCaseGenerator.data.configuration.Item;
+import com.fico.testCaseGenerator.data.configuration.Restriction;
 import com.fico.testCaseGenerator.factory.LoadConfiguration;
 import com.fico.testCaseGenerator.testCase.TestCaseGenerator;
 
@@ -209,15 +209,11 @@ public class Project {
 			for(SimpleField sf : this.getOutputSimpleFieldList()){
 				Object outputValue = getOutputSimpleFieldValue(blazeOutput, sf.getPath());
 				
-				if("A".equals(outputValue)){
-					String a = "";
-				}
-				
-				if( sf.getExtendtion().getRestriction().getType() == Restriction.TYPE_ENMURATION){
+				if( true ){
 					
 					for(Item item : sf.getExtendtion().getRestriction().getItem()){
 						
-						if(outputValue!= null && outputValue.equals(item.getValue()) && item.addResultID(getApplicationID(blazeOutput))){
+						if(outputValue!= null && outputValue.equals(item.getMaxExpression()) && item.addResultID(getApplicationID(blazeOutput))){
 							
 							rtn = true;
 							return rtn;

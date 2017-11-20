@@ -2,8 +2,10 @@ package com.fico.testCaseGenerator.data.java;
 
 import com.fico.testCaseGenerator.data.SimpleField;
 import com.fico.testCaseGenerator.data.TestData;
+import com.fico.testCaseGenerator.util.TestCaseUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
+import org.apache.xmlbeans.impl.xb.ltgfmt.TestCase;
 
 import java.lang.reflect.Field;
 import java.text.ParseException;
@@ -28,7 +30,11 @@ public class JavaTestData extends TestData {
 
             public Object convert(Class type, Object value) {
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                if(value == null){
+                    return null;
+                }
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(TestCaseUtils.DATE_FORMAT);
                 try {
                     return simpleDateFormat.parse(value.toString());
                 } catch (ParseException e) {

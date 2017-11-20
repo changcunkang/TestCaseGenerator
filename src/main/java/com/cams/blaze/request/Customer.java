@@ -240,9 +240,7 @@ public class Customer {
 	public void setReservedString12(String reservedString12) {
 		this.reservedString12 = reservedString12;
 	}
-	public String getReservedString13() {
-		return reservedString13;
-	}
+	public String getReservedString13() { return reservedString13; }
 	public void setReservedString13(String reservedString13) {
 		this.reservedString13 = reservedString13;
 	}

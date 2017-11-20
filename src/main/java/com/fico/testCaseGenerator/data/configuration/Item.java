@@ -1,4 +1,4 @@
-package com.fico.testCaseGenerator.configuration;
+package com.fico.testCaseGenerator.data.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,14 +9,16 @@ public class Item {
 	
 	private long restrictionID;
 	
-	private String value;
-	
 	private Double percentage;
 	
 	private long resultMaxNum;
-	
+
+	private String minExpression;
+
+	private String maxExpression;
+
 	private long cnt = 0;
-	
+
 	public long getId() {
 		return id;
 	}
@@ -32,7 +34,6 @@ public class Item {
 	public void setRestrictionID(long restrictionID) {
 		this.restrictionID = restrictionID;
 	}
-
 
 	private List<String> resultIdList;
 
@@ -62,9 +63,6 @@ public class Item {
 			return false;
 		}else{
 			cnt++;
-			if(cnt%100 ==0){
-				System.out.println( "Add " + this.getValue() + " current is" + cnt +" in total of " + resultMaxNum);
-			}
 			return true;
 		}
 	}
@@ -73,16 +71,8 @@ public class Item {
 	}
 
 	public Item(String value, double percentage) {
-		this.value = value;
+
 		this.percentage = percentage;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
 	}
 
 	public Double getPercentage() {
@@ -92,4 +82,22 @@ public class Item {
 	public void setPercentage(Double percentage) {
 		this.percentage = percentage;
 	}
+
+
+	public String getMinExpression() {
+		return minExpression;
+	}
+
+	public void setMinExpression(String minExpression) {
+		this.minExpression = minExpression;
+	}
+
+	public String getMaxExpression() {
+		return maxExpression;
+	}
+
+	public void setMaxExpression(String maxExpression) {
+		this.maxExpression = maxExpression;
+	}
+
 }

@@ -65,7 +65,7 @@ public class JavaSimpleField extends SimpleField {
 //
 //            String tmpPath = genericClass.getSimpleName();
 
-            this.path = this.getTestData().getPath() + "@" + field.getName();
+            this.path = this.getTestData().getPath() + "@" + field.getName() + "/";
         }
         return this.path;
     }

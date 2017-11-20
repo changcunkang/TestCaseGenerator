@@ -3,14 +3,17 @@ package com.fico.testCaseGenerator.testCase;
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
 import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.data.java.JavaTestData;
+import com.fico.testCaseGenerator.util.TestCaseUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 public class JavaTestCaseGenerator extends TestCaseGenerator {
@@ -58,7 +61,7 @@ public class JavaTestCaseGenerator extends TestCaseGenerator {
 
         Object rootTestCaseInstance = createEmptyTestCaseInstance(testData);
 
-        generateSingleTestCaseInstance(rootTestCaseInstance, testData);
+        generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(rootTestCaseInstance, testData);
 
         return rootTestCaseInstance;
 
@@ -96,7 +99,13 @@ public class JavaTestCaseGenerator extends TestCaseGenerator {
 
     protected void setTestCaseInstanceSimpleFieldValue(Object newTestCaseInstance, String attributeName, Object attributeValue) {
         try {
-            BeanUtils.setProperty(newTestCaseInstance, attributeName, attributeValue);
+            Object attValueObj = attributeValue;
+
+            if(attributeValue instanceof Date){
+                attValueObj = new SimpleDateFormat(TestCaseUtils.DATE_FORMAT).format(attributeValue);
+            }
+
+            BeanUtils.setProperty(newTestCaseInstance, attributeName, attValueObj);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

@@ -1,32 +1,41 @@
 package com.fico.testCaseGenerator.data;
 
-import com.fico.testCaseGenerator.configuration.Extendtion;
+import com.fico.testCaseGenerator.data.configuration.Extendtion;
+import com.fico.testCaseGenerator.data.configuration.Item;
+
+import java.util.List;
 
 public abstract class AbstractTestData {
 
 	private Extendtion extendtion;
 
 	private Object dataStructureElement;
-	
-	private Object testCaseInstance;
-	
+
 	protected String name;
 	
 	private Long projectID;
 	
 	private Long id;
 
+	private List testCase = null;
+
 	public static final String PATH_SEPARATOR = "/";
 	
 	public static final String GLOABLE_PATH_PREFIX = PATH_SEPARATOR +  "Projects" + PATH_SEPARATOR;
-	
+
+	public static final String APPLICATION = "Application";
+
 	public boolean isGloableDependency(){
-		if(this.getExtendtion() != null && this.getExtendtion().getDependency() != null && this.getExtendtion().getDependency().getParentPath() != null){
-			
-			String parentPath = this.getExtendtion().getDependency().getParentPath();
-			
-			if(parentPath.startsWith(GLOABLE_PATH_PREFIX)){
-				return true;
+
+		if(this.getExtendtion() != null && this.getExtendtion().getRestriction() != null){
+
+			for(Item item : this.getExtendtion().getRestriction().getItem()){
+				if(item.getMinExpression()!=null && item.getMinExpression().contains(GLOABLE_PATH_PREFIX)){
+					return true;
+				}
+				if(item.getMaxExpression()!=null && item.getMaxExpression().contains(GLOABLE_PATH_PREFIX)){
+					return true;
+				}
 			}
 		}
 		return false;
@@ -40,14 +49,6 @@ public abstract class AbstractTestData {
 
 	public void setGenerateTestCaseFinish(boolean generateTestCaseFinish) {
 		this.generateTestCaseFinish = generateTestCaseFinish;
-	}
-	
-	public Object getTestCaseInstance() {
-		return testCaseInstance;
-	}
-
-	public void setTestCaseInstance(Object testCaseInstance) {
-		this.testCaseInstance = testCaseInstance;
 	}
 
 	public Object getDataStructureElement() {
@@ -88,5 +89,13 @@ public abstract class AbstractTestData {
 
 	public void setProjectID(Long projectID) {
 		this.projectID = projectID;
+	}
+
+	public List getTestCase() {
+		return testCase;
+	}
+
+	public void setTestCase(List testCase) {
+		this.testCase = testCase;
 	}
 }

@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fico.testCaseGenerator.data.configuration.Extendtion;
+import com.fico.testCaseGenerator.data.configuration.Item;
+import com.fico.testCaseGenerator.data.configuration.Restriction;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -17,10 +20,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.fico.testCaseGenerator.configuration.Dependency;
-import com.fico.testCaseGenerator.configuration.Extendtion;
-import com.fico.testCaseGenerator.configuration.Item;
-import com.fico.testCaseGenerator.configuration.Restriction;
 
 public class LoadConfiguration {
 
@@ -43,9 +42,9 @@ public class LoadConfiguration {
 		List<Extendtion> extendtionList = new ArrayList<Extendtion>();
 		int parentAndNodeRowNumber = 0;
 		int fieldNameRowNumber = 0;
-		int parentPathRowNumber = 0;
-		int deprecationRowNumber = 0;
-		int deprecationFunctionName =0;
+		//int parentPathRowNumber = 0;
+		//int deprecationRowNumber = 0;
+		//int deprecationFunctionName =0;
 		int inputOrOutputRowNumber = 0;
 		int intervalRowNumber = 0;
 		int nullPercentageRowNumber = 0;
@@ -80,21 +79,15 @@ public class LoadConfiguration {
 							parentAndNodeRowNumber = c;
 						}else if(cell.toString().trim().equalsIgnoreCase("Field Name")){
 							fieldNameRowNumber = c;
-						}else if(cell.toString().trim().equalsIgnoreCase("Path")){
-							parentPathRowNumber = c;
-						}else if(cell.toString().trim().equalsIgnoreCase("主从关系")){
-							deprecationRowNumber = c;
-						}else if(cell.toString().trim().equalsIgnoreCase("函数名（当主从关系为3时有值）")){
-							deprecationFunctionName = c;
 						}else if (cell.toString().trim().equalsIgnoreCase("输入/输出(默认输入)")){
 							inputOrOutputRowNumber = c;
-						}else if (cell.toString().trim().equalsIgnoreCase("区间类型")){
+						}else if (cell.toString().trim().equalsIgnoreCase("生成逻辑类型")){
 							intervalRowNumber = c;
 						}else if(cell.toString().trim().equalsIgnoreCase("空值所占百分比")){
 							nullPercentageRowNumber = c;
-						}else if(cell.toString().trim().equalsIgnoreCase("最小值")){
+						}else if(cell.toString().trim().equalsIgnoreCase("初始值")){
 							minValueRowNumber = c;
-						}else if (cell.toString().trim().equalsIgnoreCase("值域")){
+						}else if (cell.toString().trim().equalsIgnoreCase("值域范围以及比例")){
 							firstCodomainRowNumber = c;
 							break;
 						}
@@ -110,64 +103,51 @@ public class LoadConfiguration {
 					HSSFRow row = (HSSFRow) sheet.getRow(r);
 					String realPath = "";
 					Extendtion extendtion = null;
-					Dependency dependency = null;
 					Restriction restriction =null;
-					Item  item = null;
+					Item item = null;
 					List<Item> itemList = new ArrayList<Item>();
 					for (int c = 0; c < row.getLastCellNum(); c++) {
 						Cell cell = row.getCell(c);
 						if (c == fieldNameRowNumber) {
 							realPath=	realPathMap.get(r);
 							if (cell!=null&&cell.getCellType() == Cell.CELL_TYPE_STRING) {
-								realPath=realPath+ "@"+cell.getStringCellValue();
+								realPath=realPath+ "@"+cell.getStringCellValue() + "/";
 							}
 						 
 						}
-						if (c == parentPathRowNumber) {
-							if (cell!=null&&cell.getCellType() == Cell.CELL_TYPE_STRING) {
-								dependency = new Dependency();
-								//modified by yuanxb
-								dependency.setParentPath( cell.getStringCellValue() );
-							}
-							// System.out.print(cell.getStringCellValue());
-						} else if (c == deprecationRowNumber) {
-							if (cell!=null&&cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-								if (cell.getNumericCellValue() == 0) {
-									dependency.setType(Dependency.getTYPE_NULL());
-								} else if (cell.getNumericCellValue() == 1) {
-									dependency.setType(Dependency.getTYPE_NUMBER());
-								} else if (cell.getNumericCellValue() == 2) {
-									dependency.setType(Dependency.getTYPE_EQUICALENCE());
-								} else if (cell.getNumericCellValue() == 3) {
-									dependency.setType(Dependency.getTYPE_FUNCTIONNAME());
-								}
-
-							}
-						} else if (c == deprecationFunctionName) {
-
-							if (cell!=null&&cell.getCellType() == Cell.CELL_TYPE_STRING) {
-								dependency.setFunctionName(cell
-										.getStringCellValue());
-							}
-						} 
-
 						if(c==inputOrOutputRowNumber){
-							if (cell!=null&&cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+							if (cell!=null&&(cell.getCellType() == Cell.CELL_TYPE_NUMERIC||cell.getCellType() == Cell.CELL_TYPE_STRING)) {
 								restriction =new Restriction();
+								double cellValue = 0 ;
+								if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)
+								{
+									cellValue = (int) cell.getNumericCellValue();
+								}else if(cell.getCellType() == Cell.CELL_TYPE_STRING){
+									cellValue = Integer.valueOf(cell.getStringCellValue());
+								}
 								if(restriction!=null){
-									restriction.setTransfersType(cell.getNumericCellValue()); 
+									restriction.setTransfersType(cellValue); 
 								}
 							}
 						}
 						if(c == intervalRowNumber){
-							if (cell!=null&&cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+							if (cell!=null&&(cell.getCellType() == Cell.CELL_TYPE_NUMERIC||cell.getCellType() == Cell.CELL_TYPE_STRING)) {
 								if(restriction!=null){
-									if(cell.getNumericCellValue() == 1){
-									restriction.setType(restriction.TYPE_ENMURATION);  
-									}else if(cell.getNumericCellValue() == 2){
-										restriction.setType(restriction.TYPE_SECTION);
-									}else if(cell.getNumericCellValue() == 3){
-										restriction.setType(restriction.TYPE_FUNCTION);
+									double cellValue = 0 ;
+									if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)
+									{
+										cellValue = (int) cell.getNumericCellValue();
+									}else if(cell.getCellType() == Cell.CELL_TYPE_STRING){
+										cellValue = Integer.valueOf(cell.getStringCellValue());
+									}
+									if(cellValue == 1){
+									restriction.setType(Restriction.TYPE_SECTION);  
+									}else if(cellValue == 2){
+										restriction.setType(Restriction.TYPE_DEPENDENT);
+									}else if(cellValue == 3){
+										restriction.setType(Restriction.TYPE_FUNCTION);
+									}else if(cellValue == 4){
+										restriction.setType(Restriction.TYPE_FILTER);
 									}else{
 										restriction.setType(cell.toString());
 									}
@@ -180,9 +160,16 @@ public class LoadConfiguration {
 
 						if (c == nullPercentageRowNumber) {
 							
-							if (cell!=null&&cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+							if (cell!=null&&(cell.getCellType() == Cell.CELL_TYPE_NUMERIC||cell.getCellType() == Cell.CELL_TYPE_STRING)) {
 								if(restriction!=null){
-								restriction.setNullPercentage(cell.getNumericCellValue()); 
+									double cellValue = 0 ;
+									if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)
+									{
+										cellValue = (int) cell.getNumericCellValue();
+									}else if(cell.getCellType() == Cell.CELL_TYPE_STRING){
+										cellValue = Integer.valueOf(cell.getStringCellValue());
+									}
+								restriction.setNullPercentage(cellValue); 
 								}
 							}
 						} 
@@ -197,8 +184,8 @@ public class LoadConfiguration {
 								}
 							}
 						} else if (c >= firstCodomainRowNumber) {
-							int num=firstCodomainRowNumber%2;
-							int mod=c%2;
+							int num=firstCodomainRowNumber%3;
+							int mod=c%3;
 							
 							if(mod==num){
 								item= new Item();
@@ -214,11 +201,25 @@ public class LoadConfiguration {
 								}
 								
 								if(cellVal != null && !"".equals(cellVal)){
-									item.setValue(cellVal);
+									item.setMinExpression(cellVal);
 								}
-							}else{
+							}else if(mod==(num+1>2?0:num+1)){
+								String cellVal = null;
+								if (cell!=null&&cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+									cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+									cellVal = cell.getStringCellValue();
+								}
+								else{
+									cellVal = cell.toString();
+								}
 								
-								if(cell != null &&  null!=cell.toString() && ""!=cell.toString()  && null!=item.getValue() && !"".equals(item.getValue().trim())){
+								if(cellVal != null && !"".equals(cellVal)){
+									item.setMaxExpression(cellVal);
+								}
+							}
+							else{
+								
+								if(cell != null &&  null!=cell.toString() && ""!=cell.toString()  && null!=item.getMinExpression() && !"".equals(item.getMinExpression().trim())){
 									
 									item.setPercentage(Double.parseDouble(cell.toString()));
 									
@@ -226,8 +227,8 @@ public class LoadConfiguration {
 								
 								
 								if(item.getPercentage() != null 
-										&& item.getValue() != null 
-										&& !"".equals(item.getValue())){
+										&& item.getMaxExpression() != null 
+										&& !"".equals(item.getMaxExpression())){
 									itemList.add(item);
 								}
 							}
@@ -238,17 +239,18 @@ public class LoadConfiguration {
 						}
 					}
 					
-					if(restriction !=null || dependency!= null||r ==2){
+					if(restriction !=null || r ==2){
 						extendtion = new Extendtion();
 						extendtion.setRealPath(realPath);
 						extendtion.setName("dependency");
 					}
 					if(restriction !=null ){
 						extendtion.setRestriction(restriction);
+
+						//added by yuanxb
+						restriction.setExtendtion(extendtion);
 					}
-					if(dependency!= null){
-						extendtion.setDependency(dependency);
-					}
+					
 					if(extendtion!=null){
 					extendtionList.add(extendtion);
 					}

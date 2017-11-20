@@ -1,23 +1,27 @@
-package com.fico.testCaseGenerator.configuration;
+package com.fico.testCaseGenerator.data.configuration;
 
 import java.util.List;
 
 public class Restriction {
-	
-	public static final String TYPE_ENMURATION = "enumeration";
-	
+
 	public static final String TYPE_SECTION = "section";
-	
+
+	public static final String TYPE_DEPENDENT = "dependent";
+
 	public static final String TYPE_FUNCTION = "function";
+
+	public static final String TYPE_FILTER = "filter";
 	
 	private long id;
-	
-	private long extendtionID;
+
+	private Extendtion extendtion;
 	
 	private String type;
 	
 	private double nullPercentage;
+
 	private Double MaxNum;
+
 	private String minStr;
 	
 	public List<Item> item;
@@ -104,12 +108,11 @@ public class Restriction {
 		this.id = id;
 	}
 
-	public long getExtendtionID() {
-		return extendtionID;
+	public Extendtion getExtendtion() {
+		return extendtion;
 	}
 
-	public void setExtendtionID(long extendtionID) {
-		this.extendtionID = extendtionID;
+	public void setExtendtion(Extendtion extendtion) {
+		this.extendtion = extendtion;
 	}
-
 }

@@ -12,7 +12,7 @@ import com.fico.testCaseGenerator.data.SimpleField;
 import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
 import com.fico.testCaseGenerator.data.xml.XMLTestData;
-import com.fico.testCaseGenerator.configuration.Restriction;
+import com.fico.testCaseGenerator.data.configuration.Restriction;
 import com.fico.testCaseGenerator.util.RandomFactory;
 
 public class XMLTestCaseGenerator extends TestCaseGenerator {
@@ -79,86 +79,86 @@ public class XMLTestCaseGenerator extends TestCaseGenerator {
 
 	
 	private void createSimpleField( Element newInstantceArrElement, SimpleField simpleField ){
-		
-		Restriction restriction = simpleField.getExtendtion().getRestriction();
-		String restrictionType = restriction.getType();
-		
-		if( simpleField.getPath().indexOf("ScoreLstOfEmyerInCorpBlkLst") != -1 ){
-			System.out.println( simpleField.getPath() + " restriction type is null" );
-		}
-		
-		double nullPercent = restriction.getNullPercentage();
-		double nullPercentHit = RandomFactory.random();
-		if( nullPercentHit > nullPercent ){
-			
-			double notNullPercentHit = RandomFactory.random();
-			
-			double minPercent = 0;
-			
-			double maxPercent = 0;
-			
-			for(int i=0; i<restriction.getItem().size(); i++){
-				
-				minPercent = maxPercent;
-				
-				maxPercent += restriction.getItem().get(i).getPercentage();
-				
-				String attributeName = ((Element)simpleField.getSimpleImplementField()).attributeValue("name");
-				
-				if(notNullPercentHit> minPercent && notNullPercentHit<= maxPercent){
-					//generateValue
-					if( Restriction.TYPE_ENMURATION.equals(restrictionType) ){
-						
-						setTestCaseElementValue(simpleField,newInstantceArrElement, attributeName, restriction.getItem().get(i).getValue());
-					}
-					else{
-						
-						String minRandomRangeStr = null;
-						
-						if( i==0 ){
-							minRandomRangeStr = restriction.getMinStr();
-						}else{
-							
-							minRandomRangeStr = restriction.getItem().get(i -1).getValue();
-						}
-						
-						String maxRandomRangeStr = restriction.getItem().get(i).getValue();
-						
-						String eleValue = null;
-						
-						if( Restriction.TYPE_SECTION.equals(restrictionType) ){
-
-							try {
-								eleValue = generateSimpleAttrRandomValue( simpleField, minRandomRangeStr, maxRandomRangeStr );
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								System.out.println( "Exception occur : " + simpleField.getPath() );
-								
-								e.printStackTrace();
-							}
-							
-							setTestCaseElementValue(simpleField, newInstantceArrElement, attributeName, eleValue);
-							
-						}
-						
-						else if( Restriction.TYPE_FUNCTION.equals(restrictionType) ){
-							try {
-								String functionRtn = customFunctionFactory.invokeCustomFunction(maxRandomRangeStr, null, simpleField);
-							
-								setTestCaseElementValue(simpleField, newInstantceArrElement, attributeName, functionRtn);
-								
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					}
-				}
-			}
-		}
-		else{
-			addSimpleListTestCaseValue(simpleField, null );
-		}
+//
+//		Restriction restriction = simpleField.getExtendtion().getRestriction();
+//		String restrictionType = restriction.getType();
+//
+//		if( simpleField.getPath().indexOf("ScoreLstOfEmyerInCorpBlkLst") != -1 ){
+//			System.out.println( simpleField.getPath() + " restriction type is null" );
+//		}
+//
+//		double nullPercent = restriction.getNullPercentage();
+//		double nullPercentHit = RandomFactory.random();
+//		if( nullPercentHit > nullPercent ){
+//
+//			double notNullPercentHit = RandomFactory.random();
+//
+//			double minPercent = 0;
+//
+//			double maxPercent = 0;
+//
+//			for(int i=0; i<restriction.getItem().size(); i++){
+//
+//				minPercent = maxPercent;
+//
+//				maxPercent += restriction.getItem().get(i).getPercentage();
+//
+//				String attributeName = ((Element)simpleField.getSimpleImplementField()).attributeValue("name");
+//
+//				if(notNullPercentHit> minPercent && notNullPercentHit<= maxPercent){
+//					//generateValue
+//					if( Restriction.TYPE_ENMURATION.equals(restrictionType) ){
+//
+//						setTestCaseElementValue(simpleField,newInstantceArrElement, attributeName, restriction.getItem().get(i).getValue());
+//					}
+//					else{
+//
+//						String minRandomRangeStr = null;
+//
+//						if( i==0 ){
+//							minRandomRangeStr = restriction.getMinStr();
+//						}else{
+//
+//							minRandomRangeStr = restriction.getItem().get(i -1).getValue();
+//						}
+//
+//						String maxRandomRangeStr = restriction.getItem().get(i).getValue();
+//
+//						String eleValue = null;
+//
+//						if( Restriction.TYPE_SECTION.equals(restrictionType) ){
+//
+//							try {
+//								eleValue = generateSimpleAttrRandomValue( simpleField, minRandomRangeStr, maxRandomRangeStr );
+//							} catch (Exception e) {
+//								// TODO Auto-generated catch block
+//								System.out.println( "Exception occur : " + simpleField.getPath() );
+//
+//								e.printStackTrace();
+//							}
+//
+//							setTestCaseElementValue(simpleField, newInstantceArrElement, attributeName, eleValue);
+//
+//						}
+//
+//						else if( Restriction.TYPE_FUNCTION.equals(restrictionType) ){
+//							try {
+//								String functionRtn = customFunctionFactory.invokeCustomFunction(maxRandomRangeStr, null, simpleField);
+//
+//								setTestCaseElementValue(simpleField, newInstantceArrElement, attributeName, functionRtn);
+//
+//							} catch (Exception e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//		else{
+//			addSimpleListTestCaseValue(simpleField, null );
+//		}
 	}
 	
 	private void setTestCaseElementValue(SimpleField simpleField , Element newInstantceArrElement, String attributeName, String eleValue){
@@ -170,11 +170,11 @@ public class XMLTestCaseGenerator extends TestCaseGenerator {
 	
 	private void addSimpleListTestCaseValue(SimpleField simpleField, String eleValue){
 		
-		simpleField.getValueList().add(eleValue);
+		simpleField.getTestCase().add(eleValue);
 
-		if(  this.bomGenerator.getSimpleFieldDependencyMap().get(simpleField.getPath()) != null ){
-			this.bomGenerator.getSimpleFieldDependencyMap().put( simpleField.getPath(), true );
-		}
+//		if(  this.bomGenerator.getSimpleFieldDependencyMap().get(simpleField.getPath()) != null ){
+//			this.bomGenerator.getSimpleFieldDependencyMap().put( simpleField.getPath(), true );
+//		}
 
 		simpleField.setGenerateTestCaseFinish(true);
 	}

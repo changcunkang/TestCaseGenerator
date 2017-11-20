@@ -12,8 +12,8 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import com.fico.testCaseGenerator.blazeServer.BlazeServers;
-import com.fico.testCaseGenerator.configuration.Item;
-import com.fico.testCaseGenerator.configuration.Restriction;
+import com.fico.testCaseGenerator.data.configuration.Item;
+import com.fico.testCaseGenerator.data.configuration.Restriction;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -102,107 +102,107 @@ public class TestCaseGeneratorFacade implements InitializingBean {
 
 	public void manageProjectLevelMasterAndSlave() {
 
-		buildProjectLevelTestCaseDependencyList();
-		buildProjectLevelSimpleFieldDependencyList();
-
-		boolean loopFlag = true;
-
-		while (loopFlag) {
-			int projectLevelDependencyTestDataListSize = this.projectLevelDependencyTestDataList
-					.size();
-
-			for (int i = 0; i < projectLevelDependencyTestDataList.size(); i++) {
-
-				TestData testData = projectLevelDependencyTestDataList.get(i);
-
-				for (Project project : this.projectList) {
-					if (!project.getTestCaseGenerator().isMasterAvailable(
-							testData)
-							&& testData.isGloableDependency()) {
-						String gloableParentPath = testData.getExtendtion()
-								.getDependency().getParentPath();
-
-						TestData targetProjectLoevelDependencyTestData = getProjectLevelTestData(gloableParentPath);
-
-						if (targetProjectLoevelDependencyTestData != null) {
-
-							for (Object paretnTestCase : testData
-									.getParentTestData().getTestCase()) {
-
-								TestCaseGenerator tcG = absTestData_TestCaseGenerator
-										.get(testData);
-
-								tcG.handleTestCaseDependency(
-										targetProjectLoevelDependencyTestData,
-										testData, paretnTestCase);
-							}
-
-							projectLevelDependencyTestDataList.remove(testData);
-							testData.setGenerateTestCaseFinish(true);
-
-							break;
-						}
-					}
-				}
-			}
-			if (this.projectLevelDependencyTestDataList.size() == 0) {
-				break;
-			} else if (this.projectLevelDependencyTestDataList.size() == projectLevelDependencyTestDataListSize) {
-				System.out
-						.println("dead loop in manageProjectLevelMasterAndSlave");
-				break;
-			}
-		}
-
-		loopFlag = true;
-
-		while (loopFlag) {
-			int projectLevelDependencyTestDataListSize = this.projectLevelDependencyTestDataList
-					.size();
-
-			for (int i = 0; i < simpleFieldLevelDependencyTestDataList.size(); i++) {
-
-				SimpleField simpleField = simpleFieldLevelDependencyTestDataList
-						.get(i);
-
-				for (Project project : this.projectList) {
-					if (!project.getTestCaseGenerator().isMasterAvailable(
-							simpleField)
-							&& simpleField.isGloableDependency()) {
-						String gloableParentPath = simpleField.getExtendtion()
-								.getDependency().getParentPath();
-
-						SimpleField targetProjectLoevelDependencySimpleField = getProjectLevelSimpleField(gloableParentPath);
-
-						if (targetProjectLoevelDependencySimpleField != null) {
-
-							for (Object paretnTestCase : simpleField
-									.getTestData().getTestCase()) {
-
-								TestCaseGenerator tcG = absTestData_TestCaseGenerator
-										.get(simpleField);
-
-								tcG.handlSimpleFieldDependency(
-										targetProjectLoevelDependencySimpleField,
-										simpleField, paretnTestCase);
-							}
-
-							simpleFieldLevelDependencyTestDataList
-									.remove(simpleField);
-							simpleField.setGenerateTestCaseFinish(true);
-
-							break;
-						}
-					}
-				}
-			}
-			if (this.simpleFieldLevelDependencyTestDataList.size() == 0) {
-				break;
-			} else if (this.simpleFieldLevelDependencyTestDataList.size() == projectLevelDependencyTestDataListSize) {
-				System.out.println("dead loop in handlSimpleFieldDependency");
-				break;
-			}
-		}
+//		buildProjectLevelTestCaseDependencyList();
+//		buildProjectLevelSimpleFieldDependencyList();
+//
+//		boolean loopFlag = true;
+//
+//		while (loopFlag) {
+//			int projectLevelDependencyTestDataListSize = this.projectLevelDependencyTestDataList
+//					.size();
+//
+//			for (int i = 0; i < projectLevelDependencyTestDataList.size(); i++) {
+//
+//				TestData testData = projectLevelDependencyTestDataList.get(i);
+//
+//				for (Project project : this.projectList) {
+//					if (!project.getTestCaseGenerator().isMasterAvailable(
+//							testData)
+//							&& testData.isGloableDependency()) {
+//						String gloableParentPath = testData.getExtendtion()
+//								.getDependency().getParentPath();
+//
+//						TestData targetProjectLoevelDependencyTestData = getProjectLevelTestData(gloableParentPath);
+//
+//						if (targetProjectLoevelDependencyTestData != null) {
+//
+//							for (Object paretnTestCase : testData
+//									.getParentTestData().getTestCase()) {
+//
+//								TestCaseGenerator tcG = absTestData_TestCaseGenerator
+//										.get(testData);
+//
+//								tcG.handleTestCaseDependency(
+//										targetProjectLoevelDependencyTestData,
+//										testData, paretnTestCase);
+//							}
+//
+//							projectLevelDependencyTestDataList.remove(testData);
+//							testData.setGenerateTestCaseFinish(true);
+//
+//							break;
+//						}
+//					}
+//				}
+//			}
+//			if (this.projectLevelDependencyTestDataList.size() == 0) {
+//				break;
+//			} else if (this.projectLevelDependencyTestDataList.size() == projectLevelDependencyTestDataListSize) {
+//				System.out
+//						.println("dead loop in manageProjectLevelMasterAndSlave");
+//				break;
+//			}
+//		}
+//
+//		loopFlag = true;
+//
+//		while (loopFlag) {
+//			int projectLevelDependencyTestDataListSize = this.projectLevelDependencyTestDataList
+//					.size();
+//
+//			for (int i = 0; i < simpleFieldLevelDependencyTestDataList.size(); i++) {
+//
+//				SimpleField simpleField = simpleFieldLevelDependencyTestDataList
+//						.get(i);
+//
+//				for (Project project : this.projectList) {
+//					if (!project.getTestCaseGenerator().isMasterAvailable(
+//							simpleField)
+//							&& simpleField.isGloableDependency()) {
+//						String gloableParentPath = simpleField.getExtendtion()
+//								.getDependency().getParentPath();
+//
+//						SimpleField targetProjectLoevelDependencySimpleField = getProjectLevelSimpleField(gloableParentPath);
+//
+//						if (targetProjectLoevelDependencySimpleField != null) {
+//
+//							for (Object paretnTestCase : simpleField
+//									.getTestData().getTestCase()) {
+//
+//								TestCaseGenerator tcG = absTestData_TestCaseGenerator
+//										.get(simpleField);
+//
+//								tcG.handlSimpleFieldDependency(
+//										targetProjectLoevelDependencySimpleField,
+//										simpleField, paretnTestCase);
+//							}
+//
+//							simpleFieldLevelDependencyTestDataList
+//									.remove(simpleField);
+//							simpleField.setGenerateTestCaseFinish(true);
+//
+//							break;
+//						}
+//					}
+//				}
+//			}
+//			if (this.simpleFieldLevelDependencyTestDataList.size() == 0) {
+//				break;
+//			} else if (this.simpleFieldLevelDependencyTestDataList.size() == projectLevelDependencyTestDataListSize) {
+//				System.out.println("dead loop in handlSimpleFieldDependency");
+//				break;
+//			}
+//		}
 	}
 
 	private TestData getProjectLevelTestData(String gloableParentPath) {
@@ -253,8 +253,8 @@ public class TestCaseGeneratorFacade implements InitializingBean {
 
 		for (Project project : this.projectList) {
 
-			for (TestData td : project.getBomGernerator()
-					.getDependencyTestDataList()) {
+			for (TestData td : project.getTestCaseGenerator().getUnGeneratedSlaveTestDataList()
+					) {
 				if (td.isGloableDependency()) {
 					projectLevelDependencyTestDataList.add(td);
 

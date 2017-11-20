@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fico.testCaseGenerator.configuration.Extendtion;
-
 public abstract class SimpleField extends AbstractTestData {
 	
 	public static final int TYPE_INT = 1;
@@ -35,29 +33,12 @@ public abstract class SimpleField extends AbstractTestData {
 	private int fieldType;
 	
 	private Object simpleImplementField;
-
-	private Extendtion extendtion;
 	
 	protected String path;
 	
 	private TestData testData;
 	
-	private List valueList;
-	
 	private long testDataId;	
-	
-	public List getValueList() {
-		
-		if( valueList == null ){
-			valueList = new ArrayList();
-		}
-		
-		return valueList;
-	}
-
-	public void setValueList(List valueList) {
-		this.valueList = valueList;
-	}
 
 	public TestData getTestData() {
 		return testData;
@@ -74,15 +55,7 @@ public abstract class SimpleField extends AbstractTestData {
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
-	public Extendtion getExtendtion() {
-		return extendtion;
-	}
 
-	public void setExtendtion(Extendtion extendtion) {
-		this.extendtion = extendtion;
-	}
-	
 	public int getFieldType() {
 		return fieldType;
 	}

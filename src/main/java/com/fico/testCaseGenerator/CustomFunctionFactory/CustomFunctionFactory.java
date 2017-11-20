@@ -12,6 +12,7 @@ import com.fico.testCaseGenerator.data.AbstractTestData;
 import com.fico.testCaseGenerator.data.SimpleField;
 import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.util.RandomFactory;
+import com.fico.testCaseGenerator.util.TestCaseUtils;
 
 public class CustomFunctionFactory {
 
@@ -46,7 +47,7 @@ public class CustomFunctionFactory {
 
 		String rtn = null;
 
-		if (sf.getValueList().size() == 0) {
+		if (sf.getTestCase().size() == 0) {
 			rtn = "1";
 		} else {
 			rtn = "2";
@@ -181,10 +182,10 @@ public class CustomFunctionFactory {
 
 		SimpleField simpleField = (SimpleField)parentTest;
 		
-		String dateStr = (String) simpleField.getValueList().get(0);
+		String dateStr = (String) simpleField.getTestCase().get(0);
 		
-		SimpleDateFormat dateTimeTypeDataFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-		
+		SimpleDateFormat dateTimeTypeDataFormat = new SimpleDateFormat(TestCaseUtils.DATE_TIME_FORMAT);
+
 		Date monthItemBaseDate = dateTimeTypeDataFormat.parse(dateStr);
 		
 		Calendar calendar=Calendar.getInstance();  

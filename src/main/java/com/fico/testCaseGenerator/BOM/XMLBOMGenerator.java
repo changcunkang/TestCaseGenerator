@@ -15,7 +15,7 @@ import com.fico.testCaseGenerator.data.SimpleField;
 import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.data.xml.XMLSimpleField;
 import com.fico.testCaseGenerator.data.xml.XMLTestData;
-import com.fico.testCaseGenerator.configuration.Extendtion;
+import com.fico.testCaseGenerator.data.configuration.Extendtion;
 import com.fico.testCaseGenerator.factory.LoadConfiguration;
 
 public class XMLBOMGenerator extends BOMGenerator {
@@ -232,33 +232,33 @@ public class XMLBOMGenerator extends BOMGenerator {
 	
 	private void addTestDataToMap(Object testDataOrSimpleAttr){
 		
-		if(testDataOrSimpleAttr instanceof TestData){
-			
-			TestData testData = (TestData)testDataOrSimpleAttr;
-			
-			this.getPathTestDataMap().put(testData.getPath(), testData);		
-			
-			if( testData.getExtendtion() != null && testData.getExtendtion().getDependency() != null && testData.getExtendtion().getDependency().getParentPath() != null ){
-				this.getTestDataDependencyMap().put(testData.getExtendtion().getDependency().getParentPath(), false);
-				
-				this.getDependencyTestDataList().add(testData);
-			}
-
-		}else if(testDataOrSimpleAttr instanceof SimpleField){
-			
-			SimpleField simpleField = (SimpleField)testDataOrSimpleAttr;
-			
-			this.getPathSimpleFieldMap().put(simpleField.getPath(), simpleField);
-			
-			if(simpleField.getExtendtion().getRestriction() != null && simpleField.getExtendtion().getRestriction().getTransfersType() == 2){
-				this.getOutputSimpleFieldList().add(simpleField);
-			}
-			
-			if( simpleField.getExtendtion() != null && simpleField.getExtendtion().getDependency() != null && simpleField.getExtendtion().getDependency().getParentPath() != null ){
-				this.getSimpleFieldDependencyMap().put(simpleField.getExtendtion().getDependency().getParentPath(), false);
-				
-				this.getDependencySimpleFieldList().add(simpleField);
-			}
-		}
+//		if(testDataOrSimpleAttr instanceof TestData){
+//
+//			TestData testData = (TestData)testDataOrSimpleAttr;
+//
+//			this.getPathTestDataMap().put(testData.getPath(), testData);
+//
+//			if( testData.getExtendtion() != null && testData.getExtendtion().getDependency() != null && testData.getExtendtion().getDependency().getParentPath() != null ){
+//				this.getTestDataDependencyMap().put(testData.getExtendtion().getDependency().getParentPath(), false);
+//
+//				this.getDependencyTestDataList().add(testData);
+//			}
+//
+//		}else if(testDataOrSimpleAttr instanceof SimpleField){
+//
+//			SimpleField simpleField = (SimpleField)testDataOrSimpleAttr;
+//
+//			this.getPathSimpleFieldMap().put(simpleField.getPath(), simpleField);
+//
+//			if(simpleField.getExtendtion().getRestriction() != null && simpleField.getExtendtion().getRestriction().getTransfersType() == 2){
+//				this.getOutputSimpleFieldList().add(simpleField);
+//			}
+//
+//			if( simpleField.getExtendtion() != null && simpleField.getExtendtion().getDependency() != null && simpleField.getExtendtion().getDependency().getParentPath() != null ){
+//				this.getSimpleFieldDependencyMap().put(simpleField.getExtendtion().getDependency().getParentPath(), false);
+//
+//				this.getDependencySimpleFieldList().add(simpleField);
+//			}
+//		}
 	}
 }

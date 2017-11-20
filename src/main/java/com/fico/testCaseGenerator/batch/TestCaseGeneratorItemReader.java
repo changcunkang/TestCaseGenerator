@@ -16,6 +16,10 @@ public class TestCaseGeneratorItemReader implements ItemReader<RIDOInstance>, In
 
     private ExecutionConfiguration executionConfiguration;
 
+    /**
+     *
+     * @return
+     */
     public TestCaseGeneratorFacade getTestCaseGeneratorFacade(){
         return executionConfiguration.getTestCaseGeneratorFacade();
     }

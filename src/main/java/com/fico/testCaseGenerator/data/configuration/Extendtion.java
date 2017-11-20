@@ -1,11 +1,22 @@
-package com.fico.testCaseGenerator.configuration;
+package com.fico.testCaseGenerator.data.configuration;
+
+import com.fico.testCaseGenerator.data.AbstractTestData;
 
 public class Extendtion {
 
 	private long id;
 	
 	private long projectID;
-	
+
+	private AbstractTestData parentTestData;
+
+	public AbstractTestData getParentTestData() {
+		return parentTestData;
+	}
+
+	public void setParentTestData(AbstractTestData parentTestData) {
+		this.parentTestData = parentTestData;
+	}
 
 	public long getId() {
 		return id;
@@ -24,16 +35,8 @@ public class Extendtion {
 	}
 
 	private String name;
-	private Dependency dependency;
 	private Restriction restriction;
 	private String realPath;
-	public long getTestDataID() {
-		return testDataID;
-	}
-
-	public void setTestDataID(long testDataID) {
-		this.testDataID = testDataID;
-	}
 
 	public long getSimpleFieldID() {
 		return simpleFieldID;
@@ -43,20 +46,16 @@ public class Extendtion {
 		this.simpleFieldID = simpleFieldID;
 	}
 
-	private long testDataID;
 	private long simpleFieldID;
-
 
 
 	public Extendtion() {
 	}
 
-	public Extendtion(String name, Dependency dependency,
+	public Extendtion(String name,
 			Restriction restriction) {
 		this.name = name;
-		this.dependency = dependency;
 		this.restriction = restriction;
-
 	}
 
 	public String getName() {
@@ -81,15 +80,6 @@ public class Extendtion {
 
 	public void setRealPath(String realPath) {
 		this.realPath = realPath;
-	}
-	
-
-	public Dependency getDependency() {
-		return dependency;
-	}
-
-	public void setDependency(Dependency dependency) {
-		this.dependency = dependency;
 	}
 
 	public String toString(){

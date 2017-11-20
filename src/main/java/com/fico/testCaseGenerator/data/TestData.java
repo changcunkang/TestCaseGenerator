@@ -3,11 +3,11 @@ package com.fico.testCaseGenerator.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fico.testCaseGenerator.configuration.Extendtion;
+import com.fico.testCaseGenerator.data.configuration.Extendtion;
 
 public abstract class TestData extends AbstractTestData {
 	
-	private List testCase = null;
+
 	
 	private TestData parentTestData;
 
@@ -81,13 +81,7 @@ public abstract class TestData extends AbstractTestData {
 		this.customFieldList = customFieldList;
 	}
 	
-	public List getTestCase() {
-		return testCase;
-	}
 
-	public void setTestCase(List testCase) {
-		this.testCase = testCase;
-	}
 	
 	public TestData getParentTestData() {
 		return parentTestData;

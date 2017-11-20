@@ -2,6 +2,10 @@ package com.fico.testCaseGenerator.batch;
 
 import com.fico.testCaseGenerator.facade.TestCaseGeneratorFacade;
 
+/**
+ * Reader 和 Writer通信的中间类
+ */
+
 public class ExecutionConfiguration {
 
     private Long targetNumCases;
