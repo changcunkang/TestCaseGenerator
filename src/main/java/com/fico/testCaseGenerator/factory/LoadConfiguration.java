@@ -197,7 +197,10 @@ public class LoadConfiguration {
 									cellVal = cell.getStringCellValue();
 								}
 								else{
-									cellVal = cell.toString();
+									if(cell !=null){
+										cellVal = cell.toString();
+									}
+
 								}
 								
 								if(cellVal != null && !"".equals(cellVal)){
@@ -210,7 +213,10 @@ public class LoadConfiguration {
 									cellVal = cell.getStringCellValue();
 								}
 								else{
-									cellVal = cell.toString();
+									if(cell !=null){
+										cellVal = cell.toString();
+									}
+
 								}
 								
 								if(cellVal != null && !"".equals(cellVal)){
@@ -290,7 +296,7 @@ public class LoadConfiguration {
 		int lastRowNumber=sheet.getLastRowNum();
 		Map<Integer,String> map = new HashMap<Integer,String>();
 		
-		for(int r=2;r<lastRowNumber;r++){
+		for(int r=2;r<=lastRowNumber;r++){
 			int startRowNumber=2;
 			realPath="";
 			HSSFRow row = (HSSFRow) sheet.getRow(r);

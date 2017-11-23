@@ -1,11 +1,9 @@
 package com.fico.testCaseGenerator.CustomFunctionFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.fico.testCaseGenerator.data.AbstractTestData;
@@ -18,26 +16,110 @@ public class CustomFunctionFactory {
 
 	private IdCardGenerator g = new IdCardGenerator();
 	
-	public String invokeCustomFunction(String functionName,
-			AbstractTestData parentTest, AbstractTestData currentTetsData)
-			throws Exception {
+	public Object invokeCustomFunction(String functionName, Object... args){
 		Method[] mArr = CustomFunctionFactory.class.getMethods();
 
 		for (Method method : mArr) {
 			if (method.getName().equals(functionName)) {
-				Object rtn = method.invoke(this, parentTest, currentTetsData);
-				return rtn.toString();
+				Object rtn = null;
+				try {
+
+					if(args == null){
+						rtn = method.invoke(this);
+					}else{
+						rtn = method.invoke(this, args);
+					}
+
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				return rtn;
 			}
 		}
-
 		return null;
 	}
 
-	public String generateApplicationID(AbstractTestData parentTest,
-			AbstractTestData currentTetsData) {
 
+	/**
+	 *
+	 * @param targetInteger
+	 * @param numberLen 整数，取整位数；负数：小数
+	 * @param upDownFlag 0:向上取整，1：向下取整；2：四舍五入
+	 * @return
+	 */
+	public Object floor(Double targetInteger, Double numberLen, Double upDownFlag){
+		if(numberLen >0){
+			Double tmpTargetInteger = targetInteger / Math.pow(10,numberLen) ;
+
+			if(upDownFlag == 0){
+				return Math.ceil( tmpTargetInteger ) * Math.pow(10,numberLen);
+			}
+			else if(upDownFlag == 1){
+				return Math.floor( Math.ceil( tmpTargetInteger ) * Math.pow(10,numberLen) );
+			}
+			else if( upDownFlag == 2 ){
+				return Math.rint( Math.ceil( tmpTargetInteger ) * Math.pow(10,numberLen) );
+			}
+		}
+		return null;
+	}
+
+	public String generateApplicationID() {
 		return java.util.UUID.randomUUID().toString();
+	}
 
+
+	/**
+	 * 广州银行120期逾期记录生成，目前只能用函数搞
+	 * @param mob
+	 * @return
+	 */
+	//滚动率
+	private static final double overDueUpLevel = 15;
+	//N的比率
+	private static final double percentN = 50;
+	//0的比率
+	private static final double percentZero = 45;
+	//大于等于1的比率
+	private static final double percentMoreThan1 = 5;
+
+	public Object getEStmtOdue120(Integer mob){
+
+		StringBuffer tmp = new StringBuffer("0");
+
+		boolean isOverDue = false;
+
+		for(int i=0; i<mob-1; i++){
+
+			int randomInt = RandomFactory.randomIntBetween(1,100);
+
+			if( ! isOverDue ){
+				if(randomInt < percentMoreThan1){
+					tmp.append("1");
+					isOverDue = true;
+				}
+				else if(randomInt < percentZero + percentMoreThan1){
+					tmp.append("0");
+				}else{
+					tmp.append("N");
+				}
+			}else{
+				int newDueNum = new Integer( tmp.charAt( tmp.length() -1 ) ) + 1;
+
+				if(randomInt < overDueUpLevel){
+					tmp.append( newDueNum );
+				}else{
+					int nextDueNum = RandomFactory.randomIntBetween(0,newDueNum);
+					tmp.append( nextDueNum );
+					if(newDueNum == 0){
+						isOverDue = false;
+					}
+				}
+			}
+		}
+		return tmp.reverse().toString();
 	}
 
 	public String generateInternalInfoApplicationType(
@@ -54,6 +136,16 @@ public class CustomFunctionFactory {
 		}
 
 		return rtn;
+	}
+
+	public Object random(Double minDouble, Double maxDouble){
+		return RandomFactory.randomDoubleBetween(minDouble,maxDouble);
+	}
+
+	public Object right(String srcStr, Double doubleLen){
+		int intLen = doubleLen.intValue();
+
+		return srcStr.substring(srcStr.length() - intLen);
 	}
 
 	public String getLatest24State(AbstractTestData parentTest,

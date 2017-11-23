@@ -84,6 +84,9 @@ public abstract class SimpleField extends AbstractTestData {
 		this.testDataId = testDataId;
 	}
 
-
+	@Override
+	public String toString(){
+		return this.getName();
+	}
 	
 }

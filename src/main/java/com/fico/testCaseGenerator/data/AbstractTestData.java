@@ -3,6 +3,7 @@ package com.fico.testCaseGenerator.data;
 import com.fico.testCaseGenerator.data.configuration.Extendtion;
 import com.fico.testCaseGenerator.data.configuration.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractTestData {
@@ -92,6 +93,9 @@ public abstract class AbstractTestData {
 	}
 
 	public List getTestCase() {
+		if(testCase == null){
+			testCase = new ArrayList();
+		}
 		return testCase;
 	}
 

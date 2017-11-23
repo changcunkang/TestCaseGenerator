@@ -34,7 +34,6 @@ public abstract class TestCaseGenerator {
 
 	public TestCaseGenerator(BOMGenerator bomGenerator){
 
-
 		this.bomGenerator = bomGenerator;
 
 		this.customFunctionFactory = new CustomFunctionFactory();
@@ -59,6 +58,8 @@ public abstract class TestCaseGenerator {
 		instanceElementList.add( rootTestCase );
 
 		rootTestData.setTestCase(instanceElementList);
+
+		rootTestData.setGenerateTestCaseFinish(true);
 
 		if(rootTestData.getCustomFieldList() != null){
 			for(TestData testData : rootTestData.getCustomFieldList()){
@@ -170,14 +171,18 @@ public abstract class TestCaseGenerator {
 	}
 
 
-	public void generateSingleTestCaseAttributeValue( Object newInstanceArr,  SimpleField simpleField){
+	public void generateSingleTestCaseAttributeValue( Object newInstance,  SimpleField simpleField){
+
+		if(simpleField.getName().contains("curBalance")){
+			String a = "";
+		}
 
 		if(simpleField.getExtendtion() != null && simpleField.getExtendtion().getRestriction() != null){
 
 			if(this.isAllRelativeElementReady(simpleField)){
 				Object expValue = this.testCaseExpression.parse(simpleField.getExtendtion().getRestriction());
 
-				this.setTestCaseInstanceSimpleFieldValue( newInstanceArr, simpleField.getName(), expValue );
+				this.setTestCaseElementValue(simpleField, newInstance, simpleField.getName(), expValue);
 			}
 			else{
 				this.unGeneratedSlaveSimpleFieldList.add(simpleField);
@@ -331,6 +336,8 @@ public abstract class TestCaseGenerator {
 
 		setTestCaseInstanceSimpleFieldValue(newInstantceArrElement,attributeName, attributeValue);
 
+		simpleField.setGenerateTestCaseFinish(true);
+
 		addSimpleListTestCaseValue(simpleField, attributeValue);
 	}
 
@@ -344,156 +351,6 @@ public abstract class TestCaseGenerator {
 
 		simpleField.setGenerateTestCaseFinish(true);
 	}
-//
-//	private String generateSimpleAttrRandomValue( SimpleField simpleField, String min, String max ) throws Exception {
-//
-//		String rtn  = null;
-//
-//		if(simpleField.getFieldType() == SimpleField.TYPE_INT){
-//
-//			int eleValueInt = RandomFactory.randomIntBetween(new Double(min).intValue(), new Double(max).intValue() );
-//
-//			rtn = String.valueOf(eleValueInt);
-//
-//		}else if( simpleField.getFieldType() == SimpleField.TYPE_REAL ){
-//
-//			double eleValueDouble = RandomFactory.randomDoubleBetween(Double.parseDouble( min ), Double.parseDouble( max ) );
-//
-//
-//			rtn = String.valueOf(new Double(eleValueDouble));
-//
-//		}else if( simpleField.getFieldType() == SimpleField.TYPE_DATE ){
-//
-//			Date dateMin = this.getDateTypeDataFormat().parse(min);
-//
-//			Date dateMax = this.getDateTypeDataFormat().parse(max);
-//
-//			Date rntDate = RandomFactory.randomDateBetween(dateMin, dateMax);
-//
-//			rtn = this.getDateTypeDataFormat().format(rntDate);
-//
-//		}else if( simpleField.getFieldType() == SimpleField.TYPE_DATETIME ){
-//
-//			Date dateMin = this.getDateTimeTypeDataFormat().parse(min);
-//
-//			Date dateMax = this.getDateTimeTypeDataFormat().parse(max);
-//
-//			Date rntDate = RandomFactory.randomDateBetween(dateMin, dateMax);
-//
-//			rtn = this.getDateTimeTypeDataFormat().format(rntDate);
-//		}
-//
-//		return rtn;
-//	}
-
-//	protected int getTestCaseInstanceNumber(TestData xmlTestData){
-//		int instanceSize = 0;
-//
-//		Restriction restriction = xmlTestData.getExtendtion().getRestriction();
-//
-//		double nullPercent = restriction.getNullPercentage();
-//
-//		double nullPercentHit = RandomFactory.random();
-//
-//		if(nullPercentHit <= nullPercent){
-//			instanceSize = 0;
-//		}
-//		else{
-//			double sectionPercent = RandomFactory.random();
-//
-//			if( restriction.getItem() != null && restriction.getItem().size()>0 ){
-//
-//				//循环中概率区间下限
-//				double percentUnitMin = 0;
-//
-//				double percentUnitMax = 0;
-//
-//				for( int i=0; i< restriction.getItem().size(); i++){
-//
-//					Item tmpItem = restriction.getItem().get(i);
-//
-//					int minSize;
-//
-//					if( i==0 ){
-//						minSize =  restriction.getTestCaseMinNum();
-//					}else{
-////						if( i==restriction.getItem().size()-1 ){
-////							minSize = restriction.getMaxNum().intValue();
-////						}
-////						else{
-//						minSize = new Double(restriction.getItem().get(i-1).getValue()).intValue();
-////						}
-//					}
-//
-//					int maxSize;
-//
-//					if( i==0 ){
-//
-//						String maxSizeStr = restriction.getItem().get(i).getValue();
-//
-//						if( maxSizeStr == null  ){
-//							System.out.println(xmlTestData.getPath() + "is null");
-//						}
-//
-//						maxSize = new Double( maxSizeStr ).intValue();
-//					}else{
-//
-//						maxSize = new Double(restriction.getItem().get(i).getValue()).intValue();
-//					}
-//
-//					percentUnitMin = percentUnitMax;
-//					percentUnitMax += tmpItem.getPercentage();
-//
-//					if( sectionPercent > percentUnitMin && sectionPercent <= percentUnitMax ){
-//						instanceSize = RandomFactory.randomIntBetween(minSize, maxSize);
-//					}
-//					//end for
-//				}
-//			}
-//		}
-//
-//		return instanceSize;
-//	}
-
-//	public List handleTestCaseDependency(TestData dependencyTestData, TestData slaveTestData, Object parentTestCaseElement){
-//
-//		List newInstantceArr = null;
-//
-//		int dependencyType = slaveTestData.getExtendtion().getDependency().getType();
-//
-//		if (dependencyType == Dependency.TYPE_NULL) {
-//			if (dependencyTestData.getTestCase() != null
-//					&& dependencyTestData.getTestCase().size() > 0) {
-//				newInstantceArr = getInstanceNumberAndGenerateAttr(
-//						parentTestCaseElement, slaveTestData);
-//			}
-//		} else if (dependencyType == Dependency.TYPE_EQUICALENCE) {
-//			List dependencyList = dependencyTestData.getTestCase();
-//			for(Object eqEl : dependencyList){
-//
-//				Object newEqEle = TestCaseInstanceCopy( eqEl );
-//
-//				newInstantceArr.add(newEqEle);
-//			}
-//
-//			return dependencyList;
-//		} else if (dependencyType == Dependency.TYPE_NUMBER) {
-//			List dependencyList = dependencyTestData.getTestCase();
-//
-//			int instanceNum = 0;
-//
-//			if (dependencyList != null) {
-//				instanceNum = dependencyList.size();
-//
-//				return generateAttr(parentTestCaseElement, instanceNum,
-//						slaveTestData);
-//			}
-//		} else if (dependencyType == Dependency.TYPE_FUNCTIONNAME) {
-//			newInstantceArr = new ArrayList();
-//		}
-//
-//		return newInstantceArr;
-//	}
 
 	private  SimpleDateFormat	dateTypeDataFormat = new SimpleDateFormat(TestCaseUtils.DATE_FORMAT);
 	
@@ -560,14 +417,9 @@ public abstract class TestCaseGenerator {
 
 	public List generateAllTestCaseListForOneTestData(TestData testData){
 
-		if(testData.getName().equals("Product")){
-			String a = "";
-		}
 		List instanceElementList = generateTestDataInstance( testData );
 
 		testData.setTestCase(instanceElementList);
-
-		//manageMasterSlave( testData );
 
 		if(testData.getCustomFieldList() != null){
 			for(TestData tmpTestData : testData.getCustomFieldList()){
@@ -609,43 +461,6 @@ public abstract class TestCaseGenerator {
 				this.unGeneratedSlaveTestDataList.add( testData );
 			}
 
-			//无主从关系
-//			if(testData.getExtendtion().getDependency() == null ){
-//
-//				if(testData.getExtendtion().getRestriction() != null && testData.getExtendtion().getRestriction().getTransfersType() != 2){
-//
-//					for( Object parentTestCaseElement :  paretnTestCaseElementList){
-//
-//						List newInstantceArr = new ArrayList();
-//
-//						newInstantceArr = getInstanceNumberAndGenerateAttr(parentTestCaseElement, testData);
-//
-//						rtnList.addAll( newInstantceArr );
-//					}
-//
-//					testData.setGenerateTestCaseFinish(true);
-//				}
-//			}
-//			else{
-//				//如果主已经建立好
-//				if( this.isMasterAvailable(testData) ){
-//
-//					String dependencyPath = testData.getExtendtion().getDependency().getParentPath();
-//
-//					TestData dependencyTestData = this.getPathTestDataMap().get(dependencyPath);
-//
-//					for( Object parentTestCaseElement :  paretnTestCaseElementList){
-//
-//						List newInstantceArr = new ArrayList();
-//
-//						newInstantceArr = handleTestCaseDependency(dependencyTestData, testData, parentTestCaseElement);
-//
-//						rtnList.addAll( newInstantceArr );
-//					}
-//
-//					testData.setGenerateTestCaseFinish(true);
-//				}
-//			}
 		}
 
 		return rtnList;
