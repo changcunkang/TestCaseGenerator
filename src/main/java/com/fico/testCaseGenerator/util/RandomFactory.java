@@ -24,24 +24,18 @@ public class RandomFactory {
 		return random.nextDouble();
 	}
 	
-	//左开右闭
+	//左闭右闭
 	public static int randomIntBetween(int min, int max){
-		
-		if(max == min){
-			return max;
-		}
-		if(max < min){
-			System.out.println("max is smaller than min" + " max is " + max + " min is " + min);
-		}
-		return random.nextInt( Math.abs(max - min) ) + Math.min(max, min) + 1 ;
+		return new RandomDataGenerator().nextInt(min, max);
 	}
 
+	//左闭右闭
 	public static long randomLongBetween(long min, long max){
 		return new RandomDataGenerator().nextLong(min, max);
 	}
 
 	public static double randomDoubleBetween(double min, double max){
-	
+
 		if(max == min){
 			return max;
 		}
@@ -72,7 +66,6 @@ public class RandomFactory {
 	}
 	
 	public static void main(String[] args){
-		
 		for( int i=0; i<20; i++ ){
 			System.out.println( random() );
 		}

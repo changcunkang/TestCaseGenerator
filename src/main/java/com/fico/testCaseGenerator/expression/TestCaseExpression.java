@@ -60,6 +60,8 @@ public class TestCaseExpression {
 
     private static final String FUNCTION_RIGHT_BRACKETS = ")";
 
+    private static final String IT_RECURSIVE_FUNCTION_NAME = "IT";
+
     private CustomFunctionFactory customFunctionFactory = null;
 
     public TestCaseExpression(BOMGenerator bomGenerator){
@@ -115,13 +117,7 @@ public class TestCaseExpression {
                 }
             }
         }
-
         return null;
-    }
-
-    private Object transFerType(Object val, Restriction restriction){
-
-       return null;
     }
 
     private Object generateRandomBetweetnMaxValueAndMinValue(Object minValue, Object maxValue, Restriction restriction){
@@ -196,48 +192,7 @@ public class TestCaseExpression {
         }
         //计算公式开头
         else if( this.isCalculationOperationOperator(path) ){
-            String operator = path.substring(0,1);
-
-            String subPath = path.substring(1);
-
-            Object leftValue = tempValue;
-
-            Object rightValue = this.recursiveParse(null, subPath, restriction);;
-
-            if("+".equals(operator)){
-                //日期加减
-                //现只支持左边日期右边数字，左边数字右边日期暂时没考虑
-                if(this.isSimpleFieldDateType(restriction)){
-                    GregorianCalendar gc=new GregorianCalendar();
-                    gc.setTime( (Date)tempValue );
-                    gc.add(GregorianCalendar.DATE, new Double( rightValue.toString() ).intValue());
-                    return gc.getTime();
-                }
-                //正常数学运算
-                BigDecimal leftBigDec = new BigDecimal(leftValue.toString());
-                return leftBigDec.add( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
-
-            }else if("-".equals(operator)) {
-
-                //日期加减
-                //现只支持左边日期右边数字，左边数字右边日期暂时没考虑
-                if(this.isSimpleFieldDateType(restriction)){
-                    GregorianCalendar gc=new GregorianCalendar();
-                    gc.setTime( (Date)tempValue );
-                    gc.add(GregorianCalendar.DATE, new Double( rightValue.toString() ).intValue() * -1);
-                    return gc.getTime();
-                }
-                BigDecimal leftBigDec = new BigDecimal(leftValue.toString());
-                return leftBigDec.subtract( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
-
-            }else if ("*".equals(operator)){
-                BigDecimal leftBigDec = new BigDecimal(leftValue.toString());
-                return leftBigDec.multiply( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
-
-            }else if ("/".equals(operator)){
-                BigDecimal leftBigDec = new BigDecimal(leftValue.toString());
-                return leftBigDec.divide( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
-            }
+            return parseCalculationOperationOperator(tempValue, path, restriction);
         }
         //函数
         else if( isFunctionInvocation(path) ){
@@ -254,6 +209,52 @@ public class TestCaseExpression {
         return null;
     }
 
+    private Object parseCalculationOperationOperator(Object tempValue, String path, Restriction restriction){
+        String operator = path.substring(0,1);
+
+        String subPath = path.substring(1);
+
+        Object leftValue = tempValue;
+
+        Object rightValue = this.recursiveParse(null, subPath, restriction);;
+
+        if("+".equals(operator)){
+            //日期加减
+            //现只支持左边日期右边数字，左边数字右边日期暂时没考虑
+            if(this.isSimpleFieldDateType(restriction)){
+                GregorianCalendar gc=new GregorianCalendar();
+                gc.setTime( (Date)tempValue );
+                gc.add(GregorianCalendar.DATE, new Double( rightValue.toString() ).intValue());
+                return gc.getTime();
+            }
+            //正常数学运算
+            BigDecimal leftBigDec = new BigDecimal(leftValue.toString());
+            return leftBigDec.add( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
+
+        }else if("-".equals(operator)) {
+            //日期加减
+            //现只支持左边日期右边数字，左边数字右边日期暂时没考虑
+            if(this.isSimpleFieldDateType(restriction)){
+                GregorianCalendar gc=new GregorianCalendar();
+                gc.setTime( (Date)tempValue );
+                gc.add(GregorianCalendar.DATE, new Double( rightValue.toString() ).intValue() * -1);
+                return gc.getTime();
+            }
+            BigDecimal leftBigDec = new BigDecimal(leftValue.toString());
+            return leftBigDec.subtract( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
+
+        }else if ("*".equals(operator)){
+            BigDecimal leftBigDec = new BigDecimal(leftValue.toString());
+            return leftBigDec.multiply( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
+
+        }else if ("/".equals(operator)){
+            BigDecimal leftBigDec = new BigDecimal(leftValue.toString());
+            return leftBigDec.divide( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
+        }
+
+        return null;
+    }
+
     private boolean isSimpleFieldDateType(Restriction restriction){
         if(restriction.getExtendtion().getParentTestData() instanceof SimpleField ) {
             SimpleField simpleField = (SimpleField) restriction.getExtendtion().getParentTestData();
@@ -266,11 +267,17 @@ public class TestCaseExpression {
         return false;
     }
 
-    public boolean isAllElementReady(String exp){
+    /**
+     *
+     * @param exp
+     * @param selfPath 排除path，自己依赖自己的情况去掉
+     * @return
+     */
+    public boolean isAllElementReady(String exp, String selfPath){
         List<String> expIncludeAbsTestDataPath = getAllAbsTestData( exp );
 
         for(String path : expIncludeAbsTestDataPath){
-            if ( ! this.bomGenerator.isAbsTestDataGenerateFinish(path) ){
+            if ( !selfPath.equals(path) && ! this.bomGenerator.isAbsTestDataGenerateFinish(path) ){
                 return false;
             }
         }
@@ -400,8 +407,29 @@ public class TestCaseExpression {
         return this.customFunctionFactory.invokeCustomFunction(functionName, args);
     }
 
+    private Object recursiveFunctionInvocation(Restriction restriction, String path, String[] rtn){
+
+        assert rtn.length == 2 : "number of arguments in recursiveFunctionInvocation is not 2";
+
+        Integer recursiveVar = new Integer( new Double(rtn[0].toString()).intValue() );
+
+        SimpleField targetMasterSimpleField = this.bomGenerator.getPathSimpleFieldMap().get( rtn[1] );
+
+        SimpleField slaveSimpleField = (SimpleField)restriction.getExtendtion().getParentTestData();
+
+        if(slaveSimpleField.getTestCase().size()%12 == 0){
+            //minStr 就是初始值
+            return this.recursiveParse(null, restriction.getMinStr(), restriction);
+        }
+        else {
+            int targeMasterSimpleFieldPos = Math.max(0, slaveSimpleField.getTestCase().size() + recursiveVar);
+
+            return targetMasterSimpleField.getTestCase().get( targeMasterSimpleFieldPos );
+        }
+    }
+
+
     private Object parseFunctionParameter( String path, Restriction restriction){
-        String functionName = parseFunctionNameFromPath(path);
 
         String targetFunctionName = this.parseFunctionNameFromPath(path);
 
@@ -458,17 +486,35 @@ public class TestCaseExpression {
             }
         }
 
-        if(expRtnValueArr != null && expRtnValueArr.length>0){
-            for(int j=0; j<expRtnValueArr.length; j++){
-                expRtnValueArr[j] = this.recursiveParse(null,rtn[j], restriction);
-            }
-        }
+        Object thisFunctionResultValue = null;
 
-        Object thisFunctionResultValue = this.functionInvocation(targetFunctionName, expRtnValueArr);
+        /**
+         * 以后单独做个函数
+         */
+        if( IT_RECURSIVE_FUNCTION_NAME.equals( targetFunctionName ) ){
+            thisFunctionResultValue = this.recursiveFunctionInvocation(restriction, path, rtn);
+
+            //这里有些冗余问题，以后继续优化
+            SimpleField slaveSimpleField = (SimpleField)restriction.getExtendtion().getParentTestData();
+            if( slaveSimpleField.getTestCase().size() == 0 ){
+                return thisFunctionResultValue;
+            }
+
+        }else{
+            if(expRtnValueArr != null && expRtnValueArr.length>0){
+                for(int j=0; j<expRtnValueArr.length; j++){
+                    expRtnValueArr[j] = this.recursiveParse(null,rtn[j], restriction);
+                }
+            }
+            thisFunctionResultValue = this.functionInvocation(targetFunctionName, expRtnValueArr);
+        }
+        /**
+          * end of 以后单独做个函数
+         **/
 
         //做完本次函数后剩下的东西
         //2 表达占位)$的位置
-        int afterFunctionExpLevaeStrPos = path.indexOf(functionName) + functionName.length() + parsePos + 2 + 1;
+        int afterFunctionExpLevaeStrPos = path.indexOf(targetFunctionName) + targetFunctionName.length() + parsePos + 2 + 1;
 
         String afterFunctionExpLevaeStr = path.substring( afterFunctionExpLevaeStrPos );
 
@@ -494,7 +540,7 @@ public class TestCaseExpression {
 
         int slaveTestCasePos = slaveTestCaseList.size();
 
-        if(abstractSlaveTestData instanceof SimpleField){
+        //if(abstractSlaveTestData instanceof SimpleField){
 
             List masterTestCaseList = this.bomGenerator.getAbsTestDataFromPath(path);
 
@@ -503,13 +549,14 @@ public class TestCaseExpression {
             targetMasterPos = Math.min(targetMasterPos, masterTestCaseList.size() -1);
 
             return masterTestCaseList.get(targetMasterPos);
-        }
-        else if(abstractSlaveTestData instanceof TestData){
-            absMasterTestData = this.bomGenerator.getPathTestDataMap().get(path);
+        //}
+        //else if(abstractSlaveTestData instanceof TestData){
 
-            return absMasterTestData;
-        }
-        return null;
+        //    absMasterTestData = this.bomGenerator.getPathTestDataMap().get(path);
+
+        //    return absMasterTestData;
+        //}
+       // return null;
     }
 
     /**

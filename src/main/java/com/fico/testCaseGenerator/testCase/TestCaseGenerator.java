@@ -162,6 +162,10 @@ public abstract class TestCaseGenerator {
 
 		for( SimpleField simpleField : testData.getSimpleFieldList() ){
 
+			if(simpleField.getName().contains("relativeCycleNumber")){
+				String a = "";
+			}
+
 			if(simpleField.getExtendtion() != null){
 				generateSingleTestCaseAttributeValue(newIns, simpleField);
 			}
@@ -474,8 +478,8 @@ public abstract class TestCaseGenerator {
 		}
 
 		for(Item item : abstractTestData.getExtendtion().getRestriction().getItem()){
-			if( !this.testCaseExpression.isAllElementReady( item.getMinExpression())
-					|| !this.testCaseExpression.isAllElementReady( item.getMaxExpression())){
+			if( !this.testCaseExpression.isAllElementReady( item.getMinExpression(), abstractTestData.getPath())
+					|| !this.testCaseExpression.isAllElementReady( item.getMaxExpression(), abstractTestData.getPath())){
 				isAllRelativeElementReady = false;
 			}
 		}

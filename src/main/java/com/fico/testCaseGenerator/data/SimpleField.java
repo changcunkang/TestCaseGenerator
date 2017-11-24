@@ -34,7 +34,7 @@ public abstract class SimpleField extends AbstractTestData {
 	
 	private Object simpleImplementField;
 	
-	protected String path;
+
 	
 	private TestData testData;
 	
@@ -46,14 +46,6 @@ public abstract class SimpleField extends AbstractTestData {
 
 	public void setTestData(TestData testData) {
 		this.testData = testData;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
 	}
 
 	public int getFieldType() {

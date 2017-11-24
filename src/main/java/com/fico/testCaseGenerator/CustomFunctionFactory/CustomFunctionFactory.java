@@ -1,5 +1,6 @@
 package com.fico.testCaseGenerator.CustomFunctionFactory;
 
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -66,10 +67,18 @@ public class CustomFunctionFactory {
 		return null;
 	}
 
+	public Double min(Object minVal, Object maxVal){
+
+		Double minValDouble = new Double(minVal.toString());
+
+		Double maxValDouble = new Double(maxVal.toString());
+
+		return Math.min(minValDouble, maxValDouble);
+	}
+
 	public String generateApplicationID() {
 		return java.util.UUID.randomUUID().toString();
 	}
-
 
 	/**
 	 * 广州银行120期逾期记录生成，目前只能用函数搞
@@ -91,12 +100,14 @@ public class CustomFunctionFactory {
 
 		boolean isOverDue = false;
 
-		for(int i=0; i<mob-1; i++){
+		int i = 0;
+
+		for(; i<mob-1; i++){
 
 			int randomInt = RandomFactory.randomIntBetween(1,100);
 
 			if( ! isOverDue ){
-				if(randomInt < percentMoreThan1){
+				if(randomInt <= percentMoreThan1){
 					tmp.append("1");
 					isOverDue = true;
 				}
@@ -106,7 +117,7 @@ public class CustomFunctionFactory {
 					tmp.append("N");
 				}
 			}else{
-				int newDueNum = new Integer( tmp.charAt( tmp.length() -1 ) ) + 1;
+				int newDueNum = new Integer( tmp.substring(tmp.length()-1) ) + 1;
 
 				if(randomInt < overDueUpLevel){
 					tmp.append( newDueNum );
@@ -120,6 +131,14 @@ public class CustomFunctionFactory {
 			}
 		}
 		return tmp.reverse().toString();
+	}
+
+	public Object getDelinquentCycle(String due123, Object relativeCycleNum){
+		Integer relativeCycleNumInt = new Integer( new Double(relativeCycleNum.toString()).intValue() );
+
+		String convertedDue123Str = due123.replace('N','0');
+
+		return convertedDue123Str.substring( relativeCycleNumInt-1, 1 );
 	}
 
 	public String generateInternalInfoApplicationType(

@@ -20,11 +20,15 @@ public abstract class AbstractTestData {
 
 	private List testCase = null;
 
+	protected String path;
+
 	public static final String PATH_SEPARATOR = "/";
 	
 	public static final String GLOABLE_PATH_PREFIX = PATH_SEPARATOR +  "Projects" + PATH_SEPARATOR;
 
 	public static final String APPLICATION = "Application";
+
+	private Object generatingTestCase = null;
 
 	public boolean isGloableDependency(){
 
@@ -99,7 +103,17 @@ public abstract class AbstractTestData {
 		return testCase;
 	}
 
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
 	public void setTestCase(List testCase) {
 		this.testCase = testCase;
 	}
+
+
 }
