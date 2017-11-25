@@ -76,6 +76,16 @@ public class CustomFunctionFactory {
 		return Math.min(minValDouble, maxValDouble);
 	}
 
+	public Double max(Object minVal, Object maxVal){
+
+		Double minValDouble = new Double(minVal.toString());
+
+		Double maxValDouble = new Double(maxVal.toString());
+
+		return Math.max(minValDouble, maxValDouble);
+	}
+
+
 	public String generateApplicationID() {
 		return java.util.UUID.randomUUID().toString();
 	}
@@ -138,7 +148,31 @@ public class CustomFunctionFactory {
 
 		String convertedDue123Str = due123.replace('N','0');
 
-		return convertedDue123Str.substring( relativeCycleNumInt-1, 1 );
+		if(relativeCycleNumInt >= convertedDue123Str.length()){
+			String a = "";
+		}
+
+		return Character.toString(convertedDue123Str.charAt(relativeCycleNumInt));
+
+//		return convertedDue123Str.substring( relativeCycleNumInt-1, 1 );
+	}
+
+	private Object getMthsOdueAmt(String due123, Object relativeCycleNum,  Object balance){
+
+		Double balanceDouble = new Double(balance.toString());
+
+		Integer relativeCycleNumInt = new Integer( new Double(relativeCycleNum.toString()).intValue() );
+
+		String convertedDue123Str = due123.replace('N','0');
+
+		char currentMonthChr = convertedDue123Str.charAt(relativeCycleNumInt);
+
+		if(currentMonthChr == '0'){
+			return new Double(0);
+		}
+		else {
+			return new Double( RandomFactory.randomDoubleBetween(0d, balanceDouble) );
+		}
 	}
 
 	public String generateInternalInfoApplicationType(
@@ -180,6 +214,8 @@ public class CustomFunctionFactory {
 		}
 		return rtn;
 	}
+
+
 
 	private Map<Integer, String> nodeInforNodeIDPosIDMap = new ConcurrentHashMap<Integer, String>();
 

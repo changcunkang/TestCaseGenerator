@@ -249,7 +249,7 @@ public class TestCaseExpression {
 
         }else if ("/".equals(operator)){
             BigDecimal leftBigDec = new BigDecimal(leftValue.toString());
-            return leftBigDec.divide( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
+            return leftBigDec.divide( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ), 5, BigDecimal.ROUND_DOWN );
         }
 
         return null;
@@ -365,8 +365,8 @@ public class TestCaseExpression {
                 leftNumbericVal = new Double(((Date)leftVal).getTime());
                 rightNumberVal = new Double(((Date)rightVal).getTime());
             }else if(leftVal instanceof Double || leftVal instanceof Integer) {
-                leftNumbericVal = new Double(((Date)leftVal).getTime());
-                rightNumberVal = new Double(((Date)rightVal).getTime());
+                leftNumbericVal = new Double(leftVal.toString());
+                rightNumberVal = new Double(rightVal.toString());
             }else if(leftVal instanceof Boolean ){
                 leftNumbericVal = (Boolean)leftVal?1d:0d;
                 rightNumberVal = (Boolean)rightVal?1d:0d;
@@ -417,7 +417,7 @@ public class TestCaseExpression {
 
         SimpleField slaveSimpleField = (SimpleField)restriction.getExtendtion().getParentTestData();
 
-        if(slaveSimpleField.getTestCase().size()%12 == 0){
+        if(slaveSimpleField.getTestData().isGeneratingTestDataFirstChild()){
             //minStr 就是初始值
             return this.recursiveParse(null, restriction.getMinStr(), restriction);
         }
@@ -496,7 +496,7 @@ public class TestCaseExpression {
 
             //这里有些冗余问题，以后继续优化
             SimpleField slaveSimpleField = (SimpleField)restriction.getExtendtion().getParentTestData();
-            if( slaveSimpleField.getTestCase().size() == 0 ){
+            if( slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() ){
                 return thisFunctionResultValue;
             }
 

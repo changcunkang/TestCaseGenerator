@@ -81,13 +81,21 @@ public abstract class TestCaseGenerator {
 	 * @param testData 要生成的testData
 	 * @return
 	 */
-	private List getInstanceNumberAndGenerateAttr(Object parentTestCaseElement, TestData testData){
+	private void getInstanceNumberAndGenerateAttr(Object parentTestCaseElement, TestData testData){
 
-		Integer instanceSize = new Double( this.testCaseExpression.parse( testData.getExtendtion().getRestriction() ).toString() ).intValue();
+		Object intVal = this.testCaseExpression.parse( testData.getExtendtion().getRestriction() );
 
-		return generateAttr(parentTestCaseElement, instanceSize, testData);
+		Integer instanceSize = null;
+
+		if(intVal == null){
+			instanceSize = 0;
+		}
+		else{
+			instanceSize = new Double( intVal.toString() ).intValue();
+		}
+
+		generateAttr(parentTestCaseElement, instanceSize, testData);
 	}
-
 
 	/**
 	 * 处理主从关系
@@ -142,9 +150,9 @@ public abstract class TestCaseGenerator {
 	 * @param testData
 	 * @return
 	 */
-	protected List generateAttr(Object parentTestCaseElement, int instanceSize, TestData testData){
+	protected void generateAttr(Object parentTestCaseElement, int instanceSize, TestData testData){
 
-		List newInstantceArr = new ArrayList();
+		//List newInstantceArr = new ArrayList();
 
 		for(int i=0; i<instanceSize; i++){
 
@@ -152,17 +160,26 @@ public abstract class TestCaseGenerator {
 
 			appendChildTestCaseToParentTestCase( parentTestCaseElement, newIns, testData );
 
-			newInstantceArr.add( generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData) );
-		}
+			testData.setGeneratingTestData(newIns);
 
-		return newInstantceArr;
+			testData.getTestCase().add(newIns);
+
+			if(i == 0){
+				testData.setGeneratingTestDataFirstChild(true);
+			}
+			else{
+				testData.setGeneratingTestDataFirstChild(false);
+			}
+			generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData);
+			//testData.getTestCase().add( generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData) );
+		}
 	}
 
 	protected Object generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(Object newIns, TestData testData){
 
 		for( SimpleField simpleField : testData.getSimpleFieldList() ){
 
-			if(simpleField.getName().contains("relativeCycleNumber")){
+			if(simpleField.getName().contains("amortizationPri")){
 				String a = "";
 			}
 
@@ -177,7 +194,7 @@ public abstract class TestCaseGenerator {
 
 	public void generateSingleTestCaseAttributeValue( Object newInstance,  SimpleField simpleField){
 
-		if(simpleField.getName().contains("curBalance")){
+		if(simpleField.getName().contains("maxBalance")){
 			String a = "";
 		}
 
@@ -419,11 +436,9 @@ public abstract class TestCaseGenerator {
 	 * @return
 	 */
 
-	public List generateAllTestCaseListForOneTestData(TestData testData){
+	public void generateAllTestCaseListForOneTestData(TestData testData){
 
-		List instanceElementList = generateTestDataInstance( testData );
-
-		testData.setTestCase(instanceElementList);
+		generateTestDataInstance( testData );
 
 		if(testData.getCustomFieldList() != null){
 			for(TestData tmpTestData : testData.getCustomFieldList()){
@@ -431,7 +446,6 @@ public abstract class TestCaseGenerator {
 			}
 		}
 
-		return instanceElementList;
 	}
 
 	/**
@@ -440,23 +454,20 @@ public abstract class TestCaseGenerator {
 	 * @return
 	 */
 
-	public List generateTestDataInstance( TestData testData) {
+	public void generateTestDataInstance( TestData testData) {
 
 		List paretnTestCaseElementList = testData.getParentTestData().getTestCase();
 
-		List rtnList = new ArrayList();
+//		List rtnList = new ArrayList();
 
 		if(testData.getExtendtion() != null && testData.getExtendtion().getRestriction() != null){
 
 			if( isAllRelativeElementReady( testData ) ){
 
-				Object expressionVal = null;
-
 				for( Object parentTestCaseElement :  paretnTestCaseElementList){
 
-					List newInstantceArr = getInstanceNumberAndGenerateAttr(parentTestCaseElement, testData);
+					getInstanceNumberAndGenerateAttr(parentTestCaseElement, testData);
 
-					rtnList.addAll( newInstantceArr );
 				}
 
 				testData.setGenerateTestCaseFinish(true);
@@ -466,8 +477,6 @@ public abstract class TestCaseGenerator {
 			}
 
 		}
-
-		return rtnList;
 	}
 
 	private boolean isAllRelativeElementReady(AbstractTestData abstractTestData){

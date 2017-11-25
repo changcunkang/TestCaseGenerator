@@ -28,8 +28,6 @@ public abstract class AbstractTestData {
 
 	public static final String APPLICATION = "Application";
 
-	private Object generatingTestCase = null;
-
 	public boolean isGloableDependency(){
 
 		if(this.getExtendtion() != null && this.getExtendtion().getRestriction() != null){

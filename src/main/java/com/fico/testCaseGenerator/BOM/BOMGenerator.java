@@ -121,6 +121,11 @@ public abstract class BOMGenerator {
 			return this.getPathTestDataMap().get(abstractTestDataPath).isGenerateTestCaseFinish();
 		}
 		else{
+
+			if(this.getPathSimpleFieldMap().get(abstractTestDataPath) == null){
+				String a = "";
+			}
+
 			return this.getPathSimpleFieldMap().get(abstractTestDataPath).isGenerateTestCaseFinish();
 		}
 	}

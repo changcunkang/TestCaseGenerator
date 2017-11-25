@@ -6,9 +6,7 @@ import java.util.List;
 import com.fico.testCaseGenerator.data.configuration.Extendtion;
 
 public abstract class TestData extends AbstractTestData {
-	
 
-	
 	private TestData parentTestData;
 
 	protected List<SimpleField> simpleFieldList;
@@ -31,6 +29,25 @@ public abstract class TestData extends AbstractTestData {
 
 	private String parentFieldName;
 
+	private Object generatingTestData;
+
+	private boolean isGeneratingTestDataFirstChild = false;
+
+	public boolean isGeneratingTestDataFirstChild() {
+		return isGeneratingTestDataFirstChild;
+	}
+
+	public void setGeneratingTestDataFirstChild(boolean generatingTestDataFirstChild) {
+		isGeneratingTestDataFirstChild = generatingTestDataFirstChild;
+	}
+
+	public Object getGeneratingTestData() {
+		return generatingTestData;
+	}
+
+	public void setGeneratingTestData(Object generatingTestData) {
+		this.generatingTestData = generatingTestData;
+	}
 
 	public void setPath(String path) {
 		this.path = path;
@@ -43,8 +60,6 @@ public abstract class TestData extends AbstractTestData {
 	public void setExtendtion(Extendtion extendtion) {
 		this.extendtion = extendtion;
 	}
-	
-	//public abstract List generateTestDataInstance(Object parentTestCaseElement);
 
 	public Object getDataStructureElement() {
 		return implementElement;
@@ -53,7 +68,6 @@ public abstract class TestData extends AbstractTestData {
 	public void setDataStructureElement(Object implementElement) {
 		this.implementElement = implementElement;
 	}
-
 
 	public List<SimpleField> getSimpleFieldList() {
 		
@@ -77,12 +91,12 @@ public abstract class TestData extends AbstractTestData {
 		return customFieldList;
 	}
 
+
+
 	public void setCustomFieldList(List<TestData> customFieldList) {
 		this.customFieldList = customFieldList;
 	}
-	
 
-	
 	public TestData getParentTestData() {
 		return parentTestData;
 	}
