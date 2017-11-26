@@ -1,12 +1,30 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.*;
-
+@Entity
 public class AssurerRepay {
+
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@Column
 	private String organname;
+	@Column
 	private Date latestAssurerRepayDate;
+	@Column
 	private Double money;
+	@Column
 	private Date latestRepayDate;
+	@Column
 	private Double balance;
 	public String getOrganname() {
 		return organname;

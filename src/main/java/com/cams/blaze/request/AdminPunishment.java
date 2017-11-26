@@ -1,13 +1,33 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
 public class AdminPunishment {
+
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@Column
 	private String organname;
+	@Column
 	private String content;
+	@Column
 	private String money;
+	@Column
 	private Date beginDate;
+	@Column
 	private Date endDate;
+	@Column
 	private String result;
 	public String getOrganname() {
 		return organname;
