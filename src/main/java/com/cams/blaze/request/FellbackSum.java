@@ -1,8 +1,17 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
+
+@Entity
 public class FellbackSum {
+
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
 	private String fellbackCD;
+	@Column
 	private Integer count;
+	@Column
 	private Double balance;
 	public String getFellbackCD() {
 		return fellbackCD;

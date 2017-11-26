@@ -1,9 +1,15 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
 public class PCustRef {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
 	private Date pDate;
+	@Column
 	private String custRef;
 	public Date getpDate() {
 		return pDate;

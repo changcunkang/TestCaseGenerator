@@ -1,16 +1,33 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
+
+@Entity
 public class CurInstalmentInfo {
+
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
 	private String instalsType;
+	@Column
 	private Double amortizationPri;
+	@Column
 	private Double totAmortizationPri;
+	@Column
 	private Double unAmortizationPri;
+	@Column
 	private Double amortizationFee;
+	@Column
 	private Double totAmortizationFee;
+	@Column
 	private Integer unAmortizationTerms;
+	@Column
 	private Integer AmortizationTerms;
+	@Column
 	private Integer totAppTerms;
+	@Column
 	private Double totAppAmt;
+	@Column
 	private Integer maxInstalTerms;
 	public String getInstalsType() {
 		return instalsType;

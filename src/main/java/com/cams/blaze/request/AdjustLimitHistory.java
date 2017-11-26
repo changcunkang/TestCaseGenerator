@@ -1,12 +1,21 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
 public class AdjustLimitHistory {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
 	private Date adjustLimitDate;
+	@Column
 	private Double adjustLimitAmtBefore;
+	@Column
 	private Double adjustLimitAmtAfter;
+	@Column
 	private String adjustLimitType;
+	@Column
 	private Date tempALunValidDate;
 
 	

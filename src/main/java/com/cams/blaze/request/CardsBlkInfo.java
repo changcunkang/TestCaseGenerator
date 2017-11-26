@@ -1,9 +1,18 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
+
+@Entity
 public class CardsBlkInfo {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
 	private String maflag;
+	@Column
 	private String cardNum;
+	@Column
 	private String cardstat;
+	@Column
 	private String product;
 	public String getMaflag() {
 		return maflag;

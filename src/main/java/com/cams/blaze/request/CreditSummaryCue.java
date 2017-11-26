@@ -1,12 +1,23 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
+@Entity
 public class CreditSummaryCue {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
 	private Integer houseLoanCount;
+	@Column
 	private Integer otherLoanCount;
+	@Column
 	private String firstLoanOpenMonth;
+	@Column
 	private Integer loancardCount;
+	@Column
 	private String firstLoancardOpenMonth;
+	@Column
 	private Integer standardLoancardCount;
+	@Column
 	private String firstStandardLoancardOpenMonth;
 	public Integer getHouseLoanCount() {
 		return houseLoanCount;

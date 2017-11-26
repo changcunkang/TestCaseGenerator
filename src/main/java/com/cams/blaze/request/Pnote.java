@@ -1,9 +1,15 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.Date;
-
+@Entity
 public class Pnote {
+
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
 	private Date pDate;
+	@Column
 	private String pText;
 	public Date getpDate() {
 		return pDate;
