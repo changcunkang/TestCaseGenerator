@@ -1,5 +1,9 @@
 package com.fico.testCaseGenerator.data;
 
+import com.fico.testCaseGenerator.data.configuration.Item;
+import com.fico.testCaseGenerator.util.TestCaseUtils;
+import org.apache.commons.math3.stat.inference.TestUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +24,9 @@ public abstract class SimpleField extends AbstractTestData {
 	public static final int TYPE_DATETIME = 6;
 	
 	private static Map<Integer, String> fieldTypeStrMap = new HashMap<Integer, String>();
-	
+
+	private List<Integer> dependencySimpleFieldPosition;
+
 	static{
 		fieldTypeStrMap.put(1, "integer");
 		fieldTypeStrMap.put(2, "real");
@@ -31,14 +37,10 @@ public abstract class SimpleField extends AbstractTestData {
 	}
 	
 	private int fieldType;
-	
-	private Object simpleImplementField;
-	
 
-	
+	private Object simpleImplementField;
+
 	private TestData testData;
-	
-	private long testDataId;	
 
 	public TestData getTestData() {
 		return testData;
@@ -52,14 +54,6 @@ public abstract class SimpleField extends AbstractTestData {
 		return fieldType;
 	}
 
-	public String getFieldTypeStr() {
-		return this.fieldTypeStrMap.get( getFieldType() );
-	}
-	
-	public void setFieldType(int fieldType) {
-		this.fieldType = fieldType;
-	}
-
 	public Object getSimpleImplementField() {
 		return simpleImplementField;
 	}
@@ -68,17 +62,25 @@ public abstract class SimpleField extends AbstractTestData {
 		this.simpleImplementField = simpleImplementField;
 	}
 
-	public long getTestDataId() {
-		return testDataId;
+
+
+	public List<Integer> getDependencySimpleFieldPosition() {
+
+		if(dependencySimpleFieldPosition == null){
+			dependencySimpleFieldPosition = new ArrayList<Integer>();
+		}
+
+		return dependencySimpleFieldPosition;
 	}
 
-	public void setTestDataId(long testDataId) {
-		this.testDataId = testDataId;
+	public void setDependencySimpleFieldPosition(List<Integer> dependencySimpleFieldPosition) {
+		this.dependencySimpleFieldPosition = dependencySimpleFieldPosition;
 	}
 
 	@Override
 	public String toString(){
 		return this.getName();
 	}
-	
+
+
 }

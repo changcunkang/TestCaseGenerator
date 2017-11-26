@@ -9,5 +9,4 @@ public interface ApplicationDao extends CrudRepository<Application, Long> {
 
     public Application save(Application application);
 
-
 }

@@ -9,29 +9,27 @@ import com.fico.testCaseGenerator.data.SimpleField;
 import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
 import com.fico.testCaseGenerator.data.configuration.Item;
-import com.fico.testCaseGenerator.data.configuration.Restriction;
 import com.fico.testCaseGenerator.expression.TestCaseExpression;
-import com.fico.testCaseGenerator.util.RandomFactory;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
 
 public abstract class TestCaseGenerator {
 	
-	protected BOMGenerator bomGenerator;
-	
+	protected BOMGenerator bomGenerator = null;
+
 	protected Map<String, Integer> simpleFieldDependencyLocalPathCounter = null;
 
 	protected CustomFunctionFactory customFunctionFactory = null;
 
-	public Map<String, TestData> getPathTestDataMap(){
-		return this.bomGenerator.getPathTestDataMap();
-	}
-
 	private TestCaseExpression testCaseExpression = null;
 
-	protected List<TestData> unGeneratedSlaveTestDataList = new ArrayList<TestData>();
+	protected Set<TestData> unGeneratedSlaveTestDataList = new HashSet<TestData>();
 
-	protected List<SimpleField> unGeneratedSlaveSimpleFieldList = new ArrayList<SimpleField>();
+	protected Set<SimpleField> unGeneratedSlaveSimpleFieldList = new HashSet<SimpleField>();
 
+	/**
+	 * 构造函数
+	 * @param bomGenerator
+	 */
 	public TestCaseGenerator(BOMGenerator bomGenerator){
 
 		this.bomGenerator = bomGenerator;
@@ -42,12 +40,29 @@ public abstract class TestCaseGenerator {
 	}
 
 	/**
-	 * 入口主程序
+	 * 主程序对外主入口
 	 * @return
 	 */
 	public Object generateTestCase(){
 
 		clearSimpleFieldDependencyPathCounter();
+
+		TestData rootTestData = generateRootTestData();
+
+		if(rootTestData.getCustomFieldList() != null){
+			for(TestData testData : rootTestData.getCustomFieldList()){
+				generateAllTestCaseListForOneTestData(testData);
+			}
+		}
+
+		generateNotCreatedSlaveTestCase();
+
+		generateLocalDependencySimpleField();
+
+		return rootTestData.getTestCase().get(0);
+	}
+
+	private TestData generateRootTestData(){
 
 		List<Object> instanceElementList = new ArrayList<Object>();
 
@@ -61,20 +76,8 @@ public abstract class TestCaseGenerator {
 
 		rootTestData.setGenerateTestCaseFinish(true);
 
-		if(rootTestData.getCustomFieldList() != null){
-			for(TestData testData : rootTestData.getCustomFieldList()){
-				generateAllTestCaseListForOneTestData(testData);
-			}
-		}
-
-		generateNotCreatedSlaveTestCase();
-
-		generateLocalDependencySimpleField();
-
-		return rootTestCase;
+		return rootTestData;
 	}
-
-
 
 	/**
 	 * @param parentTestCaseElement 父亲已经生成的测试案例的实例
@@ -98,52 +101,6 @@ public abstract class TestCaseGenerator {
 	}
 
 	/**
-	 * 处理主从关系
-	 * @param masterSimpleField
-	 * @param slaveSimpleField
-	 * @param newInstantceArrElement
-	 */
-//	public void handlSimpleFieldDependency(SimpleField masterSimpleField, SimpleField slaveSimpleField, Object newInstantceArrElement){
-//
-//		List masterSimpleFieldTestDataList = masterSimpleField.getValueList();
-//
-//		int slaveSimpleFieldPosition = slaveSimpleField.getValueList().size();
-//
-//		int dependencyType = slaveSimpleField.getExtendtion().getDependency().getType();
-//
-//		String attributeName = slaveSimpleField.getName();
-//
-//		if( slaveSimpleFieldPosition <= masterSimpleFieldTestDataList.size()-1 && masterSimpleFieldTestDataList.size()>0 ){
-//
-//			int masterTestCasePos = slaveSimpleFieldPosition == 0 ? 0 : slaveSimpleFieldPosition -1;
-//
-//			Object targetValue = masterSimpleFieldTestDataList.get( slaveSimpleFieldPosition );
-//
-//			if( dependencyType == Dependency.TYPE_NULL && targetValue != null){
-//				createSimpleField(newInstantceArrElement, slaveSimpleField);
-//			}
-//			else if(dependencyType == Dependency.TYPE_EQUICALENCE){
-//				setTestCaseElementValue(slaveSimpleField, newInstantceArrElement, attributeName, targetValue);
-//			}
-//		}
-//		if(dependencyType == Dependency.TYPE_FUNCTIONNAME){
-//
-//			String functionName = slaveSimpleField.getExtendtion().getDependency().getFunctionName();
-//
-//			if( masterSimpleField != null ){
-//
-//				try {
-//					String targetValue = customFunctionFactory.invokeCustomFunction(functionName, masterSimpleField, slaveSimpleField);
-//
-//					setTestCaseElementValue(slaveSimpleField, newInstantceArrElement, attributeName, targetValue);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//	}
-
-	/**
 	 * 生成简单属性
 	 * @param parentTestCaseElement
 	 * @param instanceSize
@@ -151,8 +108,6 @@ public abstract class TestCaseGenerator {
 	 * @return
 	 */
 	protected void generateAttr(Object parentTestCaseElement, int instanceSize, TestData testData){
-
-		//List newInstantceArr = new ArrayList();
 
 		for(int i=0; i<instanceSize; i++){
 
@@ -162,41 +117,29 @@ public abstract class TestCaseGenerator {
 
 			testData.setGeneratingTestData(newIns);
 
-			testData.getTestCase().add(newIns);
-
 			if(i == 0){
 				testData.setGeneratingTestDataFirstChild(true);
 			}
 			else{
 				testData.setGeneratingTestDataFirstChild(false);
 			}
+
 			generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData);
-			//testData.getTestCase().add( generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData) );
+
+			testData.getTestCase().add(newIns);
 		}
 	}
 
-	protected Object generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(Object newIns, TestData testData){
-
+	public Object generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(Object newIns, TestData testData){
 		for( SimpleField simpleField : testData.getSimpleFieldList() ){
-
-			if(simpleField.getName().contains("amortizationPri")){
-				String a = "";
-			}
-
 			if(simpleField.getExtendtion() != null){
 				generateSingleTestCaseAttributeValue(newIns, simpleField);
 			}
 		}
-
 		return newIns;
 	}
 
-
 	public void generateSingleTestCaseAttributeValue( Object newInstance,  SimpleField simpleField){
-
-		if(simpleField.getName().contains("maxBalance")){
-			String a = "";
-		}
 
 		if(simpleField.getExtendtion() != null && simpleField.getExtendtion().getRestriction() != null){
 
@@ -206,152 +149,29 @@ public abstract class TestCaseGenerator {
 				this.setTestCaseElementValue(simpleField, newInstance, simpleField.getName(), expValue);
 			}
 			else{
+				recordAbstractTestDataPosition( simpleField );
 				this.unGeneratedSlaveSimpleFieldList.add(simpleField);
 			}
-
-//			//主已经建立好
-//			if( simpleField.getExtendtion().getDependency() != null &&  this.isMasterAvailable(simpleField) ){
-//
-//				SimpleField masterField = this.bomGenerator.getPathSimpleFieldMap().get( simpleField.getExtendtion().getDependency().getParentPath() );
-//
-//				handlSimpleFieldDependency(masterField, simpleField, newInstanceArr);
-//
-//			}
-//			else if( simpleField.getExtendtion().getDependency() == null && simpleField.getExtendtion().getRestriction() != null){
-//				createSimpleField(newInstanceArr, simpleField);
-//			}
 		}
 	}
-//
-//	private Object generateRestrictionExpressionValue(Restriction restriction){
-//
-//		double nullPercent = restriction.getNullPercentage();
-//
-//		double nullPercentHit = RandomFactory.random();
-//
-//		if( nullPercentHit >= nullPercent ){
-//
-//			double notNullPercentHit = RandomFactory.random();
-//
-//			double minPercent = 0;
-//
-//			double maxPercent = 0;
-//
-//			for(int i=0; i<restriction.getItem().size(); i++) {
-//
-//				minPercent = maxPercent;
-//
-//				maxPercent += restriction.getItem().get(i).getPercentage();
-//
-//				//区间的边界值界定
-//				if(notNullPercentHit> minPercent && notNullPercentHit<= maxPercent){
-//
-//					String minExp = restriction.getItem().get(i).getMinExpression().replace(" ", "").trim();
-//
-//					String maxExp = restriction.getItem().get(i).getMaxExpression().replace(" ", "").trim();
-//
-//					if(minExp.equals(maxExp)){
-//
-//						Object expReturnVal = this.testCaseExpression.parse( minExp );
-//					}
-//					else{
-//						Object minExpRtnVal = this.testCaseExpression.parse( minExp );
-//
-//						Object maxExpRtnVal = this.testCaseExpression.parse( maxExp );
-//
-//					}
-//
-//				}
-//			}
-//		}
-//		else{
-//			return null;
-//		}
-//
-//		return null;
-//	}
-//
-//	private void createSimpleField( Object newInstantceArrElement, SimpleField simpleField ){
-//
-//		Restriction restriction = simpleField.getExtendtion().getRestriction();
-//
-//		String restrictionType = restriction.getType();
-//
-//		double nullPercent = restriction.getNullPercentage();
-//
-//		double nullPercentHit = RandomFactory.random();
-//
-//		if( nullPercentHit > nullPercent ){
-//
-//			double notNullPercentHit = RandomFactory.random();
-//
-//			double minPercent = 0;
-//
-//			double maxPercent = 0;
-//
-//			for(int i=0; i<restriction.getItem().size(); i++){
-//
-//				minPercent = maxPercent;
-//
-//				maxPercent += restriction.getItem().get(i).getPercentage();
-//
-//				String attributeName = simpleField.getName();
-//
-//				if(notNullPercentHit> minPercent && notNullPercentHit<= maxPercent){
-//					//generateValue
-//					if( Restriction.TYPE_ENMURATION.equals(restrictionType) ){
-//
-//						setTestCaseElementValue(simpleField,newInstantceArrElement, attributeName, restriction.getItem().get(i).getValue());
-//					}
-//					else{
-//
-//						String minRandomRangeStr = null;
-//
-//						if( i==0 ){
-//							minRandomRangeStr = restriction.getMinStr();
-//						}else{
-//
-//							minRandomRangeStr = restriction.getItem().get(i -1).getValue();
-//						}
-//
-//						String maxRandomRangeStr = restriction.getItem().get(i).getValue();
-//
-//						String eleValue = null;
-//
-//						if( Restriction.TYPE_SECTION.equals(restrictionType) ){
-//
-//							try {
-//								eleValue = generateSimpleAttrRandomValue( simpleField, minRandomRangeStr, maxRandomRangeStr );
-//							} catch (Exception e) {
-//								// TODO Auto-generated catch block
-//								System.out.println( "Exception occur : " + simpleField.getPath() );
-//
-//								e.printStackTrace();
-//							}
-//
-//							setTestCaseElementValue(simpleField, newInstantceArrElement, attributeName, eleValue);
-//
-//						}
-//
-//						else if( Restriction.TYPE_FUNCTION.equals(restrictionType) ){
-//							try {
-//								String functionRtn = customFunctionFactory.invokeCustomFunction(maxRandomRangeStr, null, simpleField);
-//
-//								setTestCaseElementValue(simpleField, newInstantceArrElement, attributeName, functionRtn);
-//
-//							} catch (Exception e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//		else{
-//			addSimpleListTestCaseValue(simpleField, null );
-//		}
-//	}
+
+	private void recordAbstractTestDataPosition(AbstractTestData absTestData){
+		String[] allRelativedPath = absTestData.getRelativePathArr();
+		Integer[] tmpPathPosition = new Integer[allRelativedPath.length];
+
+		for( int i=0; i<allRelativedPath.length; i++ ){
+			String path = allRelativedPath[i];
+
+			if(this.bomGenerator.pathIsSimpleField(path)){
+				SimpleField masterSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(path);
+				TestData testData = masterSimpleField.getTestData();
+				tmpPathPosition[i] = testData.getTestCase().size();
+			}
+		}
+
+		absTestData.getPositionRecord().add( tmpPathPosition );
+
+	}
 
 	private void setTestCaseElementValue(SimpleField simpleField , Object newInstantceArrElement, String attributeName, Object attributeValue){
 
@@ -366,68 +186,9 @@ public abstract class TestCaseGenerator {
 
 		simpleField.getTestCase().add(eleValue);
 
-//		if(  this.bomGenerator.getSimpleFieldDependencyMap().get(simpleField.getPath()) != null ){
-//			this.bomGenerator.getSimpleFieldDependencyMap().put( simpleField.getPath(), true );
-//		}
-
 		simpleField.setGenerateTestCaseFinish(true);
 	}
 
-	private  SimpleDateFormat	dateTypeDataFormat = new SimpleDateFormat(TestCaseUtils.DATE_FORMAT);
-	
-	private  SimpleDateFormat	dateTimeTypeDataFormat = new SimpleDateFormat(TestCaseUtils.DATE_TIME_FORMAT);
-	
-	public  SimpleDateFormat getDateTypeDataFormat(){
-		return dateTypeDataFormat;
-	}
-	
-	public  SimpleDateFormat getDateTimeTypeDataFormat(){
-		return dateTimeTypeDataFormat;
-	}
-	
-//	public boolean isMasterAvailable(AbstractTestData absTestData){
-//
-//		if(absTestData instanceof TestData){
-//			TestData testData = (TestData)absTestData;
-//
-//			if(testData.getExtendtion()!= null && testData.getExtendtion().getDependency() != null){
-//				String depPath = testData.getExtendtion().getDependency().getParentPath();
-//
-//				if(this.bomGenerator.getTestDataDependencyMap().get(depPath) != null && this.bomGenerator.getTestDataDependencyMap().get(depPath)){
-//					return true;
-//				}
-//			}
-//		}else if(absTestData instanceof SimpleField){
-//			SimpleField simpleField = (SimpleField)absTestData;
-//
-//			if(simpleField.getExtendtion()!= null && simpleField.getExtendtion().getDependency() != null){
-//				String depPath = simpleField.getExtendtion().getDependency().getParentPath();
-//
-//				if(this.bomGenerator.getSimpleFieldDependencyMap().get(depPath) != null && this.bomGenerator.getSimpleFieldDependencyMap().get(depPath)){
-//					return true;
-//				}
-//			}
-//		}
-//		return false;
-//	}
-	
-	public void clearTestCaseFinishFlag(){
-		if( this.bomGenerator.getRootTestData() != null ){
-			recursiveClearTestCaseFinishFlag( this.bomGenerator.getRootTestData(), false );
-		}
-	}
-	
-	private void recursiveClearTestCaseFinishFlag(TestData testData, boolean flag){
-		testData.setGenerateTestCaseFinish(flag);
-		
-		for(SimpleField sf : testData.getSimpleFieldList()){
-			sf.setGenerateTestCaseFinish(flag);
-		}
-		
-		for(TestData childTestData : testData.getCustomFieldList()){
-			recursiveClearTestCaseFinishFlag( childTestData,  flag);
-		}
-	}
 
 
 	/**
@@ -445,7 +206,6 @@ public abstract class TestCaseGenerator {
 				generateAllTestCaseListForOneTestData(tmpTestData);
 			}
 		}
-
 	}
 
 	/**
@@ -457,8 +217,6 @@ public abstract class TestCaseGenerator {
 	public void generateTestDataInstance( TestData testData) {
 
 		List paretnTestCaseElementList = testData.getParentTestData().getTestCase();
-
-//		List rtnList = new ArrayList();
 
 		if(testData.getExtendtion() != null && testData.getExtendtion().getRestriction() != null){
 
@@ -474,8 +232,8 @@ public abstract class TestCaseGenerator {
 
 			}else{
 				this.unGeneratedSlaveTestDataList.add( testData );
+				this.recordAbstractTestDataPosition( testData );
 			}
-
 		}
 	}
 
@@ -487,7 +245,7 @@ public abstract class TestCaseGenerator {
 		}
 
 		for(Item item : abstractTestData.getExtendtion().getRestriction().getItem()){
-			if( !this.testCaseExpression.isAllElementReady( item.getMinExpression(), abstractTestData.getPath())
+			if(  !this.testCaseExpression.isAllElementReady( item.getMinExpression(), abstractTestData.getPath())
 					|| !this.testCaseExpression.isAllElementReady( item.getMaxExpression(), abstractTestData.getPath())){
 				isAllRelativeElementReady = false;
 			}
@@ -495,67 +253,96 @@ public abstract class TestCaseGenerator {
 		return isAllRelativeElementReady;
 	}
 
+	private void handleLocalDependency(){
+		boolean testDataLoopFlag = false;
+		boolean simpleFieldLoopFlag = false;
+
+		boolean isTestDataListReduced = true;
+		boolean isSimpleFieldReduced = true;
+
+		do{
+			//testData
+			if(this.unGeneratedSlaveTestDataList != null && this.unGeneratedSlaveTestDataList.size() > 0){
+
+				testDataLoopFlag = true;
+
+				while( testDataLoopFlag ){
+
+					int unConstructedTestDataListSize = unGeneratedSlaveTestDataList.size();
+
+					for(TestData unConsTestCaseData : unGeneratedSlaveTestDataList){
+						if(this.isAllRelativeElementReady( unConsTestCaseData )){
+							generateAllTestCaseListForOneTestData(unConsTestCaseData);
+							unGeneratedSlaveTestDataList.remove(unConsTestCaseData);
+						}
+					}
+					if(unGeneratedSlaveTestDataList.size() == 0){
+						testDataLoopFlag = false;
+						break;
+					}else if(unConstructedTestDataListSize >= unGeneratedSlaveTestDataList.size()){
+						isTestDataListReduced = false;
+					}
+				}
+			}
+
+			//simpleField
+			if(this.unGeneratedSlaveSimpleFieldList != null && this.unGeneratedSlaveSimpleFieldList.size() > 0 ){
+
+				simpleFieldLoopFlag = true;
+
+				List<SimpleField> tmpList = new ArrayList<SimpleField>();
+
+				tmpList.addAll( unGeneratedSlaveSimpleFieldList );
+
+				while( simpleFieldLoopFlag ){
+
+					int unConstructedSimpleListSize = unGeneratedSlaveSimpleFieldList.size();
+
+					for(int i=0; i<tmpList.size(); i ++){
+
+						SimpleField unConsTestCaseData = tmpList.get(i);
+
+						if( this.isAllRelativeElementReady(unConsTestCaseData) ){
+
+							for(Object testCaseIns : unConsTestCaseData.getTestData().getTestCase() ){
+								generateSingleTestCaseAttributeValue(testCaseIns,unConsTestCaseData);
+							}
+							unGeneratedSlaveSimpleFieldList.remove(unConsTestCaseData);
+							tmpList.remove(unConsTestCaseData);
+						}
+					}
+					if(unGeneratedSlaveSimpleFieldList.size() == 0){
+						simpleFieldLoopFlag = false;
+						break;
+					}else if(unConstructedSimpleListSize == unGeneratedSlaveSimpleFieldList.size()){
+						isSimpleFieldReduced = false;
+					}
+				}
+			}
+
+			//异常
+			if( !isTestDataListReduced && !isSimpleFieldReduced ){
+				System.out.println("None TestData nor SimpleField is reduced");
+				break;
+			}
+
+		}while (!testDataLoopFlag && simpleFieldLoopFlag );
+	}
 	
 	public void generateNotCreatedSlaveTestCase(){
 		
-		if(this.unGeneratedSlaveTestDataList != null){
-			boolean loopFlag = true;
-			
-			while( loopFlag ){
-				
-				int unConstructedTestCaseListSize = unGeneratedSlaveTestDataList.size();
-				
-				for(TestData unConsTestCaseData : unGeneratedSlaveTestDataList){
-					if(this.isAllRelativeElementReady( unConsTestCaseData )){
-						generateAllTestCaseListForOneTestData(unConsTestCaseData);
-						unGeneratedSlaveTestDataList.remove(unConsTestCaseData);
-					}
-				}
-				if(unGeneratedSlaveTestDataList.size() == 0){
-					loopFlag = false;
-					break;
-				}else if(unConstructedTestCaseListSize >= unGeneratedSlaveTestDataList.size()){
-					System.out.println("local dead loop in generateNotCreatedSlaveTestCase");
-					break;
-				}
-			}
-		}
+
 	}
 	
 	public void generateLocalDependencySimpleField(){
-		if(this.unGeneratedSlaveSimpleFieldList != null){
-			boolean loopFlag = true;
-			
-			while( loopFlag ){
-				
-				int unConstructedTestCaseListSize = unGeneratedSlaveSimpleFieldList.size();
-				
-				for(int i=0; i<unGeneratedSlaveSimpleFieldList.size(); i ++){
-					
-					SimpleField unConsTestCaseData = unGeneratedSlaveSimpleFieldList.get(i);
-					
-					if( this.isAllRelativeElementReady(unConsTestCaseData) ){
-						
-						for(Object testCaseIns : unConsTestCaseData.getTestData().getTestCase() ){
-							generateSingleTestCaseAttributeValue(testCaseIns,unConsTestCaseData);
-						}
-						unGeneratedSlaveSimpleFieldList.remove(unConsTestCaseData);
-					}
-				}
-				if(unGeneratedSlaveSimpleFieldList.size() == 0){
-					loopFlag = false;
-					break;
-				}else if(unConstructedTestCaseListSize == unGeneratedSlaveSimpleFieldList.size()){
-					System.out.println("local dead loop in generateLocalDependencySimpleField");
-					break;
-				}
-			}
-		}
+
+
 	}
 	
 	private void clearSimpleFieldDependencyPathCounter(){
-		
-		clearTestCaseFinishFlag();
+
+		//重置状态
+		this.clearTestCaseFinishFlag();
 		
 		if( simpleFieldDependencyLocalPathCounter == null ){
 			simpleFieldDependencyLocalPathCounter = new HashMap<String, Integer>();
@@ -565,35 +352,33 @@ public abstract class TestCaseGenerator {
 			simpleFieldDependencyLocalPathCounter.put(simpleField.getPath(), 0);
 		}
 
-		this.unGeneratedSlaveTestDataList = new ArrayList<TestData>();
+		this.unGeneratedSlaveTestDataList = new HashSet<TestData>();
 
-		this.unGeneratedSlaveSimpleFieldList = new ArrayList<SimpleField>();
+		this.unGeneratedSlaveSimpleFieldList = new HashSet<SimpleField>();
 	}
 
-//	protected void manageMasterSlave(Object absTestData){
-//
-//		manageLocalMasterSlave( absTestData );
-//	}
-	
-//	protected void manageLocalMasterSlave( Object absTestData ){
-//
-//		if(absTestData instanceof TestData){
-//			TestData testData = (TestData)absTestData;
-//
-//			this.bomGenerator.getTestDataDependencyMap().put(testData.getPath(), true);
-//
-//			List<SimpleField> simpleFiledList = testData.getSimpleFieldList();
-//
-//			if( simpleFiledList != null){
-//				for(SimpleField simpleField : simpleFiledList){
-//
-//					if(simpleField.isGenerateTestCaseFinish() &&  this.bomGenerator.getSimpleFieldDependencyMap().get(simpleField.getPath()) != null){
-//						this.bomGenerator.getSimpleFieldDependencyMap().put( simpleField.getPath(), true );
-//					}
-//				}
-//			}
-//		}
-//	}
+	public void clearTestCaseFinishFlag(){
+		if( this.bomGenerator.getRootTestData() != null ){
+			recursiveClearTestCaseFinishFlag( this.bomGenerator.getRootTestData(), false );
+		}
+	}
+
+	private void recursiveClearTestCaseFinishFlag(TestData testData, boolean flag){
+
+		testData.setGenerateTestCaseFinish(flag);
+		testData.setGeneratingTestDataFirstChild(flag);
+		testData.setGeneratingTestData(null);
+
+		for(SimpleField sf : testData.getSimpleFieldList()){
+			sf.setGenerateTestCaseFinish(flag);
+			sf.setDependencySimpleFieldPosition(new ArrayList<Integer>());
+		}
+
+		for(TestData childTestData : testData.getCustomFieldList()){
+			recursiveClearTestCaseFinishFlag( childTestData,  flag);
+		}
+	}
+
 
 	public TestData getRootTestData(){
 		return this.bomGenerator.getRootTestData();
@@ -609,20 +394,36 @@ public abstract class TestCaseGenerator {
 
 	protected abstract Object createEmptyTestCaseInstance(TestData testData);
 
-	public List<TestData> getUnGeneratedSlaveTestDataList() {
+	public Set<TestData> getUnGeneratedSlaveTestDataList() {
 		return unGeneratedSlaveTestDataList;
 	}
 
-	public void setUnGeneratedSlaveTestDataList(List<TestData> unGeneratedSlaveTestDataList) {
+	public void setUnGeneratedSlaveTestDataList(Set<TestData> unGeneratedSlaveTestDataList) {
 		this.unGeneratedSlaveTestDataList = unGeneratedSlaveTestDataList;
 	}
 
-	public List<SimpleField> getUnGeneratedSlaveSimpleFieldList() {
+	public Set<SimpleField> getUnGeneratedSlaveSimpleFieldList() {
 		return unGeneratedSlaveSimpleFieldList;
 	}
 
-	public void setUnGeneratedSlaveSimpleFieldList(List<SimpleField> unGeneratedSlaveSimpleFieldList) {
+	public void setUnGeneratedSlaveSimpleFieldList(HashSet<SimpleField> unGeneratedSlaveSimpleFieldList) {
 		this.unGeneratedSlaveSimpleFieldList = unGeneratedSlaveSimpleFieldList;
+	}
+
+	public Map<String, TestData> getPathTestDataMap(){
+		return this.bomGenerator.getPathTestDataMap();
+	}
+
+	private  SimpleDateFormat	dateTypeDataFormat = new SimpleDateFormat(TestCaseUtils.DATE_FORMAT);
+
+	private  SimpleDateFormat	dateTimeTypeDataFormat = new SimpleDateFormat(TestCaseUtils.DATE_TIME_FORMAT);
+
+	public  SimpleDateFormat getDateTypeDataFormat(){
+		return dateTypeDataFormat;
+	}
+
+	public  SimpleDateFormat getDateTimeTypeDataFormat(){
+		return dateTimeTypeDataFormat;
 	}
 
 }

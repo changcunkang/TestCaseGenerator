@@ -153,8 +153,6 @@ public class CustomFunctionFactory {
 		}
 
 		return Character.toString(convertedDue123Str.charAt(relativeCycleNumInt));
-
-//		return convertedDue123Str.substring( relativeCycleNumInt-1, 1 );
 	}
 
 	private Object getMthsOdueAmt(String due123, Object relativeCycleNum,  Object balance){

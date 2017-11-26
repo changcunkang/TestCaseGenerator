@@ -46,7 +46,7 @@ public class TestCaseExpression {
 
     private static final int STATE_FUNCTION = 0;
 
-    private static final String FIND_ALL_PATH_EXP = "(\\/)?Application(\\/@?[_a-zA-Z]{1,}[a-zA-Z0-9]{1,})*\\/";
+    public static final String FIND_ALL_PATH_EXP = "(\\/)?Application(\\/@?[_a-zA-Z]{1,}[a-zA-Z0-9]{1,})*\\/";
 
     private static final String FIND_PURE_NUMBERIC_PATH_EXP = "^(-?\\d+)(\\.+\\d+)?$";
 
@@ -104,6 +104,7 @@ public class TestCaseExpression {
                     if(minExp.equals(maxExp) || maxExp == null || "~".equals(maxExp)){
 
                         Object rtnVal = this.recursiveParse(null, minExp, restriction );
+
                         return rtnVal;
                     }
                     else{
@@ -409,11 +410,19 @@ public class TestCaseExpression {
 
     private Object recursiveFunctionInvocation(Restriction restriction, String path, String[] rtn){
 
+        if(path.contains("AmortizationPri")){
+            String a = "";
+        }
+
         assert rtn.length == 2 : "number of arguments in recursiveFunctionInvocation is not 2";
 
         Integer recursiveVar = new Integer( new Double(rtn[0].toString()).intValue() );
 
         SimpleField targetMasterSimpleField = this.bomGenerator.getPathSimpleFieldMap().get( rtn[1] );
+
+        if(targetMasterSimpleField == null){
+            String a = "";
+        }
 
         SimpleField slaveSimpleField = (SimpleField)restriction.getExtendtion().getParentTestData();
 
@@ -565,17 +574,7 @@ public class TestCaseExpression {
      * @return
      */
     private List<String> getAllAbsTestData(String exp){
-
-        List<String> rtnPathList = new ArrayList<String>();
-
-        Pattern p = Pattern.compile(FIND_ALL_PATH_EXP);
-
-        Matcher m = p.matcher( exp );
-
-        while (m.find() ){
-            rtnPathList.add( m.group() );
-        }
-        return rtnPathList;
+        return TestCaseUtils.getAllAbsTestData(exp);
     }
 
     /**
