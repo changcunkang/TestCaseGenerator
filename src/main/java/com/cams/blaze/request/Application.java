@@ -10,14 +10,23 @@ import java.util.*;
 @Entity
 public class Application {
 
+
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column
 	private Long id;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
 	/**客户层信息*/
 	@OneToOne(cascade = CascadeType.ALL)
-	@Transient
 	private Customer customer = new Customer();
 	/**输出响应*/
 	//@OneToOne(cascade = CascadeType.ALL)
@@ -60,6 +69,7 @@ public class Application {
 	public void setMessageList(MessageList messageList) {
 		this.messageList = messageList;
 	}
+
 	public DecisionResponse getDecisionResponse() {
 		return decisionResponse;
 	}

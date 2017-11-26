@@ -1,39 +1,87 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
 public class MonthlyRecordInfo {
-	private List<ConsumeTypeSet> consumeTypeSet = new ArrayList<ConsumeTypeSet>();
-	private List<TransRecords> transRecords = new ArrayList<TransRecords>();
-	private List<InstalmentInfo> instalmentInfo = new ArrayList<InstalmentInfo>();
-	private List<HighRiskTrans> highRiskTrans = new ArrayList<HighRiskTrans>();
-	private List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
-	private Integer relativeCycleNumber;
-	private Integer delinquentCycle;
-	private Double fixCreditLimit;
-	private Double temporaryLimit;
-	private Double billDateFixCreditLimit;
-	private Double billDateTemporaryLimit;
-	private Double cashLimt;
-	private Double balance;
-	private Double mthsOdueAmt;
-	private Double interest;
-	private Double monthlyIncome;
-	private Double dailyBalanceSum;
-	private Double overdraftAmtTot;
-	private Double dailyCreditLimtSum;
-	private Double maxBalance;
-	private Double billInstaledAmt;
-	private Double billPaymentAmt;
-	private Integer maxFqTerms;
-	private String billInstalmentKeys;
-	private String postInstalmentKeys;
-	private String consumerInstalmentKeys;
-	private Double top1TransanctionAmt;
-	private Double top2TransanctionAmt;
-	private Double top3TransanctionAmt;
-	private Double top4TransanctionAmt;
-	private Double top5TransanctionAmt;
+
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL)
+    private	 List<ConsumeTypeSet> consumeTypeSet = new ArrayList<ConsumeTypeSet>();
+	@OneToMany(cascade = CascadeType.ALL)
+    private	 List<TransRecords> transRecords = new ArrayList<TransRecords>();
+	@OneToMany(cascade = CascadeType.ALL)
+    private	 List<InstalmentInfo> instalmentInfo = new ArrayList<InstalmentInfo>();
+	@OneToMany(cascade = CascadeType.ALL)
+    private	 List<HighRiskTrans> highRiskTrans = new ArrayList<HighRiskTrans>();
+	@OneToMany(cascade = CascadeType.ALL)
+    private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
+	
+	@Column
+    private	 Integer relativeCycleNumber;
+	@Column
+    private	 Integer delinquentCycle;
+	@Column
+    private	 Double fixCreditLimit;
+	@Column
+    private	 Double temporaryLimit;
+	@Column
+    private	 Double billDateFixCreditLimit;
+	@Column
+    private	 Double billDateTemporaryLimit;
+	@Column
+    private	 Double cashLimt;
+	@Column
+    private	 Double balance;
+	@Column
+    private	 Double mthsOdueAmt;
+	@Column
+    private	 Double interest;
+	@Column
+    private	 Double monthlyIncome;
+	@Column
+    private	 Double dailyBalanceSum;
+	@Column
+    private	 Double overdraftAmtTot;
+	@Column
+    private	 Double dailyCreditLimtSum;
+	@Column
+    private	 Double maxBalance;
+	@Column
+    private	 Double billInstaledAmt;
+	@Column
+    private	 Double billPaymentAmt;
+	@Column
+    private	 Integer maxFqTerms;
+	@Column
+    private	 String billInstalmentKeys;
+	@Column
+    private	 String postInstalmentKeys;
+	@Column
+    private	 String consumerInstalmentKeys;
+	@Column
+    private	 Double top1TransanctionAmt;
+	@Column
+    private	 Double top2TransanctionAmt;
+	@Column
+    private	 Double top3TransanctionAmt;
+	@Column
+    private	 Double top4TransanctionAmt;
+	@Column
+    private	 Double top5TransanctionAmt;
 
 
 

@@ -1,129 +1,262 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
 public class Product {
-	private List<Account> account = new ArrayList<Account>();
-	private List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
-	private List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
-	private String productNumber;
-	private String productCode;
-	private Double bScore;
-	private Double ptfqScore;
-	private Double defqScore;
-	private Double xhCuScore;
-	private Double score01;
-	private Double score02;
-	private Double score03;
-	private Double score04;
-	private Double score05;
-	private Double score06;
-	private Double score07;
-	private Double score08;
-	private Double score09;
-	private Double score10;
-	private String channelType;
-	private String customerSegmentation;
-	private String adjustLimitType;
-	private Date tempAlVaildDate;
-	private Double applyALAmt;
-	private Double applyInstalAmt;
-	private Integer applyInstalTerms;
-	private Double preALAmt1;
-	private Date preALVaildDate1;
-	private Double preALAmt2;
-	private Date preALVaildDate2;
-	private Double preALAmt3;
-	private Date preALVaildDate3;
-	private Double preALAmt4;
-	private Date preALVaildDate4;
-	private Double preALAmt5;
-	private Date preALVaildDate5;
-	private Double adjustLimitRatio;
 
-	private String reservedString01;
-	private String reservedString02;
-	private String reservedString03;
-	private String reservedString04;
-	private String reservedString05;
-	private String reservedString06;
-	private String reservedString07;
-	private String reservedString08;
-	private String reservedString09;
-	private String reservedString10;
-	private String reservedString11;
-	private String reservedString12;
-	private String reservedString13;
-	private String reservedString14;
-	private String reservedString15;
-	private String reservedString16;
-	private String reservedString17;
-	private String reservedString18;
-	private String reservedString19;
-	private String reservedString20;
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
 
-	private Double reservedDouble01;
-	private Double reservedDouble02;
-	private Double reservedDouble03;
-	private Double reservedDouble04;
-	private Double reservedDouble05;
-	private Double reservedDouble06;
-	private Double reservedDouble07;
-	private Double reservedDouble08;
-	private Double reservedDouble09;
-	private Double reservedDouble10;
-	private Double reservedDouble11;
-	private Double reservedDouble12;
-	private Double reservedDouble13;
-	private Double reservedDouble14;
-	private Double reservedDouble15;
-	private Double reservedDouble16;
-	private Double reservedDouble17;
-	private Double reservedDouble18;
-	private Double reservedDouble19;
-	private Double reservedDouble20;
+	public Long getId() {
+		return id;
+	}
 
-	private Integer reservedInteger01;
-	private Integer reservedInteger02;
-	private Integer reservedInteger03;
-	private Integer reservedInteger04;
-	private Integer reservedInteger05;
-	private Integer reservedInteger06;
-	private Integer reservedInteger07;
-	private Integer reservedInteger08;
-	private Integer reservedInteger09;
-	private Integer reservedInteger10;
-	private Integer reservedInteger11;
-	private Integer reservedInteger12;
-	private Integer reservedInteger13;
-	private Integer reservedInteger14;
-	private Integer reservedInteger15;
-	private Integer reservedInteger16;
-	private Integer reservedInteger17;
-	private Integer reservedInteger18;
-	private Integer reservedInteger19;
-	private Integer reservedInteger20;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-	private Date reservedDate01;
-	private Date reservedDate02;
-	private Date reservedDate03;
-	private Date reservedDate04;
-	private Date reservedDate05;
-	private Date reservedDate06;
-	private Date reservedDate07;
-	private Date reservedDate08;
-	private Date reservedDate09;
-	private Date reservedDate10;
-	private Date reservedDate11;
-	private Date reservedDate12;
-	private Date reservedDate13;
-	private Date reservedDate14;
-	private Date reservedDate15;
-	private Date reservedDate16;
-	private Date reservedDate17;
-	private Date reservedDate18;
-	private Date reservedDate19;
-	private Date reservedDate20;
+	@OneToMany(cascade = CascadeType.ALL)
+    private	 List<Account> account = new ArrayList<Account>();
+	@Transient
+    private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
+	@Transient
+    private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
+	@Column
+    private	 String productNumber;
+	@Column
+    private	 String productCode;
+	@Column
+    private	 Double bScore;
+	@Column
+    private	 Double ptfqScore;
+	@Column
+    private	 Double defqScore;
+	@Column
+    private	 Double xhCuScore;
+	@Column
+    private	 Double score01;
+	@Column
+    private	 Double score02;
+	@Column
+    private	 Double score03;
+	@Column
+    private	 Double score04;
+	@Column
+    private	 Double score05;
+	@Column
+    private	 Double score06;
+	@Column
+    private	 Double score07;
+	@Column
+    private	 Double score08;
+	@Column
+    private	 Double score09;
+	@Column
+    private	 Double score10;
+	@Column
+    private	 String channelType;
+	@Column
+    private	 String customerSegmentation;
+	@Column
+    private	 String adjustLimitType;
+	@Column
+    private	 Date tempAlVaildDate;
+	@Column
+    private	 Double applyALAmt;
+	@Column
+    private	 Double applyInstalAmt;
+	@Column
+    private	 Integer applyInstalTerms;
+	@Column
+    private	 Double preALAmt1;
+	@Column
+    private	 Date preALVaildDate1;
+	@Column
+    private	 Double preALAmt2;
+	@Column
+    private	 Date preALVaildDate2;
+	@Column
+    private	 Double preALAmt3;
+	@Column
+    private	 Date preALVaildDate3;
+	@Column
+    private	 Double preALAmt4;
+	@Column
+    private	 Date preALVaildDate4;
+	@Column
+    private	 Double preALAmt5;
+	@Column
+    private	 Date preALVaildDate5;
+	@Column
+    private	 Double adjustLimitRatio;
+
+	@Column
+    private	 String reservedString01;
+	@Column
+    private	 String reservedString02;
+	@Column
+    private	 String reservedString03;
+	@Column
+    private	 String reservedString04;
+	@Column
+    private	 String reservedString05;
+	@Column
+    private	 String reservedString06;
+	@Column
+    private	 String reservedString07;
+	@Column
+    private	 String reservedString08;
+	@Column
+    private	 String reservedString09;
+	@Column
+    private	 String reservedString10;
+	@Column
+    private	 String reservedString11;
+	@Column
+    private	 String reservedString12;
+	@Column
+    private	 String reservedString13;
+	@Column
+    private	 String reservedString14;
+	@Column
+    private	 String reservedString15;
+	@Column
+    private	 String reservedString16;
+	@Column
+    private	 String reservedString17;
+	@Column
+    private	 String reservedString18;
+	@Column
+    private	 String reservedString19;
+	@Column
+    private	 String reservedString20;
+
+	@Column
+    private	 Double reservedDouble01;
+	@Column
+    private	 Double reservedDouble02;
+	@Column
+    private	 Double reservedDouble03;
+	@Column
+    private	 Double reservedDouble04;
+	@Column
+    private	 Double reservedDouble05;
+	@Column
+    private	 Double reservedDouble06;
+	@Column
+    private	 Double reservedDouble07;
+	@Column
+    private	 Double reservedDouble08;
+	@Column
+    private	 Double reservedDouble09;
+	@Column
+    private	 Double reservedDouble10;
+	@Column
+    private	 Double reservedDouble11;
+	@Column
+    private	 Double reservedDouble12;
+	@Column
+    private	 Double reservedDouble13;
+	@Column
+    private	 Double reservedDouble14;
+	@Column
+    private	 Double reservedDouble15;
+	@Column
+    private	 Double reservedDouble16;
+	@Column
+    private	 Double reservedDouble17;
+	@Column
+    private	 Double reservedDouble18;
+	@Column
+    private	 Double reservedDouble19;
+	@Column
+    private	 Double reservedDouble20;
+
+	@Column
+    private	 Integer reservedInteger01;
+	@Column
+    private	 Integer reservedInteger02;
+	@Column
+    private	 Integer reservedInteger03;
+	@Column
+    private	 Integer reservedInteger04;
+	@Column
+    private	 Integer reservedInteger05;
+	@Column
+    private	 Integer reservedInteger06;
+	@Column
+    private	 Integer reservedInteger07;
+	@Column
+    private	 Integer reservedInteger08;
+	@Column
+    private	 Integer reservedInteger09;
+	@Column
+    private	 Integer reservedInteger10;
+	@Column
+    private	 Integer reservedInteger11;
+	@Column
+    private	 Integer reservedInteger12;
+	@Column
+    private	 Integer reservedInteger13;
+	@Column
+    private	 Integer reservedInteger14;
+	@Column
+    private	 Integer reservedInteger15;
+	@Column
+    private	 Integer reservedInteger16;
+	@Column
+    private	 Integer reservedInteger17;
+	@Column
+    private	 Integer reservedInteger18;
+	@Column
+    private	 Integer reservedInteger19;
+	@Column
+    private	 Integer reservedInteger20;
+
+	@Column
+    private	 Date reservedDate01;
+	@Column
+    private	 Date reservedDate02;
+	@Column
+    private	 Date reservedDate03;
+	@Column
+    private	 Date reservedDate04;
+	@Column
+    private	 Date reservedDate05;
+	@Column
+    private	 Date reservedDate06;
+	@Column
+    private	 Date reservedDate07;
+	@Column
+    private	 Date reservedDate08;
+	@Column
+    private	 Date reservedDate09;
+	@Column
+    private	 Date reservedDate10;
+	@Column
+    private	 Date reservedDate11;
+	@Column
+    private	 Date reservedDate12;
+	@Column
+    private	 Date reservedDate13;
+	@Column
+    private	 Date reservedDate14;
+	@Column
+    private	 Date reservedDate15;
+	@Column
+    private	 Date reservedDate16;
+	@Column
+    private	 Date reservedDate17;
+	@Column
+    private	 Date reservedDate18;
+	@Column
+    private	 Date reservedDate19;
+	@Column
+    private	 Date reservedDate20;
 	
 
 	public Double getPtfqScore() {
