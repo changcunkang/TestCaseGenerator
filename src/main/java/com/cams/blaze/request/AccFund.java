@@ -4,16 +4,41 @@ import java.util.*;
 
 import org.springframework.beans.BeanUtils;
 
+import javax.persistence.*;
+
+@Entity
 public class AccFund {
+
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@Column
 	private String area;
+	@Column
 	private Date registerDate;
+	@Column
 	private String firstMonth;
+	@Column
 	private String toMonth;
+	@Column
 	private String state;
+	@Column
 	private Double pay;
+	@Column
 	private Double ownPercent;
+	@Column
 	private Double comPercent;
+	@Column
 	private String organname;
+	@Column
 	private Date getTime;
 	public String getArea() {
 		return area;

@@ -1,5 +1,6 @@
 package com.cams.blaze.response;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -7,19 +8,45 @@ import java.util.Date;
  * @author YuHuaPeng
  *
  */
+@Entity
 public class DerivedVariable {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@Column
 	private Integer index;
+	@Column
 	private String associationID;
+	@Column
 	private String variableSetName;
+	@Column
 	private String variableName;
+	@Column
 	private String variableCode;
+	@Column
 	private String variableValue;
+	@Column
 	private String dataType;
+	@Column
 	private String implementationType;
+	@Column
 	private String implementationName;
+	@Column
 	private String stringValue;
+	@Column
 	private Double realValue;
+	@Column
 	private Integer integerValue;
+	@Column
 	private Date dateValue;
 
 	public String getStringValue() {

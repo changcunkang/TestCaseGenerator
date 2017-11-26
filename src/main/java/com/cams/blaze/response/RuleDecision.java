@@ -1,21 +1,46 @@
 package com.cams.blaze.response;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Entity
 public class RuleDecision {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<RuleAssociation> ruleAssociation=new ArrayList<RuleAssociation>();
-    private Integer index;
-    private String rulesetName;
-    private String rulesetCode;
-    private String rulesetType;
-    private String ruleName;
-    private String ruleCode;
-    private String ruleType;
-    private String ruleDecisionResult;
-    private String ruleReasonCode;
-    private String ruleReasonText;
-    private Integer ruleSeverityLevel;
+    @Column
+	private Integer index;
+    @Column
+	private String rulesetName;
+    @Column
+	private String rulesetCode;
+    @Column
+	private String rulesetType;
+    @Column
+	private String ruleName;
+    @Column
+	private String ruleCode;
+    @Column
+	private String ruleType;
+    @Column
+	private String ruleDecisionResult;
+    @Column
+	private String ruleReasonCode;
+    @Column
+	private String ruleReasonText;
+    @Column
+	private Integer ruleSeverityLevel;
     
 	public Integer getIndex() {
 		return index;

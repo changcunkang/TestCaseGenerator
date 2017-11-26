@@ -1,15 +1,40 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
+
+@Entity
 public class ShareAndDebtSum {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@Column
 	private String shareAndDebtCD;
+	@Column
 	private Integer financeCorpCount;
+	@Column
 	private Integer financeOrgCount;
+	@Column
 	private Integer accountCount;
+	@Column
 	private Double creditLimit;
+	@Column
 	private Double maxCreditLimitPerOrg;
+	@Column
 	private Double minCreditLimitPerOrg;
+	@Column
 	private Double balance;
+	@Column
 	private Double usedCreditLimit;
+	@Column
 	private Double latest6MonthUsedAvgAmount;
 	public String getShareAndDebtCD() {
 		return shareAndDebtCD;

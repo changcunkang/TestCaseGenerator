@@ -5,20 +5,38 @@ package com.cams.blaze.response;
  * @author YuHuaPeng
  *
  */
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Entity
 public class DecisionFlowStepHistory {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 	/**规则集历史ʷ*/
-    private List<RulesetHistory> rulesetHistory=new ArrayList<RulesetHistory>();
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<RulesetHistory> rulesetHistory=new ArrayList<RulesetHistory>();
     /**步骤序号*/
-    private Integer stepIndex;
+    @Column
+	private Integer stepIndex;
     /**实施类型*/
-    private String implementationType;
+    @Column
+	private String implementationType;
     /**实施名称*/
-    private String implementationName;
+    @Column
+	private String implementationName;
     /**函数结果*/
-    private String functionResult;
+    @Column
+	private String functionResult;
 
 	public List<RulesetHistory> getRulesetHistory() {
 		return rulesetHistory;

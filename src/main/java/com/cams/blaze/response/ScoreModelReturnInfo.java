@@ -5,23 +5,47 @@ package com.cams.blaze.response;
  * @author YuHuaPeng
  *
  */
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+@Entity
 public class ScoreModelReturnInfo
-{ 
-  private List<ScoredCharacteristic> scoredCharacteristic = new ArrayList<ScoredCharacteristic>();
-  private String associationID;
-  private String scoreModelName;
-  private String versionID;
-  private String scoreModelID;
-  private Double finalScore;
-  private Double rawScore;
-  private Double initialScore;
-  private Date scoreDateTime;
-  private Integer unexpectedCount;
-  private Integer characteristicCount;
+{
+  @Id
+  @GeneratedValue(strategy= GenerationType.IDENTITY)
+  @Column
+  private Long id;
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+  @OneToMany(cascade = CascadeType.ALL)
+	private List<ScoredCharacteristic> scoredCharacteristic = new ArrayList<ScoredCharacteristic>();
+  @Column
+	private String associationID;
+  @Column
+	private String scoreModelName;
+  @Column
+	private String versionID;
+  @Column
+	private String scoreModelID;
+  @Column
+	private Double finalScore;
+  @Column
+	private Double rawScore;
+  @Column
+	private Double initialScore;
+  @Column
+	private Date scoreDateTime;
+  @Column
+	private Integer unexpectedCount;
+  @Column
+	private Integer characteristicCount;
  
   public List<ScoredCharacteristic> getScoredCharacteristic()
   {

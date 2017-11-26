@@ -1,8 +1,25 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
+
+@Entity
 public class GuaranteeSum {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@Column
 	private Integer count;
+	@Column
 	private Double amount;
+	@Column
 	private Double balance;
 	public Integer getCount() {
 		return count;

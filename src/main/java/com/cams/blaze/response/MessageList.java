@@ -4,15 +4,31 @@ package com.cams.blaze.response;
  * @author YuHuaPeng
  *
  */
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Entity
 public class MessageList
 {
-  private List<Message> message = new ArrayList<Message>();
-  private Integer statusCode;
-  private String statusDescription; 
+  @Id
+  @GeneratedValue(strategy= GenerationType.IDENTITY)
+  @Column
+  private Long id;
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+  @OneToMany(cascade = CascadeType.ALL)
+	private List<Message> message = new ArrayList<Message>();
+  @Column
+	private Integer statusCode;
+  @Column
+	private String statusDescription; 
 
   public List<Message> getMessage()
   {

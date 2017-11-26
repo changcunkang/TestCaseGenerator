@@ -4,18 +4,33 @@ package com.cams.blaze.response;
  * @author YuHuaPeng
  *
  */
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 
-
+@Entity
 public class RulesetHistory {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column
+    private Long id;
 
-    private List<RuleHistory> ruleHistory=new ArrayList<RuleHistory>();
+    public Long getId() {
+        return id;
+    }
 
-    private String rulesetName;
+    public void setId(Long id) {
+        this.id = id;
+    }
+    @OneToMany(cascade = CascadeType.ALL)
+	private List<RuleHistory> ruleHistory=new ArrayList<RuleHistory>();
 
-    private String rulesetCode;
+    @Column
+	private String rulesetName;
+
+    @Column
+	private String rulesetCode;
 
     public List<RuleHistory> getRuleHistory() {
 		return ruleHistory;

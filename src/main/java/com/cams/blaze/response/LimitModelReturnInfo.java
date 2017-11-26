@@ -1,13 +1,30 @@
 package com.cams.blaze.response;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Entity
 public class LimitModelReturnInfo {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<LimitItem> limitItem = new ArrayList<LimitItem>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<LimitAction> limitAction = new ArrayList<LimitAction>();
+	@Column
 	private String associationID;
+	@Column
 	private String limitModelName;
+	@Column
 	private String limitModelID;
 	public String getAssociationID() {
 		return associationID;

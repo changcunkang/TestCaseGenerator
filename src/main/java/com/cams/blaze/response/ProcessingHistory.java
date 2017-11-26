@@ -3,14 +3,32 @@ package com.cams.blaze.response;
  * @author YuHuaPeng
  *
  */
+import javax.persistence.*;
 import java.util.*;
-
+@Entity
 public class ProcessingHistory {
-    private DecisionFlowHistory decisionFlowHistory=new DecisionFlowHistory();
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@OneToOne(cascade = CascadeType.ALL)
+	private DecisionFlowHistory decisionFlowHistory=new DecisionFlowHistory();
+	@Column
 	private String entryPoint;
-    private Date startTimestamp;
-    private Date stopTimestamp;
-    private Integer elapsedMillis;
+    @Column
+	private Date startTimestamp;
+    @Column
+	private Date stopTimestamp;
+    @Column
+	private Integer elapsedMillis;
 
 	public DecisionFlowHistory getDecisionFlowHistory() {
 		return decisionFlowHistory;

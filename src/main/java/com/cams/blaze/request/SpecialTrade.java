@@ -1,12 +1,30 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.Date;
-
+@Entity
 public class SpecialTrade {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@Column
 	private String type;
+	@Column
 	private Date getTime;
+	@Column
 	private Integer changingMonths;
+	@Column
 	private Double changingAmount;
+	@Column
 	private String content;
 	public String getType() {
 		return type;

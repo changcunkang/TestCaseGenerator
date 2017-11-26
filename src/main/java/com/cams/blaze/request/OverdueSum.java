@@ -1,10 +1,30 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
+
+@Entity
 public class OverdueSum {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@Column
 	private String overdueCD;
+	@Column
 	private Integer count;
+	@Column
 	private Integer months;
+	@Column
 	private Double highestOverdueAmountPerMon;
+	@Column
 	private Integer maxDuration;
 	public String getOverdueCD() {
 		return overdueCD;

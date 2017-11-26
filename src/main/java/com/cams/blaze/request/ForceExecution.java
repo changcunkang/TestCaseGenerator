@@ -1,17 +1,40 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
 public class ForceExecution {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@Column
 	private String court;
+	@Column
 	private String caseReason;
+	@Column
 	private Date registerDate;
+	@Column
 	private String closedType;
+	@Column
 	private String caseState;
+	@Column
 	private Date closedDate;
+	@Column
 	private String enforceObject;
+	@Column
 	private Double enforceObjectMoney;
+	@Column
 	private String alreadyEnforceObject;
+	@Column
 	private Double alreadyEnforceObjectMoney;
 	public String getCourt() {
 		return court;
