@@ -1,31 +1,68 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.*;
-
+@Entity
 public class PbocReport {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@OneToOne(cascade = CascadeType.ALL)
 	private List<CreditSummaryCue> creditSummaryCue = new ArrayList<CreditSummaryCue>();
+	@OneToOne(cascade = CascadeType.ALL)
 	private List<FellbackSum> fellbackSum = new ArrayList<FellbackSum>();
+	@OneToOne(cascade = CascadeType.ALL)
 	private List<OverdueSum> overdueSum = new ArrayList<OverdueSum>();
+	@OneToOne(cascade = CascadeType.ALL)
 	private List<ShareAndDebtSum> shareAndDebtSum = new ArrayList<ShareAndDebtSum>();
+	@OneToOne(cascade = CascadeType.ALL)
 	private List<GuaranteeSum> guaranteeSum = new ArrayList<GuaranteeSum>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Loancard> loancard = new ArrayList<Loancard>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<StandardLoancard> standardLoancard = new ArrayList<StandardLoancard>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Loan> loan = new ArrayList<Loan>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<AccFund> accFund = new ArrayList<AccFund>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<AssetDisposition> assetDisposition = new ArrayList<AssetDisposition>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<AssurerRepay> assurerRepay = new ArrayList<AssurerRepay>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<ForceExecution> forceExecution = new ArrayList<ForceExecution>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<AdminPunishment> adminPunishment = new ArrayList<AdminPunishment>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<RecordDetail> recordDetail = new ArrayList<RecordDetail>();
+	@Column
 	private String reportSN;
+	@Column
 	private Integer pbocQueriedFlag;
+	@Column
 	private Date queryTime;
+	@Column
 	private Date reportCreateTime;
+	@Column
 	private String gender;
+	@Column
 	private Date birthday;
+	@Column
 	private String maritalState;
+	@Column
 	private String mobile;
+	@Column
 	private String eduLevel;
+	@Column
 	private Double creditScore;
 	
 	public Date getBirthday() {

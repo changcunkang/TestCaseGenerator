@@ -1,31 +1,68 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.*;
-
+@Entity
 public class StandardLoancard {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<SpecialTrade> specialTrade = new ArrayList<SpecialTrade>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<OverdueRecord> overdueRecord = new ArrayList<OverdueRecord>();
+	@Column
 	private String state;
+	@Column
 	private String cue;
+	@Column
 	private String financeOrg;
+	@Column
 	private String account;
+	@Column
 	private String currency;
+	@Column
 	private Date openDate;
+	@Column
 	private Double creditLimitAmount;
+	@Column
 	private String guaranteeType;
+	@Column
 	private Date stateEndDate;
+	@Column
 	private String stateEndMonth;
+	@Column
 	private Double shareCreditLimitAmount;
+	@Column
 	private Double usedCreditLimitAmount;
+	@Column
 	private Double latest6MonthUsedAvgAmount;
+	@Column
 	private Double usedHighestAmount;
+	@Column
 	private Date scheduledPaymentDate;
+	@Column
 	private Double actualPaymentAmount;
+	@Column
 	private Date recentPayDate;
+	@Column
 	private Double overdueOver180Amount;
+	@Column
 	private String beginMonth;
+	@Column
 	private String endMonth;
+	@Column
 	private String latest24State;
+	@Column
 	private String latest24StateNum;
 	public String getState() {
 		return state;

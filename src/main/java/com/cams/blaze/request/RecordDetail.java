@@ -1,17 +1,40 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
+import javax.persistence.OneToMany;
 import java.util.*;
 
+@Entity
 public class RecordDetail {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 	
+	@Column
 	private Date queryDate;
+	@Column
 	private String querier;
+	@Column
 	private String queryReason;
 	
+	@Column
 	private String reserveString01;
+	@Column
 	private String reserveString02;
+	@Column
 	private String reserveString03;
+	@Column
 	private String reserveString04;
+	@Column
 	private String reserveString05;
 	
 	public Date getQueryDate() {

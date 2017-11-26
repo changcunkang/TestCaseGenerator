@@ -5,102 +5,201 @@ package com.cams.blaze.response;
  *
  */
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
 public class DecisionResponse {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 	/**策略决策*/
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<StrategyDecision> strategyDecision = new ArrayList<StrategyDecision>();
 	/**衍生变量*/
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<DerivedVariable> derivedVariable = new ArrayList<DerivedVariable>();
 	/**额度模型返回信息*/
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<LimitModelReturnInfo> limitModelReturnInfo = new ArrayList<LimitModelReturnInfo>();
 	/**评分模型返回信息*/
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<ScoreModelReturnInfo> scoreModelReturnInfo = new ArrayList<ScoreModelReturnInfo>();
 	/**规则决策*/
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<RuleDecision> ruleDecision = new ArrayList<RuleDecision>();
 	
+	@Column
 	private String reservedString01;
+	@Column
 	private String reservedString02;
+	@Column
 	private String reservedString03;
+	@Column
 	private String reservedString04;
+	@Column
 	private String reservedString05;
+	@Column
 	private String reservedString06;
+	@Column
 	private String reservedString07;
+	@Column
 	private String reservedString08;
+	@Column
 	private String reservedString09;
+	@Column
 	private String reservedString10;
+	@Column
 	private String reservedString11;
+	@Column
 	private String reservedString12;
+	@Column
 	private String reservedString13;
+	@Column
 	private String reservedString14;
+	@Column
 	private String reservedString15;
+	@Column
 	private String reservedString16;
+	@Column
 	private String reservedString17;
+	@Column
 	private String reservedString18;
+	@Column
 	private String reservedString19;
+	@Column
 	private String reservedString20;
 
+	@Column
 	private Double reservedDouble01;
+	@Column
 	private Double reservedDouble02;
+	@Column
 	private Double reservedDouble03;
+	@Column
 	private Double reservedDouble04;
+	@Column
 	private Double reservedDouble05;
+	@Column
 	private Double reservedDouble06;
+	@Column
 	private Double reservedDouble07;
+	@Column
 	private Double reservedDouble08;
+	@Column
 	private Double reservedDouble09;
+	@Column
 	private Double reservedDouble10;
+	@Column
 	private Double reservedDouble11;
+	@Column
 	private Double reservedDouble12;
+	@Column
 	private Double reservedDouble13;
+	@Column
 	private Double reservedDouble14;
+	@Column
 	private Double reservedDouble15;
+	@Column
 	private Double reservedDouble16;
+	@Column
 	private Double reservedDouble17;
+	@Column
 	private Double reservedDouble18;
+	@Column
 	private Double reservedDouble19;
+	@Column
 	private Double reservedDouble20;
 
+	@Column
 	private Integer reservedInteger01;
+	@Column
 	private Integer reservedInteger02;
+	@Column
 	private Integer reservedInteger03;
+	@Column
 	private Integer reservedInteger04;
+	@Column
 	private Integer reservedInteger05;
+	@Column
 	private Integer reservedInteger06;
+	@Column
 	private Integer reservedInteger07;
+	@Column
 	private Integer reservedInteger08;
+	@Column
 	private Integer reservedInteger09;
+	@Column
 	private Integer reservedInteger10;
+	@Column
 	private Integer reservedInteger11;
+	@Column
 	private Integer reservedInteger12;
+	@Column
 	private Integer reservedInteger13;
+	@Column
 	private Integer reservedInteger14;
+	@Column
 	private Integer reservedInteger15;
+	@Column
 	private Integer reservedInteger16;
+	@Column
 	private Integer reservedInteger17;
+	@Column
 	private Integer reservedInteger18;
+	@Column
 	private Integer reservedInteger19;
+	@Column
 	private Integer reservedInteger20;
 
+	@Column
 	private Date reservedDate01;
+	@Column
 	private Date reservedDate02;
+	@Column
 	private Date reservedDate03;
+	@Column
 	private Date reservedDate04;
+	@Column
 	private Date reservedDate05;
+	@Column
 	private Date reservedDate06;
+	@Column
 	private Date reservedDate07;
+	@Column
 	private Date reservedDate08;
+	@Column
 	private Date reservedDate09;
+	@Column
 	private Date reservedDate10;
+	@Column
 	private Date reservedDate11;
+	@Column
 	private Date reservedDate12;
+	@Column
 	private Date reservedDate13;
+	@Column
 	private Date reservedDate14;
+	@Column
 	private Date reservedDate15;
+	@Column
 	private Date reservedDate16;
+	@Column
 	private Date reservedDate17;
+	@Column
 	private Date reservedDate18;
+	@Column
 	private Date reservedDate19;
+	@Column
 	private Date reservedDate20;
 	
 	

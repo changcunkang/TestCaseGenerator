@@ -1,20 +1,45 @@
 package com.cams.blaze.response;
+
+import javax.persistence.*;
+
 /**
  * 
  * @author YuHuaPeng
  *
  */
+@Entity
 public class ScoredCharacteristic{
-  private String characteristic;
-  private String mappedFieldName;
-  private String characteristicName;
-  private String characteristicValue;
-  private String binLabel;
-  private Double baselineScore;
-  private Double partialScore;
-  private Double maxBinScore;
+  @Id
+  @GeneratedValue(strategy= GenerationType.IDENTITY)
+  @Column
+  private Long id;
 
-  private Boolean unexpectedValueFlag;
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+  @Column
+	private String characteristic;
+  @Column
+	private String mappedFieldName;
+  @Column
+	private String characteristicName;
+  @Column
+	private String characteristicValue;
+  @Column
+	private String binLabel;
+  @Column
+	private Double baselineScore;
+  @Column
+	private Double partialScore;
+  @Column
+	private Double maxBinScore;
+
+  @Column
+	private Boolean unexpectedValueFlag;
  
   public String getCharacteristicName()
   {

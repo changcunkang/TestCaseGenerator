@@ -4,29 +4,59 @@ package com.cams.blaze.response;
  * @author YuHuaPeng
  *
  */
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Entity
 public class StrategyDecision {
-	
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Limit> limit = new ArrayList<Limit>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Action> action = new ArrayList<Action>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<ReasonCodeSet> reasonCodeSet= new ArrayList<ReasonCodeSet>();
 	
+	@Column
 	private String strategyEntityLevel;
+	@Column
 	private String strategyEntityNumber;
+	@Column
 	private String decisionArea;
+	@Column
 	private String callType;
+	@Column
 	private String SPID;
+	@Column
 	private String SPIDdescription;
+	@Column
 	private String CCID;
+	@Column
 	private String CCIDdescription;
+	@Column
 	private String strategyID;
+	@Column
 	private String strategyName;
+	@Column
 	private String scenarioID;
+	@Column
 	private String branchID;
+	@Column
 	private String finalReasonCode;
+	@Column
 	private Integer tempALvalidDays;
+	@Column
 	private String decisionResult;
 
 	public String getStrategyEntityLevel() {

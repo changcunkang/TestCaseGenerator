@@ -1,14 +1,31 @@
 package com.cams.blaze.response;
+
+import javax.persistence.*;
+
 /**
  * 
  * @author YuHuaPeng
  *
  */
+@Entity
 public class RuleHistory {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column
+    private Long id;
 
-    private String ruleName;
+    public Long getId() {
+        return id;
+    }
 
-    private String ruleCode;
+    public void setId(Long id) {
+        this.id = id;
+    }
+    @Column
+	private String ruleName;
+
+    @Column
+	private String ruleCode;
     public String getRuleName() {
         return ruleName;
     }

@@ -1,40 +1,87 @@
 package com.cams.blaze.request;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
 public class Loan {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<SpecialTrade> specialTrade = new ArrayList<SpecialTrade>();
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<OverdueRecord> overdueRecord = new ArrayList<OverdueRecord>();
+	@Column
 	private String state;
+	@Column
 	private String cue;
+	@Column
 	private String financeOrg;
+	@Column
 	private String account;
+	@Column
 	private String type;
+	@Column
 	private String currency;
+	@Column
 	private Date openDate;
+	@Column
 	private Date endDate;
+	@Column
 	private Double creditLimitAmount;
+	@Column
 	private String guaranteeType;
+	@Column
 	private String paymentRating;
+	@Column
 	private String paymentCyc;
+	@Column
 	private Date stateEndDate;
+	@Column
 	private String stateEndMonth;
+	@Column
 	private String class5State;
+	@Column
 	private Double balance;
+	@Column
 	private Integer remainPaymentCyc;
+	@Column
 	private Double scheduledPaymentAmount;
+	@Column
 	private Date scheduledPaymentDate;
+	@Column
 	private Double actualPaymentAmount;
+	@Column
 	private Date recentPayDate;
+	@Column
 	private Integer currOverdueCyc;
+	@Column
 	private Double currOverdueAmount;
+	@Column
 	private Double overdue31To60Amount;
+	@Column
 	private Double overdue61To90Amount;
+	@Column
 	private Double overdue91To180Amount;
+	@Column
 	private Double overdueOver180Amount;
+	@Column
 	private String beginMonth;
+	@Column
 	private String endMonth;
+	@Column
 	private String latest24State;
+	@Column
 	private String latest24StateNum;
 	public String getState() {
 		return state;
