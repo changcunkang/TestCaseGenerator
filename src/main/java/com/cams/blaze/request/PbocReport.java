@@ -16,15 +16,15 @@ public class PbocReport {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<CreditSummaryCue> creditSummaryCue = new ArrayList<CreditSummaryCue>();
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<FellbackSum> fellbackSum = new ArrayList<FellbackSum>();
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<OverdueSum> overdueSum = new ArrayList<OverdueSum>();
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<ShareAndDebtSum> shareAndDebtSum = new ArrayList<ShareAndDebtSum>();
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<GuaranteeSum> guaranteeSum = new ArrayList<GuaranteeSum>();
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Loancard> loancard = new ArrayList<Loancard>();
