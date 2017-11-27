@@ -543,7 +543,6 @@ public class TestCaseExpression {
 
         AbstractTestData abstractSlaveTestData = restriction.getExtendtion().getParentTestData();
 
-
         AbstractTestData absMasterTestData = null;
 
         List slaveTestCaseList = (List)abstractSlaveTestData.getTestCase();
@@ -579,16 +578,10 @@ public class TestCaseExpression {
 
         if(abstractSlaveTestData.getPositionRecord().size()>0){
             for( int i=0; i<abstractSlaveTestData.getRelativePathArr().length; i++){
-                if( masterPath.equals( abstractSlaveTestData.getRelativePathArr()[i] ) ){
-                    int slaveTestCasePosition = Math.max( abstractSlaveTestData.getTestCase().size()-1, 0);
+                if( masterPath.equals( abstractSlaveTestData.getRelativePathArr()[i] )  ){
+                    int slaveTestCasePosition = Math.max( abstractSlaveTestData.getTestCase().size(), 0);
 
                     Integer[] ss = abstractSlaveTestData.getPositionRecord().get(slaveTestCasePosition);
-
-                    if(ss == null || ss.length+1<i || ss[i] == null){
-                        String a = "";
-                    }
-
-
 
                     position = ss[i];
                 }

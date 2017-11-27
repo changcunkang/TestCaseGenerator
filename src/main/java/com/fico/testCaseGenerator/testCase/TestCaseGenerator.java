@@ -128,14 +128,16 @@ public abstract class TestCaseGenerator {
 			}
 
 			generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData);
-
-
 		}
 	}
 
 	public Object generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(Object newIns, TestData testData){
 		for( SimpleField simpleField : testData.getSimpleFieldList() ){
+
 			if(simpleField.getExtendtion() != null){
+
+
+
 				generateSingleTestCaseAttributeValue(newIns, simpleField);
 			}
 		}
@@ -143,6 +145,10 @@ public abstract class TestCaseGenerator {
 	}
 
 	public void generateSingleTestCaseAttributeValue( Object newInstance,  SimpleField simpleField){
+
+		if(simpleField.getName().equals("cashLimt")){
+			String a = "";
+		}
 
 		if(simpleField.getExtendtion() != null && simpleField.getExtendtion().getRestriction() != null){
 
@@ -309,12 +315,6 @@ public abstract class TestCaseGenerator {
 
 						if( this.isAllRelativeElementReady(unConsTestCaseData) ){
 
-							System.out.println( unConsTestCaseData.getPath() );
-
-							if("Application/Customer/Product/Account/MonthlyRecordInfo/@mthsOdueAmt/".equals(unConsTestCaseData.getPath())){
-								System.out.println( unConsTestCaseData.getPath() );
-							}
-
 							for(Object testCaseIns : unConsTestCaseData.getTestData().getTestCase() ){
 								generateSingleTestCaseAttributeValue(testCaseIns,unConsTestCaseData);
 							}
@@ -340,17 +340,7 @@ public abstract class TestCaseGenerator {
 
 		}while (!testDataLoopFlag && simpleFieldLoopFlag );
 	}
-	
-	public void generateNotCreatedSlaveTestCase(){
-		
 
-	}
-	
-	public void generateLocalDependencySimpleField(){
-
-
-	}
-	
 	private void clearSimpleFieldDependencyPathCounter(){
 
 		//重置状态

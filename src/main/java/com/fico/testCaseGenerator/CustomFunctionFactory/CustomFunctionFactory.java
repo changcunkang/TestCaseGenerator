@@ -143,6 +143,10 @@ public class CustomFunctionFactory {
 		return tmp.reverse().toString();
 	}
 
+	private Object getLastRepaymentDate(){
+		return "1";
+	}
+
 	public Object getDelinquentCycle(String due123, Object relativeCycleNum){
 		Integer relativeCycleNumInt = new Integer( new Double(relativeCycleNum.toString()).intValue() );
 
