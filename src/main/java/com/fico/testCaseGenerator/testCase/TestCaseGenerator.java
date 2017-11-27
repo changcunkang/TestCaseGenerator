@@ -55,9 +55,7 @@ public abstract class TestCaseGenerator {
 			}
 		}
 
-		generateNotCreatedSlaveTestCase();
-
-		generateLocalDependencySimpleField();
+		handleLocalDependency();
 
 		return rootTestData.getTestCase().get(0);
 	}
@@ -75,6 +73,10 @@ public abstract class TestCaseGenerator {
 		rootTestData.setTestCase(instanceElementList);
 
 		rootTestData.setGenerateTestCaseFinish(true);
+		for(SimpleField simpleField : rootTestData.getTmpGeneratedSimpleFieldSet()){
+			simpleField.setGenerateTestCaseFinish(true);
+		}
+
 
 		return rootTestData;
 	}
@@ -116,6 +118,7 @@ public abstract class TestCaseGenerator {
 			appendChildTestCaseToParentTestCase( parentTestCaseElement, newIns, testData );
 
 			testData.setGeneratingTestData(newIns);
+			testData.getTestCase().add(newIns);
 
 			if(i == 0){
 				testData.setGeneratingTestDataFirstChild(true);
@@ -126,7 +129,7 @@ public abstract class TestCaseGenerator {
 
 			generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData);
 
-			testData.getTestCase().add(newIns);
+
 		}
 	}
 
@@ -147,6 +150,7 @@ public abstract class TestCaseGenerator {
 				Object expValue = this.testCaseExpression.parse(simpleField.getExtendtion().getRestriction());
 
 				this.setTestCaseElementValue(simpleField, newInstance, simpleField.getName(), expValue);
+
 			}
 			else{
 				recordAbstractTestDataPosition( simpleField );
@@ -165,7 +169,7 @@ public abstract class TestCaseGenerator {
 			if(this.bomGenerator.pathIsSimpleField(path)){
 				SimpleField masterSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(path);
 				TestData testData = masterSimpleField.getTestData();
-				tmpPathPosition[i] = testData.getTestCase().size();
+				tmpPathPosition[i] = testData.getTestCase().size()-1;
 			}
 		}
 
@@ -177,16 +181,13 @@ public abstract class TestCaseGenerator {
 
 		setTestCaseInstanceSimpleFieldValue(newInstantceArrElement,attributeName, attributeValue);
 
-		simpleField.setGenerateTestCaseFinish(true);
+		simpleField.getTestData().getTmpGeneratedSimpleFieldSet().add(simpleField);
 
 		addSimpleListTestCaseValue(simpleField, attributeValue);
 	}
 
 	private void addSimpleListTestCaseValue(SimpleField simpleField, Object eleValue){
-
 		simpleField.getTestCase().add(eleValue);
-
-		simpleField.setGenerateTestCaseFinish(true);
 	}
 
 
@@ -229,6 +230,10 @@ public abstract class TestCaseGenerator {
 				}
 
 				testData.setGenerateTestCaseFinish(true);
+				for(SimpleField simpleField : testData.getTmpGeneratedSimpleFieldSet()){
+					simpleField.setGenerateTestCaseFinish( true );
+				}
+				testData.setTmpGeneratedSimpleFieldSet(new HashSet<SimpleField>());
 
 			}else{
 				this.unGeneratedSlaveTestDataList.add( testData );
@@ -279,7 +284,7 @@ public abstract class TestCaseGenerator {
 					if(unGeneratedSlaveTestDataList.size() == 0){
 						testDataLoopFlag = false;
 						break;
-					}else if(unConstructedTestDataListSize >= unGeneratedSlaveTestDataList.size()){
+					}else if(unConstructedTestDataListSize == unGeneratedSlaveTestDataList.size()){
 						isTestDataListReduced = false;
 					}
 				}
@@ -304,9 +309,16 @@ public abstract class TestCaseGenerator {
 
 						if( this.isAllRelativeElementReady(unConsTestCaseData) ){
 
+							System.out.println( unConsTestCaseData.getPath() );
+
+							if("Application/Customer/Product/Account/MonthlyRecordInfo/@mthsOdueAmt/".equals(unConsTestCaseData.getPath())){
+								System.out.println( unConsTestCaseData.getPath() );
+							}
+
 							for(Object testCaseIns : unConsTestCaseData.getTestData().getTestCase() ){
 								generateSingleTestCaseAttributeValue(testCaseIns,unConsTestCaseData);
 							}
+							unConsTestCaseData.setGenerateTestCaseFinish(true);
 							unGeneratedSlaveSimpleFieldList.remove(unConsTestCaseData);
 							tmpList.remove(unConsTestCaseData);
 						}

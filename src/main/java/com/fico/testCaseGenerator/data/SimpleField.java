@@ -82,5 +82,4 @@ public abstract class SimpleField extends AbstractTestData {
 		return this.getName();
 	}
 
-
 }

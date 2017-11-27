@@ -5,7 +5,9 @@ import com.fico.testCaseGenerator.data.configuration.Item;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class AbstractTestData {
 
@@ -63,11 +65,10 @@ public abstract class AbstractTestData {
 	public String[] getRelativePathArr() {
 
 		if(this.relativePathArr == null){
-			List<String> tmpList = new ArrayList<String>();
+			Set<String> tmpList = new HashSet<String>();
 			if( this.getExtendtion() !=null && this.getExtendtion().getRestriction() != null ){
 				if(this.getExtendtion().getRestriction().getMinStr() != null){
 					tmpList.addAll(TestCaseUtils.getAllAbsTestData( this.getExtendtion().getRestriction().getMinStr() ));
-
 				}
 				for(Item item : this.getExtendtion().getRestriction().getItem()){
 					tmpList.addAll(TestCaseUtils.getAllAbsTestData(item.getMinExpression()));

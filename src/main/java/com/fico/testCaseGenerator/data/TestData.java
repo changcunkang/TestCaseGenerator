@@ -1,7 +1,9 @@
 package com.fico.testCaseGenerator.data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fico.testCaseGenerator.data.configuration.Extendtion;
 
@@ -32,6 +34,23 @@ public abstract class TestData extends AbstractTestData {
 	private Object generatingTestData;
 
 	private boolean isGeneratingTestDataFirstChild = false;
+
+	public Set<SimpleField> getTmpGeneratedSimpleFieldSet() {
+
+		if( tmpGeneratedSimpleFieldSet == null ){
+			tmpGeneratedSimpleFieldSet = new HashSet<SimpleField>();
+		}
+
+		return tmpGeneratedSimpleFieldSet;
+	}
+
+	public void setTmpGeneratedSimpleFieldSet(Set<SimpleField> tmpGeneratedSimpleFieldSet) {
+		this.tmpGeneratedSimpleFieldSet = tmpGeneratedSimpleFieldSet;
+	}
+
+	private Set<SimpleField> tmpGeneratedSimpleFieldSet = null;
+
+
 
 	public boolean isGeneratingTestDataFirstChild() {
 		return isGeneratingTestDataFirstChild;
@@ -119,5 +138,10 @@ public abstract class TestData extends AbstractTestData {
 		}
 
 		return this.path;
+	}
+
+	@Override
+	public String toString(){
+		return this.getName();
 	}
 }

@@ -1,5 +1,8 @@
 import com.cams.blaze.request.Application;
+import com.fico.testCaseGenerator.facade.TestCaseGeneratorFacade;
+import com.fico.testCaseGenerator.project.Project;
 import com.fico.testCaseGenerator.repository.ApplicationDao;
+import com.fico.testCaseGenerator.testCase.RIDOInstance;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -18,7 +21,17 @@ public class TestMainJPA {
 
         app.setCallType("1111");
 
-        appDao.save(app);
+        RIDOInstance rtnInstance = new RIDOInstance();
+
+        TestCaseGeneratorFacade testCaseGeneratorFacade = new TestCaseGeneratorFacade();
+        testCaseGeneratorFacade.listProjects();
+        testCaseGeneratorFacade.loadAllProjects();
+
+        Project cafsProject = testCaseGeneratorFacade.getProject("cafs");
+        cafsProject.setProjectID(4L);
+        Application testCase = (Application) cafsProject.generateTestCase();
+
+        appDao.save(testCase);
 
     }
 }

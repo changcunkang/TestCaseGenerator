@@ -130,13 +130,13 @@ public abstract class BOMGenerator {
 		}
 	}
 
-	public List getAbsTestDataFromPath(String path){
+	public AbstractTestData getAbsTestDataFromPath(String path){
 
 		if(this.pathIsSimpleField(path)){
-			return this.pathSimpleFieldMap.get(path).getTestCase();
+			return this.getPathSimpleFieldMap().get(path);
 		}
 		else{
-			return this.getPathTestDataMap().get(path).getTestCase();
+			return this.getPathTestDataMap().get(path);
 		}
 
 	}
