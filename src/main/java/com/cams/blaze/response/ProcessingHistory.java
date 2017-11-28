@@ -19,7 +19,7 @@ public class ProcessingHistory {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private DecisionFlowHistory decisionFlowHistory=new DecisionFlowHistory();
 	@Column
 	private String entryPoint;

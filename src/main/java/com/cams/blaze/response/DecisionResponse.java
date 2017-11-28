@@ -23,19 +23,19 @@ public class DecisionResponse {
 		this.id = id;
 	}
 	/**策略决策*/
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<StrategyDecision> strategyDecision = new ArrayList<StrategyDecision>();
 	/**衍生变量*/
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<DerivedVariable> derivedVariable = new ArrayList<DerivedVariable>();
 	/**额度模型返回信息*/
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<LimitModelReturnInfo> limitModelReturnInfo = new ArrayList<LimitModelReturnInfo>();
 	/**评分模型返回信息*/
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<ScoreModelReturnInfo> scoreModelReturnInfo = new ArrayList<ScoreModelReturnInfo>();
 	/**规则决策*/
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<RuleDecision> ruleDecision = new ArrayList<RuleDecision>();
 	
 	@Column

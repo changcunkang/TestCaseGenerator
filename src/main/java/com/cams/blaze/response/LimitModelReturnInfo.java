@@ -16,9 +16,9 @@ public class LimitModelReturnInfo {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<LimitItem> limitItem = new ArrayList<LimitItem>();
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<LimitAction> limitAction = new ArrayList<LimitAction>();
 	@Column
 	private String associationID;
