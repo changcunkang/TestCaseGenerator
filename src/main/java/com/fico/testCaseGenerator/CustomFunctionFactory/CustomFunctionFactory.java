@@ -20,6 +20,10 @@ public class CustomFunctionFactory {
 	public Object invokeCustomFunction(String functionName, Object... args){
 		Method[] mArr = CustomFunctionFactory.class.getMethods();
 
+		if(functionName.equals("getMthsOdueAmt")){
+			String a = "";
+		}
+
 		for (Method method : mArr) {
 			if (method.getName().equals(functionName)) {
 				Object rtn = null;
@@ -159,7 +163,7 @@ public class CustomFunctionFactory {
 		return Character.toString(convertedDue123Str.charAt(relativeCycleNumInt));
 	}
 
-	private Object getMthsOdueAmt(String due123, Object relativeCycleNum,  Object balance){
+	public Object getMthsOdueAmt(String due123, Object relativeCycleNum,  Object balance){
 
 		Double balanceDouble = new Double(balance.toString());
 
