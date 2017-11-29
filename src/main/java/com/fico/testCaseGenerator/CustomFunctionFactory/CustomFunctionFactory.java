@@ -20,7 +20,7 @@ public class CustomFunctionFactory {
 	public Object invokeCustomFunction(String functionName, Object... args){
 		Method[] mArr = CustomFunctionFactory.class.getMethods();
 
-		if(functionName.equals("getMthsOdueAmt")){
+		if(functionName.equals("getDayNumber") || functionName.equals("getStmtOdue120")){
 			String a = "";
 		}
 
@@ -38,6 +38,8 @@ public class CustomFunctionFactory {
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}catch (Exception e){
 					e.printStackTrace();
 				}
 				return rtn;
@@ -156,11 +158,64 @@ public class CustomFunctionFactory {
 
 		String convertedDue123Str = due123.replace('N','0');
 
-		if(relativeCycleNumInt >= convertedDue123Str.length()){
-			String a = "";
-		}
-
 		return Character.toString(convertedDue123Str.charAt(relativeCycleNumInt));
+	}
+
+	public Object getDayNumber(String due123, Object cycleNumber){
+
+		Integer cycleNumberDouble = new Integer( new Double( cycleNumber.toString() ).intValue() );
+
+		Integer rtn = null;
+
+		if(due123.charAt( cycleNumberDouble ) == 'N' ){
+			rtn = 0;
+		}else if( due123.charAt( cycleNumberDouble ) != '0'){
+			rtn = 30;
+		}
+		else {
+			rtn = RandomFactory.randomIntBetween( 0, 30 );
+		}
+		return rtn;
+	}
+
+	public Object getStmtOdue120(String eStmtOdue120){
+
+		char[] tmpChar = new char[eStmtOdue120.length()] ;
+
+		for(int i=0; i<tmpChar.length; i++) {
+
+			double randomDouble = RandomFactory.randomDoubleBetween(0, 1);
+
+			if (i == 0) {
+				if (randomDouble >= 0 || randomDouble < 0.9) {
+					tmpChar[i] = '0';
+				} else if (randomDouble >= 0.9 || randomDouble < 0.99) {
+					tmpChar[i] = 'A';
+				} else if (randomDouble >= 0.992 || randomDouble < 0.994) {
+					tmpChar[i] = 'B';
+				} else if (randomDouble >= 0.994 || randomDouble < 0.996) {
+					tmpChar[i] = 'C';
+				} else if (randomDouble >= 0.996 || randomDouble < 1) {
+					tmpChar[i] = 'D';
+				}
+				continue;
+			}
+
+			if (eStmtOdue120.charAt(i - 1) == '0' || eStmtOdue120.charAt(i - 1) == 'N') {
+				tmpChar[i] = eStmtOdue120.charAt(i - 1);
+			} else {
+				if (randomDouble >= 0 || randomDouble < 0.25) {
+					tmpChar[i] = 'A';
+				} else if (randomDouble >= 0.25 || randomDouble < 0.5) {
+					tmpChar[i] = 'B';
+				} else if (randomDouble >= 0.5 || randomDouble < 0.75) {
+					tmpChar[i] = 'C';
+				} else if (randomDouble >= 0.75 || randomDouble < 1) {
+					tmpChar[i] = 'D';
+				}
+			}
+		}
+			return new String(tmpChar);
 	}
 
 	public Object getMthsOdueAmt(String due123, Object relativeCycleNum,  Object balance){

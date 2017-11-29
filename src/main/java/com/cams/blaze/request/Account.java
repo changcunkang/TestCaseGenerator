@@ -124,7 +124,8 @@ public class Account {
     private	 String reservedString19;
 	@Column
     private	 String reservedString20;
-
+	@Column
+	private Integer isCurbillFqAcct;
 	@Column
     private	 Double reservedDouble01;
 	@Column
@@ -248,11 +249,14 @@ public class Account {
 	@Column
     private	 Date reservedDate20;
 
-	
-	
 
+	public Integer getIsCurbillFqAcct() {
+		return isCurbillFqAcct;
+	}
 
-	
+	public void setIsCurbillFqAcct(Integer isCurbillFqAcct) {
+		this.isCurbillFqAcct = isCurbillFqAcct;
+	}
 
 	public String getReservedString01() {
 		return reservedString01;

@@ -22,6 +22,16 @@ public class ConsumeTypeSet {
 	private String consumeType;
 	@Column
 	private Double consumeAmt;
+	@Column
+	private Integer consumeTimes;
+
+	public Integer getConsumeTimes() {
+		return consumeTimes;
+	}
+
+	public void setConsumeTimes(Integer consumeTimes) {
+		this.consumeTimes = consumeTimes;
+	}
 
 	public String getConsumeType() {
 		return consumeType;

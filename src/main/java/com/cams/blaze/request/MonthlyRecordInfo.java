@@ -82,8 +82,26 @@ public class MonthlyRecordInfo {
     private	 Double top4TransanctionAmt;
 	@Column
     private	 Double top5TransanctionAmt;
+	@Column
+	private Integer cashAmtOccupiedDays;
+	@Column
+	private Integer limitUsedDays;
 
+	public Integer getCashAmtOccupiedDays() {
+		return cashAmtOccupiedDays;
+	}
 
+	public void setCashAmtOccupiedDays(Integer cashAmtOccupiedDays) {
+		this.cashAmtOccupiedDays = cashAmtOccupiedDays;
+	}
+
+	public Integer getLimitUsedDays() {
+		return limitUsedDays;
+	}
+
+	public void setLimitUsedDays(Integer limitUsedDays) {
+		this.limitUsedDays = limitUsedDays;
+	}
 
 	public Integer getRelativeCycleNumber() {
 		return relativeCycleNumber;

@@ -134,6 +134,7 @@ public abstract class TestCaseGenerator {
 	public Object generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(Object newIns, TestData testData){
 		for( SimpleField simpleField : testData.getSimpleFieldList() ){
 
+
 			if(simpleField.getExtendtion() != null){
 
 				generateSingleTestCaseAttributeValue(newIns, simpleField);
@@ -149,7 +150,7 @@ public abstract class TestCaseGenerator {
 			if(this.isAllRelativeElementReady(simpleField)){
 
 
-				if(simpleField.getName().contains("amortizationPri")){
+				if(simpleField.getName().contains("eStmtOdue120")){
 					String a = "";
 				}
 

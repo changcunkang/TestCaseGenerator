@@ -34,7 +34,7 @@ public class RandomFactory {
 		return new RandomDataGenerator().nextLong(min, max);
 	}
 
-	public static double randomDoubleBetween(double min, double max){
+	public static Double randomDoubleBetween(double min, double max){
 
 		if(max == min){
 			return max;

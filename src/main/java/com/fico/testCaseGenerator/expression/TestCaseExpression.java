@@ -245,6 +245,7 @@ public class TestCaseExpression {
             return leftBigDec.subtract( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
 
         }else if ("*".equals(operator)){
+
             BigDecimal leftBigDec = new BigDecimal(leftValue.toString());
             return leftBigDec.multiply( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
 
@@ -410,19 +411,11 @@ public class TestCaseExpression {
 
     private Object recursiveFunctionInvocation(Restriction restriction, String path, String[] rtn){
 
-        if(path.contains("AmortizationPri")){
-            String a = "";
-        }
-
         assert rtn.length == 2 : "number of arguments in recursiveFunctionInvocation is not 2";
 
         Integer recursiveVar = new Integer( new Double(rtn[0].toString()).intValue() );
 
         SimpleField targetMasterSimpleField = this.bomGenerator.getPathSimpleFieldMap().get( rtn[1] );
-
-        if(targetMasterSimpleField == null){
-            String a = "";
-        }
 
         SimpleField slaveSimpleField = (SimpleField)restriction.getExtendtion().getParentTestData();
 
@@ -582,6 +575,10 @@ public class TestCaseExpression {
                     int slaveTestCasePosition = Math.max( abstractSlaveTestData.getTestCase().size(), 0);
 
                     Integer[] ss = abstractSlaveTestData.getPositionRecord().get(slaveTestCasePosition);
+
+                    if(ss[i] == null){
+                        String a = "";
+                    }
 
                     position = ss[i];
                 }
