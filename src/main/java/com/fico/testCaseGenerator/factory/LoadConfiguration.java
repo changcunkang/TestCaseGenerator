@@ -275,7 +275,7 @@ public class LoadConfiguration {
 
 	public static void main(String args[]) {
 		//广州银行
-		List<Extendtion> list = readExcelData("C:\\FICO\\CAMS\\bom\\test.xls");
+		List<Extendtion> list = readExcelData("C:\\projects\\testCaseGenerator\\eclipse_work_space\\TestCaseGeneratorWeb\\BOM\\cafs\\test2.xls");
 		
 		System.out.println("111111111111");
 	}
@@ -297,6 +297,9 @@ public class LoadConfiguration {
 		Map<Integer,String> map = new HashMap<Integer,String>();
 		
 		for(int r=2;r<=lastRowNumber;r++){
+			if(r==305){
+				String a ="";
+			}
 			int startRowNumber=2;
 			realPath="";
 			HSSFRow row = (HSSFRow) sheet.getRow(r);
@@ -314,12 +317,24 @@ public class LoadConfiguration {
 							HSSFRow row2 = (HSSFRow) sheet.getRow(cr);
 							Cell cell2=row2.getCell(c-1);
 							Cell cell3 = null;
+							Cell cell4 = null;
+							Cell cell5 = null;
 							if(c>=3){cell3=row2.getCell(c-2);}
+							if(c>=4){cell4=row2.getCell(c-3);}
+							if(c>=5){cell5=row2.getCell(c-4);}
 							if(cell2!=null&&cell2.getCellType()==Cell.CELL_TYPE_STRING){
 								startRowNumber=cr;
 								break;
 							}
 							if(cell3!=null&&cell3.getCellType()==Cell.CELL_TYPE_STRING){
+								startRowNumber=cr;
+								break;
+							}
+							if(cell4!=null&&cell4.getCellType()==Cell.CELL_TYPE_STRING){
+								startRowNumber=cr;
+								break;
+							}
+							if(cell5!=null&&cell5.getCellType()==Cell.CELL_TYPE_STRING){
 								startRowNumber=cr;
 								break;
 							}
@@ -352,7 +367,7 @@ public class LoadConfiguration {
 	public static List<String> listAllProjectsName(){
 		
 		List<String> ListProject = new ArrayList<String>();
-		File root = new File("C:\\projects\\testCaseGenerator\\eclipse_work_space\\TestCaseGeneratorWeb\\BOM");
+		File root = new File("C:\\projects\\testCaseGenerator\\eclipse_work_space\\TestCaseGeneratorWeb\\BOM\\cafs\\test2.xls");
 	    File[] files = root.listFiles();
 	    for(File file:files){     
 	    	if(file.isDirectory()){
