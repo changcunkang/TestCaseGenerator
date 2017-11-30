@@ -16,9 +16,9 @@ public class Loancard {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<SpecialTrade> specialTrade = new ArrayList<SpecialTrade>();
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<OverdueRecord> overdueRecord = new ArrayList<OverdueRecord>();
 	@Column
 	private String state;

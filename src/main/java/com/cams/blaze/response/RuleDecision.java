@@ -17,7 +17,7 @@ public class RuleDecision {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<RuleAssociation> ruleAssociation=new ArrayList<RuleAssociation>();
     @Column
 	private Integer index;

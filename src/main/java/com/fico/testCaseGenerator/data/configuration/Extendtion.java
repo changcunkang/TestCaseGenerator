@@ -52,8 +52,7 @@ public class Extendtion {
 	public Extendtion() {
 	}
 
-	public Extendtion(String name,
-			Restriction restriction) {
+	public Extendtion(String name, Restriction restriction) {
 		this.name = name;
 		this.restriction = restriction;
 	}

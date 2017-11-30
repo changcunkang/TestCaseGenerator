@@ -19,15 +19,15 @@ public class MonthlyRecordInfo {
 		this.id = id;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<ConsumeTypeSet> consumeTypeSet = new ArrayList<ConsumeTypeSet>();
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<TransRecords> transRecords = new ArrayList<TransRecords>();
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<InstalmentInfo> instalmentInfo = new ArrayList<InstalmentInfo>();
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<HighRiskTrans> highRiskTrans = new ArrayList<HighRiskTrans>();
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
 	
 	@Column

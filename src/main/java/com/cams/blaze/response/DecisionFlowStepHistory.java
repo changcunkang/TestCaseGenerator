@@ -23,7 +23,7 @@ public class DecisionFlowStepHistory {
 		this.id = id;
 	}
 	/**规则集历史ʷ*/
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<RulesetHistory> rulesetHistory=new ArrayList<RulesetHistory>();
     /**步骤序号*/
     @Column

@@ -136,8 +136,6 @@ public abstract class TestCaseGenerator {
 
 			if(simpleField.getExtendtion() != null){
 
-
-
 				generateSingleTestCaseAttributeValue(newIns, simpleField);
 			}
 		}
@@ -146,13 +144,16 @@ public abstract class TestCaseGenerator {
 
 	public void generateSingleTestCaseAttributeValue( Object newInstance,  SimpleField simpleField){
 
-		if(simpleField.getName().equals("cashLimt")){
-			String a = "";
-		}
-
 		if(simpleField.getExtendtion() != null && simpleField.getExtendtion().getRestriction() != null){
 
 			if(this.isAllRelativeElementReady(simpleField)){
+
+
+				if(simpleField.getName().contains("amortizationPri")){
+					String a = "";
+				}
+
+
 				Object expValue = this.testCaseExpression.parse(simpleField.getExtendtion().getRestriction());
 
 				this.setTestCaseElementValue(simpleField, newInstance, simpleField.getName(), expValue);
@@ -195,8 +196,6 @@ public abstract class TestCaseGenerator {
 	private void addSimpleListTestCaseValue(SimpleField simpleField, Object eleValue){
 		simpleField.getTestCase().add(eleValue);
 	}
-
-
 
 	/**
 	 * 生成一个TestData下所有案例数据，包括主从

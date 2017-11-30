@@ -256,7 +256,7 @@ public class Customer {
 	@Transient
 //	@Column
     private	 List<Pnote> pnote = new ArrayList<Pnote>();
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<Product> product = new ArrayList<Product>();
 	@Transient
 //	@Column

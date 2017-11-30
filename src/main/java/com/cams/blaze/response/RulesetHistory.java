@@ -23,7 +23,7 @@ public class RulesetHistory {
     public void setId(Long id) {
         this.id = id;
     }
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<RuleHistory> ruleHistory=new ArrayList<RuleHistory>();
 
     @Column
