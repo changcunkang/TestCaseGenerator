@@ -6,9 +6,11 @@ import java.util.*;
 import com.fico.testCaseGenerator.data.AbstractTestData;
 import com.fico.testCaseGenerator.CustomFunctionFactory.CustomFunctionFactory;
 import com.fico.testCaseGenerator.data.SimpleField;
+import com.fico.testCaseGenerator.data.TempoaryTestData;
 import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
 import com.fico.testCaseGenerator.data.configuration.Item;
+import com.fico.testCaseGenerator.data.configuration.Restriction;
 import com.fico.testCaseGenerator.expression.TestCaseExpression;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
 
@@ -88,18 +90,31 @@ public abstract class TestCaseGenerator {
 	 */
 	private void getInstanceNumberAndGenerateAttr(Object parentTestCaseElement, TestData testData){
 
-		Object intVal = this.testCaseExpression.parse( testData.getExtendtion().getRestriction() );
+		Integer instanceSize = generateTestCaseNumberFromRestriction(testData.getExtendtion().getRestriction());
 
-		Integer instanceSize = null;
-
-		if(intVal == null){
-			instanceSize = 0;
+		//临时节点
+		if(isTempoaryTestData(testData)){
+			generateTempoaryTestData(testData);
+		}else{
+			//不是临时节点，正常生成
+			generateAttr(parentTestCaseElement, instanceSize, testData);
 		}
-		else{
+	}
+
+	private Integer generateTestCaseNumberFromRestriction(Restriction restriction){
+		Object intVal = this.testCaseExpression.parse( restriction );
+
+		Integer instanceSize = 0;
+
+		if(intVal != null){
 			instanceSize = new Double( intVal.toString() ).intValue();
 		}
 
-		generateAttr(parentTestCaseElement, instanceSize, testData);
+		return instanceSize;
+	}
+
+	private boolean isTempoaryTestData(AbstractTestData abstractTestData){
+		return abstractTestData.getPath().startsWith(TempoaryTestData.GLOABLE_PATH_PREFIX);
 	}
 
 	/**
@@ -130,6 +145,11 @@ public abstract class TestCaseGenerator {
 
 			generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData);
 		}
+	}
+
+	protected void generateTempoaryTestData(TestData tempoaryTestData){
+		Integer testCaseSize = this.generateTestCaseNumberFromRestriction( tempoaryTestData.getExtendtion().getRestriction() );
+
 	}
 
 	public Object generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(Object newIns, TestData testData){
@@ -259,10 +279,6 @@ public abstract class TestCaseGenerator {
 
 	public void generateTestDataInstance( TestData testData) {
 
-		if(testData.getName().equalsIgnoreCase("PbocReport")){
-			String a = "";
-		}
-
 		List paretnTestCaseElementList = testData.getParentTestData().getTestCase();
 
 		if(testData.getExtendtion() != null && testData.getExtendtion().getRestriction() != null){
@@ -276,6 +292,7 @@ public abstract class TestCaseGenerator {
 				}
 
 				testData.setGenerateTestCaseFinish(true);
+
 				for(SimpleField simpleField : testData.getTmpGeneratedSimpleFieldSet()){
 					simpleField.setGenerateTestCaseFinish( true );
 				}
