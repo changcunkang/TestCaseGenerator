@@ -297,9 +297,6 @@ public class LoadConfiguration {
 		Map<Integer,String> map = new HashMap<Integer,String>();
 		
 		for(int r=2;r<=lastRowNumber;r++){
-			if(r==305){
-				String a ="";
-			}
 			int startRowNumber=2;
 			realPath="";
 			HSSFRow row = (HSSFRow) sheet.getRow(r);
