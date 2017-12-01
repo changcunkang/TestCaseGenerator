@@ -4,10 +4,7 @@ import com.fico.testCaseGenerator.data.configuration.Extendtion;
 import com.fico.testCaseGenerator.data.configuration.Item;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public abstract class AbstractTestData {
 
@@ -60,11 +57,11 @@ public abstract class AbstractTestData {
 		this.positionRecord = positionRecord;
 	}
 
-	private String[] relativePathArr = null;
+	private List<String> relativeManyToOnePathSet = null;
 
-	public String[] getRelativePathArr() {
+	public List<String> getRelativeManyToOnePathSet() {
 
-		if(this.relativePathArr == null){
+		if(this.relativeManyToOnePathSet == null){
 			Set<String> tmpList = new HashSet<String>();
 			if( this.getExtendtion() !=null && this.getExtendtion().getRestriction() != null ){
 				if(this.getExtendtion().getRestriction().getMinStr() != null){
@@ -75,16 +72,17 @@ public abstract class AbstractTestData {
 					tmpList.addAll(TestCaseUtils.getAllAbsTestData(item.getMaxExpression()));
 				}
 			}
-
-			this.relativePathArr = tmpList.toArray( new String[tmpList.size()] );
+			this.relativeManyToOnePathSet = new ArrayList<String>();
+			this.relativeManyToOnePathSet.addAll(tmpList);
 		}
 
-		return relativePathArr;
+		return relativeManyToOnePathSet;
 	}
 
-	public void setRelativePathArr(String[] relativePathArr) {
-		this.relativePathArr = relativePathArr;
+	public void setRelativeManyToOnePathSet(List<String> relativeManyToOnePathSet) {
+		this.relativeManyToOnePathSet = relativeManyToOnePathSet;
 	}
+
 
 
 	private boolean generateTestCaseFinish = false;

@@ -127,13 +127,19 @@ public abstract class TestCaseGenerator {
 				testData.setGeneratingTestDataFirstChild(false);
 			}
 
+
 			generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData);
 		}
 	}
 
 	public Object generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(Object newIns, TestData testData){
+
+
 		for( SimpleField simpleField : testData.getSimpleFieldList() ){
 
+			if(simpleField.getPath().equalsIgnoreCase("Application/Customer/PbocReport/Loan/@stateEndDate/")){
+				String a = "";
+			}
 
 			if(simpleField.getExtendtion() != null){
 
@@ -149,12 +155,6 @@ public abstract class TestCaseGenerator {
 
 			if(this.isAllRelativeElementReady(simpleField)){
 
-
-				if(simpleField.getName().contains("eStmtOdue120")){
-					String a = "";
-				}
-
-
 				Object expValue = this.testCaseExpression.parse(simpleField.getExtendtion().getRestriction());
 
 				this.setTestCaseElementValue(simpleField, newInstance, simpleField.getName(), expValue);
@@ -167,22 +167,58 @@ public abstract class TestCaseGenerator {
 		}
 	}
 
+	//找主从最近的共享节点
 	private void recordAbstractTestDataPosition(AbstractTestData absTestData){
-		String[] allRelativedPath = absTestData.getRelativePathArr();
-		Integer[] tmpPathPosition = new Integer[allRelativedPath.length];
+		List<String> allRelativedPath = absTestData.getRelativeManyToOnePathSet();
+		Integer[] tmpPathPosition = new Integer[allRelativedPath.size()];
 
-		for( int i=0; i<allRelativedPath.length; i++ ){
-			String path = allRelativedPath[i];
+		int i = 0;
 
+		for( Iterator<String> it = allRelativedPath.iterator(); it.hasNext(); i++ ){
+			String path = it.next();
 			if(this.bomGenerator.pathIsSimpleField(path)){
+
+				String minimumSharedPath = getSharedPath(absTestData.getPath(), path);
+//				SimpleField masterSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(minimumSharedPath);
+//
+//				if(masterSimpleField == null){
+//					String a = "";
+//				}
+//
+//				TestData testData = masterSimpleField.getTestData();
+				TestData testData = this.bomGenerator.getPathTestDataMap().get(minimumSharedPath);
+
 				SimpleField masterSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(path);
-				TestData testData = masterSimpleField.getTestData();
+
+				masterSimpleField.getRelativeManyToOnePathSet().add(minimumSharedPath);
+
 				tmpPathPosition[i] = testData.getTestCase().size()-1;
 			}
 		}
 
 		absTestData.getPositionRecord().add( tmpPathPosition );
+	}
 
+	private String getSharedPath(String path1, String path2){
+		String rtn = null;
+		int lastOprPosition = -1;
+		int minLen = Math.min(path1.length(), path2.length());
+		char[] tmpCharArr = new char[ minLen ];
+		int i = 0;
+		for(; i<path1.length()&&i<path2.length(); i++){
+
+			if(path1.charAt(i) != path2.charAt(i)){
+				break;
+			}
+			if(path1.charAt(i) == '@'){
+				break;
+			}
+			if(path1.charAt(i) == '/'){
+				lastOprPosition = i;
+			}
+
+		}
+		return path1.substring(0, Math.min(i, lastOprPosition)+1 );
 	}
 
 	private void setTestCaseElementValue(SimpleField simpleField , Object newInstantceArrElement, String attributeName, Object attributeValue){
@@ -222,6 +258,10 @@ public abstract class TestCaseGenerator {
 	 */
 
 	public void generateTestDataInstance( TestData testData) {
+
+		if(testData.getName().equalsIgnoreCase("PbocReport")){
+			String a = "";
+		}
 
 		List paretnTestCaseElementList = testData.getParentTestData().getTestCase();
 
@@ -292,6 +332,7 @@ public abstract class TestCaseGenerator {
 						break;
 					}else if(unConstructedTestDataListSize == unGeneratedSlaveTestDataList.size()){
 						isTestDataListReduced = false;
+						break;
 					}
 				}
 			}
@@ -328,6 +369,7 @@ public abstract class TestCaseGenerator {
 						break;
 					}else if(unConstructedSimpleListSize == unGeneratedSlaveSimpleFieldList.size()){
 						isSimpleFieldReduced = false;
+						break;
 					}
 				}
 			}

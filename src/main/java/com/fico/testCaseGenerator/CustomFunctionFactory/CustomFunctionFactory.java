@@ -48,6 +48,60 @@ public class CustomFunctionFactory {
 		return null;
 	}
 
+	public Object getstateEndMonth(Object stateEndDate){
+
+		Date stateEndDateD = (Date)stateEndDate;
+
+		return new SimpleDateFormat("yyyy.MM").format(stateEndDateD);
+
+	}
+
+	public Object NowDate(){
+		return new Date();
+	}
+
+	public Object getBeginMonth(Object stateEndDate){
+		return getstateEndMonth( stateEndDate);
+	}
+
+	public Object getLatest24State(){
+
+		StringBuffer tmp = new StringBuffer("0");
+
+		boolean isOverDue = false;
+
+		int i = 0;
+
+		for(; i<24; i++){
+
+			int randomInt = RandomFactory.randomIntBetween(1,100);
+
+			if( ! isOverDue ){
+				if(randomInt <= percentMoreThan1){
+					tmp.append("1");
+					isOverDue = true;
+				}
+				else if(randomInt < percentZero + percentMoreThan1){
+					tmp.append("0");
+				}else{
+					tmp.append("N");
+				}
+			}else{
+				int newDueNum = new Integer( tmp.substring(tmp.length()-1) ) + 1;
+
+				if(randomInt < overDueUpLevel){
+					tmp.append( newDueNum );
+				}else{
+					int nextDueNum = RandomFactory.randomIntBetween(0,newDueNum);
+					tmp.append( nextDueNum );
+					if(newDueNum == 0){
+						isOverDue = false;
+					}
+				}
+			}
+		}
+		return tmp.toString();
+	}
 
 	/**
 	 *
@@ -261,21 +315,21 @@ public class CustomFunctionFactory {
 
 		return srcStr.substring(srcStr.length() - intLen);
 	}
-
-	public String getLatest24State(AbstractTestData parentTest,
-			AbstractTestData currentTetsData) {
-		String rtn = "";
-
-		for (int i = 0; i < 24; i++) {
-			if (RandomFactory.randomDoubleBetween(1, 100) < 0.5) {
-				rtn += "1";
-			} else {
-				rtn += "0";
-			}
-		}
-		return rtn;
-	}
-
+//
+//	public String getLatest24State(AbstractTestData parentTest,
+//			AbstractTestData currentTetsData) {
+//		String rtn = "";
+//
+//		for (int i = 0; i < 24; i++) {
+//			if (RandomFactory.randomDoubleBetween(1, 100) < 0.5) {
+//				rtn += "1";
+//			} else {
+//				rtn += "0";
+//			}
+//		}
+//		return rtn;
+//	}
+//
 
 
 	private Map<Integer, String> nodeInforNodeIDPosIDMap = new ConcurrentHashMap<Integer, String>();

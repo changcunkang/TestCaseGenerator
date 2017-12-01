@@ -364,7 +364,7 @@ public class LoadConfiguration {
 	public static List<String> listAllProjectsName(){
 		
 		List<String> ListProject = new ArrayList<String>();
-		File root = new File("C:\\projects\\testCaseGenerator\\eclipse_work_space\\TestCaseGeneratorWeb\\BOM\\cafs\\test2.xls");
+		File root = new File("C:\\projects\\testCaseGenerator\\eclipse_work_space\\TestCaseGeneratorWeb\\BOM");
 	    File[] files = root.listFiles();
 	    for(File file:files){     
 	    	if(file.isDirectory()){

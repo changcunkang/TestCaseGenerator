@@ -8,15 +8,11 @@ import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.data.configuration.Restriction;
 import com.fico.testCaseGenerator.util.RandomFactory;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -562,6 +558,10 @@ public class TestCaseExpression {
 
         }
 
+        if( targetMasterPos == -1 ){
+            String a = "";
+        }
+
         return masterTestCaseList.get(targetMasterPos);
     }
 
@@ -569,9 +569,14 @@ public class TestCaseExpression {
 
         int position = -1;
 
+        int i = 0;
+
         if(abstractSlaveTestData.getPositionRecord().size()>0){
-            for( int i=0; i<abstractSlaveTestData.getRelativePathArr().length; i++){
-                if( masterPath.equals( abstractSlaveTestData.getRelativePathArr()[i] )  ){
+            for(Iterator<String> it = abstractSlaveTestData.getRelativeManyToOnePathSet().iterator(); it.hasNext(); i++ ){
+
+                String tmpRellativePath = it.next();
+
+                if( masterPath.equals( tmpRellativePath )  ){
                     int slaveTestCasePosition = Math.max( abstractSlaveTestData.getTestCase().size(), 0);
 
                     Integer[] ss = abstractSlaveTestData.getPositionRecord().get(slaveTestCasePosition);
@@ -582,6 +587,7 @@ public class TestCaseExpression {
 
                     position = ss[i];
                 }
+
             }
         }
 
