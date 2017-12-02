@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.fico.testCaseGenerator.BOM.BOMGenerator;
 import com.fico.testCaseGenerator.data.AbstractTestData;
 import com.fico.testCaseGenerator.data.SimpleField;
 import com.fico.testCaseGenerator.data.TestData;
@@ -16,6 +17,12 @@ import com.fico.testCaseGenerator.util.TestCaseUtils;
 public class CustomFunctionFactory {
 
 	private IdCardGenerator g = new IdCardGenerator();
+
+	private BOMGenerator bomGenerator;
+
+	public CustomFunctionFactory(BOMGenerator bomGenerator){
+		this.bomGenerator = bomGenerator;
+	}
 	
 	public Object invokeCustomFunction(String functionName, Object... args){
 		Method[] mArr = CustomFunctionFactory.class.getMethods();
@@ -47,6 +54,24 @@ public class CustomFunctionFactory {
 		}
 		return null;
 	}
+
+	public Object testDataSize( String absTestDataPath ){
+		AbstractTestData targetAbsTestData = null;
+		if(this.bomGenerator.pathIsSimpleField(absTestDataPath) ){
+			targetAbsTestData = this.bomGenerator.getPathSimpleFieldMap().get(absTestDataPath);
+		}else {
+			targetAbsTestData = this.bomGenerator.getPathTestDataMap().get(absTestDataPath);
+		}
+
+		return targetAbsTestData.getTestCase().size();
+	}
+
+	//added by kangchangcun at 2017/12/02
+	public Object left(String srcStr, Double doubleLen){
+		int intLen = doubleLen.intValue();
+		return srcStr.substring(0,intLen);
+	}
+//end added by kangchangcun at 2017/12/02
 
 	public Object getstateEndMonth(Object stateEndDate){
 
