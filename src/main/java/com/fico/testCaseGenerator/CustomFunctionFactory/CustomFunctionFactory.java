@@ -69,7 +69,8 @@ public class CustomFunctionFactory {
 	//added by kangchangcun at 2017/12/02
 	public Object left(String srcStr, Double doubleLen){
 		int intLen = doubleLen.intValue();
-		return srcStr.substring(0,intLen);
+		String Str = srcStr.substring(0,intLen);
+		return Str.replace('N','0');
 	}
 //end added by kangchangcun at 2017/12/02
 
@@ -236,24 +237,26 @@ public class CustomFunctionFactory {
 		Integer relativeCycleNumInt = new Integer( new Double(relativeCycleNum.toString()).intValue() );
 
 		String convertedDue123Str = due123.replace('N','0');
-
-		return Character.toString(convertedDue123Str.charAt(relativeCycleNumInt));
+//modified by kangchangcun at 20171202
+		return Character.toString(convertedDue123Str.charAt(relativeCycleNumInt-1));
+//end  modified by kangchangcun at 20171202
 	}
 
 	public Object getDayNumber(String due123, Object cycleNumber){
-
 		Integer cycleNumberDouble = new Integer( new Double( cycleNumber.toString() ).intValue() );
 
 		Integer rtn = null;
+//modified by kangchangcun at 20171202
 
-		if(due123.charAt( cycleNumberDouble ) == 'N' ){
+		if(due123.charAt( cycleNumberDouble-1 ) == 'N' ){
 			rtn = 0;
-		}else if( due123.charAt( cycleNumberDouble ) != '0'){
+		}else if( due123.charAt( cycleNumberDouble-1 ) != '0'){
 			rtn = 30;
 		}
 		else {
 			rtn = RandomFactory.randomIntBetween( 0, 30 );
 		}
+		//end  modified by kangchangcun at 20171202
 		return rtn;
 	}
 
@@ -264,36 +267,37 @@ public class CustomFunctionFactory {
 		for(int i=0; i<tmpChar.length; i++) {
 
 			double randomDouble = RandomFactory.randomDoubleBetween(0, 1);
+//modified by kangchangcun at 20171202
+//			if (i == 0) {
+//				if (randomDouble >= 0 || randomDouble < 0.9) {
+//					tmpChar[i] = '0';
+//				} else if (randomDouble >= 0.9 || randomDouble < 0.99) {
+//					tmpChar[i] = 'A';
+//				} else if (randomDouble >= 0.992 || randomDouble < 0.994) {
+//					tmpChar[i] = 'B';
+//				} else if (randomDouble >= 0.994 || randomDouble < 0.996) {
+//					tmpChar[i] = 'C';
+//				} else if (randomDouble >= 0.996 || randomDouble < 1) {
+//					tmpChar[i] = 'D';
+//				}
+//				continue;
+//			}
 
-			if (i == 0) {
-				if (randomDouble >= 0 || randomDouble < 0.9) {
-					tmpChar[i] = '0';
-				} else if (randomDouble >= 0.9 || randomDouble < 0.99) {
-					tmpChar[i] = 'A';
-				} else if (randomDouble >= 0.992 || randomDouble < 0.994) {
-					tmpChar[i] = 'B';
-				} else if (randomDouble >= 0.994 || randomDouble < 0.996) {
-					tmpChar[i] = 'C';
-				} else if (randomDouble >= 0.996 || randomDouble < 1) {
-					tmpChar[i] = 'D';
-				}
-				continue;
-			}
-
-			if (eStmtOdue120.charAt(i - 1) == '0' || eStmtOdue120.charAt(i - 1) == 'N') {
-				tmpChar[i] = eStmtOdue120.charAt(i - 1);
-			} else {
-				if (randomDouble >= 0 || randomDouble < 0.25) {
-					tmpChar[i] = 'A';
-				} else if (randomDouble >= 0.25 || randomDouble < 0.5) {
-					tmpChar[i] = 'B';
-				} else if (randomDouble >= 0.5 || randomDouble < 0.75) {
-					tmpChar[i] = 'C';
-				} else if (randomDouble >= 0.75 || randomDouble < 1) {
-					tmpChar[i] = 'D';
-				}
+			if (eStmtOdue120.charAt(i) == 'N') {
+			tmpChar[i] = eStmtOdue120.charAt(i);
+		} else {
+			if (randomDouble >= 0 || randomDouble < 0.25) {
+				tmpChar[i] = 'A';
+			} else if (randomDouble >= 0.25 || randomDouble < 0.5) {
+				tmpChar[i] = 'B';
+			} else if (randomDouble >= 0.5 || randomDouble < 0.75) {
+				tmpChar[i] = 'C';
+			} else if (randomDouble >= 0.75 || randomDouble < 1) {
+				tmpChar[i] = 'D';
 			}
 		}
+	}
+//end modified by kangchangcun at 20171202
 			return new String(tmpChar);
 	}
 
@@ -304,9 +308,9 @@ public class CustomFunctionFactory {
 		Integer relativeCycleNumInt = new Integer( new Double(relativeCycleNum.toString()).intValue() );
 
 		String convertedDue123Str = due123.replace('N','0');
-
-		char currentMonthChr = convertedDue123Str.charAt(relativeCycleNumInt);
-
+//modified by kangchangcun at 20171202
+		char currentMonthChr = convertedDue123Str.charAt(relativeCycleNumInt-1);
+//end modified by kangchangcun at 20171202
 		if(currentMonthChr == '0'){
 			return new Double(0);
 		}
