@@ -335,8 +335,13 @@ public class CustomFunctionFactory {
 		return rtn;
 	}
 
-	public Object random(Double minDouble, Double maxDouble){
-		return RandomFactory.randomDoubleBetween(minDouble,maxDouble);
+	public Object random(Object minDouble, Object maxDouble){
+
+		Double minD = new Double(minDouble.toString());
+
+		Double maxD = new Double(maxDouble.toString());
+
+		return RandomFactory.randomDoubleBetween(minD, maxD);
 	}
 
 	public Object right(String srcStr, Double doubleLen){
