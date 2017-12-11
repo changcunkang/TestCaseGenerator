@@ -49,7 +49,7 @@ public class Loancard {
 	@Column
 	private Double usedHighestAmount;
 	@Column
-	private Date scheduledPaymentDate;
+	private Integer scheduledPaymentDate;
 	@Column
 	private Double scheduledPaymentAmount;
 	@Column
@@ -152,10 +152,10 @@ public class Loancard {
 	public void setUsedHighestAmount(Double usedHighestAmount) {
 		this.usedHighestAmount = usedHighestAmount;
 	}
-	public Date getScheduledPaymentDate() {
+	public Integer getScheduledPaymentDate() {
 		return scheduledPaymentDate;
 	}
-	public void setScheduledPaymentDate(Date scheduledPaymentDate) {
+	public void setScheduledPaymentDate(Integer scheduledPaymentDate) {
 		this.scheduledPaymentDate = scheduledPaymentDate;
 	}
 	public Double getScheduledPaymentAmount() {

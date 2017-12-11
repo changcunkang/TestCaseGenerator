@@ -105,7 +105,12 @@ public class JavaTestCaseGenerator extends TestCaseGenerator {
                 attValueObj = new SimpleDateFormat(TestCaseUtils.DATE_FORMAT).format(attributeValue);
             }
 
-            BeanUtils.setProperty(newTestCaseInstance, attributeName, attValueObj);
+            if("AmortizationTerms".equalsIgnoreCase(attributeName)){
+                String a = "";
+            }
+
+            String attrName = attributeName.substring(0,1).toLowerCase() +  attributeName.substring(1);
+            BeanUtils.setProperty(newTestCaseInstance, attrName, attValueObj);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

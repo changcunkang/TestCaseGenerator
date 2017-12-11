@@ -6,6 +6,7 @@ import com.fico.testCaseGenerator.data.AbstractTestData;
 import com.fico.testCaseGenerator.data.SimpleField;
 import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.data.configuration.Restriction;
+import com.fico.testCaseGenerator.testCase.TestCaseGenerator;
 import com.fico.testCaseGenerator.util.RandomFactory;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
 
@@ -25,6 +26,8 @@ import java.util.regex.Pattern;
  *
  */
 public class TestCaseExpression {
+
+    private TestCaseGenerator testCaseGenerator = null;
 
     private BOMGenerator bomGenerator;
 
@@ -58,11 +61,22 @@ public class TestCaseExpression {
 
     private static final String IT_RECURSIVE_FUNCTION_NAME = "IT";
 
+    public static final String MERGE_FUNCTION_NAME = "merge";
+
+    public static final String TESTDATA_SIZE_FUNCTION_NAME = "testDataSize";
+
+    private static List<String> ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST = new ArrayList<String>();
+
+    static {
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(TESTDATA_SIZE_FUNCTION_NAME);
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(MERGE_FUNCTION_NAME);
+    }
+
     private CustomFunctionFactory customFunctionFactory = null;
 
-    public TestCaseExpression(BOMGenerator bomGenerator){
-        this.bomGenerator = bomGenerator;
-        this.customFunctionFactory = new CustomFunctionFactory();
+    public TestCaseExpression(TestCaseGenerator testCaseGenerator){
+        this.bomGenerator = testCaseGenerator.getBomGenerator();
+        this.customFunctionFactory = new CustomFunctionFactory(testCaseGenerator);
     }
 
     /**
@@ -145,6 +159,10 @@ public class TestCaseExpression {
                             randomMaxDateInt = ((Date)maxValue).getTime();
                         }
 
+                        if(randomMinDateInt==null || randomMaxDateInt==null){
+                            String a = "";
+                        }
+
                         long randomBetweenInt = RandomFactory.randomLongBetween(randomMinDateInt, randomMaxDateInt);
                         return new Date(randomBetweenInt);
 
@@ -160,6 +178,11 @@ public class TestCaseExpression {
 
     private Integer convertObjectValToInteger(Object val){
         if(val instanceof String){
+
+            if(val == null || "".equalsIgnoreCase(val.toString())){
+                String a = "";
+            }
+
             return new Integer ( new Double(val.toString()).intValue() );
         }else if(val instanceof Double){
             return new Integer ( ((Double)val).intValue() );
@@ -167,6 +190,10 @@ public class TestCaseExpression {
             return ((BigDecimal)val).intValue();
         }
         return (Integer)val;
+    }
+
+    public Object parseInitialValue(Restriction restriction){
+       return this.recursiveParse(null, restriction.getMinStr(), restriction );
     }
 
     private Object recursiveParse(Object tempValue, String path, Restriction restriction){
@@ -218,7 +245,7 @@ public class TestCaseExpression {
         if("+".equals(operator)){
             //日期加减
             //现只支持左边日期右边数字，左边数字右边日期暂时没考虑
-            if(this.isSimpleFieldDateType(restriction)){
+            if(this.isSimpleFieldDateType(restriction, tempValue)){
                 GregorianCalendar gc=new GregorianCalendar();
                 gc.setTime( (Date)tempValue );
                 gc.add(GregorianCalendar.DATE, new Double( rightValue.toString() ).intValue());
@@ -231,7 +258,7 @@ public class TestCaseExpression {
         }else if("-".equals(operator)) {
             //日期加减
             //现只支持左边日期右边数字，左边数字右边日期暂时没考虑
-            if(this.isSimpleFieldDateType(restriction)){
+            if(this.isSimpleFieldDateType(restriction, tempValue)){
                 GregorianCalendar gc=new GregorianCalendar();
                 gc.setTime( (Date)tempValue );
                 gc.add(GregorianCalendar.DATE, new Double( rightValue.toString() ).intValue() * -1);
@@ -253,7 +280,7 @@ public class TestCaseExpression {
         return null;
     }
 
-    private boolean isSimpleFieldDateType(Restriction restriction){
+    private boolean isSimpleFieldDateType(Restriction restriction, Object leftValue){
         if(restriction.getExtendtion().getParentTestData() instanceof SimpleField ) {
             SimpleField simpleField = (SimpleField) restriction.getExtendtion().getParentTestData();
 
@@ -261,6 +288,9 @@ public class TestCaseExpression {
                 return true;
 
             }
+        }
+        if(leftValue.getClass() == Date.class){
+            return true;
         }
         return false;
     }
@@ -498,7 +528,20 @@ public class TestCaseExpression {
                 return thisFunctionResultValue;
             }
 
-        }else{
+        }else if( isAbstractTestDataOperationFunction(targetFunctionName) ){
+            if(targetFunctionName.equalsIgnoreCase(MERGE_FUNCTION_NAME)){
+                Object[] functionArgs = new Object[3];
+                //这块以后要改
+                functionArgs[0] = restriction.getExtendtion().getParentTestData();
+                functionArgs[1] = restriction.getExtendtion().getParentTestData();
+                functionArgs[2] = rtn;
+                return this.functionInvocation(targetFunctionName, functionArgs);
+            }
+            else{
+                return this.functionInvocation(targetFunctionName, rtn);
+            }
+        }
+        else{
             if(expRtnValueArr != null && expRtnValueArr.length>0){
                 for(int j=0; j<expRtnValueArr.length; j++){
                     expRtnValueArr[j] = this.recursiveParse(null,rtn[j], restriction);
@@ -521,7 +564,21 @@ public class TestCaseExpression {
         }else{
             return this.recursiveParse( thisFunctionResultValue, afterFunctionExpLevaeStr, restriction );
         }
+    }
 
+    /**
+     * 获取TestData本身的属性的函数，如TestData的TestCase列表的长度
+     * @param functionName
+     * @return
+     */
+    private boolean isAbstractTestDataOperationFunction(String functionName){
+        boolean rtn = false;
+
+        if(ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.contains(functionName)){
+            rtn = true;
+        }
+
+        return rtn;
     }
 
     /**
@@ -599,7 +656,7 @@ public class TestCaseExpression {
      * @param exp
      * @return
      */
-    private List<String> getAllAbsTestData(String exp){
+    public List<String> getAllAbsTestData(String exp){
         return TestCaseUtils.getAllAbsTestData(exp);
     }
 

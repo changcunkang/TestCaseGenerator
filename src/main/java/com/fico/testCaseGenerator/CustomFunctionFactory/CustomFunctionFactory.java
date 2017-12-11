@@ -11,6 +11,7 @@ import com.fico.testCaseGenerator.BOM.BOMGenerator;
 import com.fico.testCaseGenerator.data.AbstractTestData;
 import com.fico.testCaseGenerator.data.SimpleField;
 import com.fico.testCaseGenerator.data.TestData;
+import com.fico.testCaseGenerator.testCase.TestCaseGenerator;
 import com.fico.testCaseGenerator.util.RandomFactory;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
 
@@ -20,8 +21,11 @@ public class CustomFunctionFactory {
 
 	private BOMGenerator bomGenerator;
 
-	public CustomFunctionFactory(BOMGenerator bomGenerator){
-		this.bomGenerator = bomGenerator;
+	private TestCaseGenerator testCaseGenerator;
+
+	public CustomFunctionFactory(TestCaseGenerator testCaseGenerator){
+		this.bomGenerator = testCaseGenerator.getBomGenerator();
+		this.testCaseGenerator = testCaseGenerator;
 	}
 	
 	public Object invokeCustomFunction(String functionName, Object... args){
@@ -260,6 +264,19 @@ public class CustomFunctionFactory {
 		return rtn;
 	}
 
+	/**
+	 * 中间节点合并函数
+	 * @param testData
+	 * @param testDataPath
+	 * @return
+	 */
+	public Object merge(Object parentTestDataIns, TestData testData, String[] testDataPath){
+
+		this.testCaseGenerator.merge(parentTestDataIns, testData, testDataPath);
+
+		return null;
+	}
+
 	public Object getStmtOdue120(String eStmtOdue120){
 
 		char[] tmpChar = new char[eStmtOdue120.length()] ;
@@ -300,6 +317,7 @@ public class CustomFunctionFactory {
 //end modified by kangchangcun at 20171202
 			return new String(tmpChar);
 	}
+
 
 	public Object getMthsOdueAmt(String due123, Object relativeCycleNum,  Object balance){
 

@@ -52,8 +52,18 @@ public class Application {
 	/**调用类型(实时，批量)*/
 	@Column
 	private String callType;
-	
-	
+
+	@Transient
+	private List<Temporary> temporary = new ArrayList<Temporary>();
+
+	public List<Temporary> getTemporary() {
+		return temporary;
+	}
+
+	public void setTemporary(List<Temporary> temporary) {
+		this.temporary = temporary;
+	}
+
 	public ProcessingHistory getProcessingHistory() {
 		return processingHistory;
 	}

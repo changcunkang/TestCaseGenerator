@@ -1,26 +1,24 @@
 package com.fico.testCaseGenerator.testCase;
 
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import com.fico.testCaseGenerator.data.AbstractTestData;
+import com.fico.testCaseGenerator.data.*;
 import com.fico.testCaseGenerator.CustomFunctionFactory.CustomFunctionFactory;
-import com.fico.testCaseGenerator.data.SimpleField;
-import com.fico.testCaseGenerator.data.TempoaryTestData;
-import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
 import com.fico.testCaseGenerator.data.configuration.Item;
 import com.fico.testCaseGenerator.data.configuration.Restriction;
 import com.fico.testCaseGenerator.expression.TestCaseExpression;
+import com.fico.testCaseGenerator.util.ClassUtil;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 public abstract class TestCaseGenerator {
-	
+
 	protected BOMGenerator bomGenerator = null;
 
 	protected Map<String, Integer> simpleFieldDependencyLocalPathCounter = null;
-
-	protected CustomFunctionFactory customFunctionFactory = null;
 
 	private TestCaseExpression testCaseExpression = null;
 
@@ -36,9 +34,7 @@ public abstract class TestCaseGenerator {
 
 		this.bomGenerator = bomGenerator;
 
-		this.customFunctionFactory = new CustomFunctionFactory();
-
-		this.testCaseExpression = new TestCaseExpression(this.bomGenerator);
+		this.testCaseExpression = new TestCaseExpression(this);
 	}
 
 	/**
@@ -90,11 +86,16 @@ public abstract class TestCaseGenerator {
 	 */
 	private void getInstanceNumberAndGenerateAttr(Object parentTestCaseElement, TestData testData){
 
+		if(isTestDataMergeMode(testData)){
+			generateAttr(parentTestCaseElement, -1, testData);
+			return ;
+		}
+
 		Integer instanceSize = generateTestCaseNumberFromRestriction(testData.getExtendtion().getRestriction());
 
-		//临时节点
 		if(isTempoaryTestData(testData)){
-			generateTempoaryTestData(testData);
+			//临时节点
+			generateTempoaryTestDataTestCase(instanceSize, testData);
 		}else{
 			//不是临时节点，正常生成
 			generateAttr(parentTestCaseElement, instanceSize, testData);
@@ -102,11 +103,13 @@ public abstract class TestCaseGenerator {
 	}
 
 	private Integer generateTestCaseNumberFromRestriction(Restriction restriction){
+		//Object intVal = this.testCaseExpression.parseInitialValue( restriction );
+
 		Object intVal = this.testCaseExpression.parse( restriction );
 
 		Integer instanceSize = 0;
 
-		if(intVal != null){
+		if(intVal != null && !"".equalsIgnoreCase(intVal.toString())){
 			instanceSize = new Double( intVal.toString() ).intValue();
 		}
 
@@ -126,6 +129,76 @@ public abstract class TestCaseGenerator {
 	 */
 	protected void generateAttr(Object parentTestCaseElement, int instanceSize, TestData testData){
 
+		if(isTestDataMergeMode(testData)){
+			tmpMergeParentTestCaseElement = parentTestCaseElement;
+			this.testCaseExpression.parse(testData.getExtendtion().getRestriction());
+			return ;
+		}
+
+		generateAttr1(parentTestCaseElement, instanceSize, testData);
+	}
+
+	private Object tmpMergeParentTestCaseElement = null;
+
+	/**
+	 * 这里以后要考虑类似多个人行的情况，目前只考虑一个
+	 * @param parentTestDataIns
+	 * @param testData
+	 * @param pathArr
+	 */
+	public void merge(Object parentTestDataIns, TestData testData, String[] pathArr){
+		int parentTestInsInParentTestDataPos = getTestDataInstanceInTestDataPos(tmpMergeParentTestCaseElement, testData.getParentTestData());
+
+		for(String path : pathArr){
+			List tmpObjList = ClassUtil.search(this.getBomGenerator().getRootTestData().getTestCase().get(0),"/" + path.substring(0,path.length()-1));
+
+			appendTempoaryToTargetTestData(tmpMergeParentTestCaseElement, testData, tmpObjList);
+		}
+	}
+
+	private void appendTempoaryToTargetTestData(Object parentTestDataIns, TestData testData, List objList){
+
+		for(Object obj : objList) {
+			Object newIns = this.createEmptyTestCaseInstance(testData);
+			appendChildTestCaseToParentTestCase(parentTestDataIns, newIns, testData);
+
+			Class objCls = obj.getClass();
+			for (Field field : objCls.getDeclaredFields()) {
+
+				String fieldName = field.getName();
+
+				for(SimpleField simpleField : testData.getSimpleFieldList()){
+
+					if(simpleField.getName().equalsIgnoreCase(fieldName)) {
+						try {
+							field.setAccessible(true);
+							setTestCaseElementValue(simpleField, newIns, fieldName, field.get(obj));
+						} catch (IllegalAccessException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+			testData.getTestCase().add(newIns);
+		}
+	}
+
+	private Integer getTestDataInstanceInTestDataPos(Object testDataInstance, TestData testData){
+
+		int rtn = -1;
+
+		for(int i=0; i<testData.getTestCase().size(); i++){
+			if(testDataInstance == testData.getTestCase().get(i)){
+				rtn = i;
+				break;
+			}
+		}
+
+		return rtn;
+	}
+
+	protected void generateAttr1(Object parentTestCaseElement, int instanceSize, TestData testData){
+
 		for(int i=0; i<instanceSize; i++){
 
 			Object newIns = this.createEmptyTestCaseInstance(testData);
@@ -142,27 +215,45 @@ public abstract class TestCaseGenerator {
 				testData.setGeneratingTestDataFirstChild(false);
 			}
 
-
 			generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData);
 		}
 	}
 
-	protected void generateTempoaryTestData(TestData tempoaryTestData){
-		Integer testCaseSize = this.generateTestCaseNumberFromRestriction( tempoaryTestData.getExtendtion().getRestriction() );
+	private boolean isTestDataMergeMode(AbstractTestData testData){
+		if(testData.getExtendtion().getRestriction()!=null){
+			Restriction restriction = testData.getExtendtion().getRestriction();
+			if(restriction.getMinStr().contains(TestCaseExpression.MERGE_FUNCTION_NAME)){
+				return true;
+			}
+			for(Item item:restriction.getItem()){
+				if(item.getMinExpression().contains(TestCaseExpression.MERGE_FUNCTION_NAME) ||
+						item.getMaxExpression().contains(TestCaseExpression.MERGE_FUNCTION_NAME)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
+	protected void generateTempoaryTestDataTestCase(int instanceSize, TestData testData){
+		TempoaryTestData tempoaryTestData = (TempoaryTestData)testData;
+
+		for(int i=0; i<instanceSize; i++){
+
+			TempoaryTestCase tempoaryTestCase = new TempoaryTestCase();
+
+			for( SimpleField simpleField : tempoaryTestData.getSimpleFieldList() ){
+					tempoaryTestCase.getKeyValuePairList().add(
+						new TempoaryKeyValuePair(simpleField.getName(), this.testCaseExpression.parse(simpleField.getExtendtion().getRestriction()))
+				);
+			}
+		}
 	}
 
 	public Object generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(Object newIns, TestData testData){
 
-
 		for( SimpleField simpleField : testData.getSimpleFieldList() ){
-
-			if(simpleField.getPath().equalsIgnoreCase("Application/Customer/PbocReport/Loan/@stateEndDate/")){
-				String a = "";
-			}
-
 			if(simpleField.getExtendtion() != null){
-
 				generateSingleTestCaseAttributeValue(newIns, simpleField);
 			}
 		}
@@ -285,31 +376,54 @@ public abstract class TestCaseGenerator {
 
 			if( isAllRelativeElementReady( testData ) ){
 
-				for( Object parentTestCaseElement :  paretnTestCaseElementList){
+				if(paretnTestCaseElementList == null || paretnTestCaseElementList.size() == 0){
 
-					getInstanceNumberAndGenerateAttr(parentTestCaseElement, testData);
+					recursiveClearTestCaseFinishFlag(testData, true);
 
+				}else{
+					for( Object parentTestCaseElement :  paretnTestCaseElementList){
+
+						getInstanceNumberAndGenerateAttr(parentTestCaseElement, testData);
+
+					}
+
+					testData.setGenerateTestCaseFinish(true);
+
+					for(SimpleField simpleField : testData.getTmpGeneratedSimpleFieldSet()){
+						simpleField.setGenerateTestCaseFinish( true );
+					}
+					testData.setTmpGeneratedSimpleFieldSet(new HashSet<SimpleField>());
 				}
-
-				testData.setGenerateTestCaseFinish(true);
-
-				for(SimpleField simpleField : testData.getTmpGeneratedSimpleFieldSet()){
-					simpleField.setGenerateTestCaseFinish( true );
-				}
-				testData.setTmpGeneratedSimpleFieldSet(new HashSet<SimpleField>());
 
 			}else{
 				this.unGeneratedSlaveTestDataList.add( testData );
-				this.recordAbstractTestDataPosition( testData );
+				if( testData.getParentTestData().isGenerateTestCaseFinish() ){
+					this.recordAbstractTestDataPosition( testData );
+				}
 			}
 		}
 	}
 
 	private boolean isAllRelativeElementReady(AbstractTestData abstractTestData){
+
+		if(abstractTestData.getName().equalsIgnoreCase("OverdueRecord")){
+			String a = "";
+		}
+
 		boolean isAllRelativeElementReady = true;
 
 		if(abstractTestData.getExtendtion() == null || abstractTestData.getExtendtion().getRestriction() == null){
 			return isAllRelativeElementReady;
+		}
+
+		if(abstractTestData instanceof TestData){
+			TestData testData = (TestData)abstractTestData;
+			if(!testData.getParentTestData().isGenerateTestCaseFinish()){
+				return false;
+			}
+			else if(testData.getParentTestData().getTestCase().size()==0){
+				return true;
+			}
 		}
 
 		for(Item item : abstractTestData.getExtendtion().getRestriction().getItem()){
@@ -318,6 +432,24 @@ public abstract class TestCaseGenerator {
 				isAllRelativeElementReady = false;
 			}
 		}
+
+		if(isAllRelativeElementReady && this.isTestDataMergeMode(abstractTestData)){
+
+			for(Item item : abstractTestData.getExtendtion().getRestriction().getItem()){
+				List<String> pathList = this.testCaseExpression.getAllAbsTestData(item.getMinExpression());
+
+				for(String path : pathList){
+					for(SimpleField simpleField : this.unGeneratedSlaveSimpleFieldList){
+						if(simpleField.getPath().startsWith(abstractTestData.getPath()) ||
+								simpleField.getPath().startsWith(path)
+								){
+							return false;
+						}
+					}
+				}
+			}
+		}
+
 		return isAllRelativeElementReady;
 	}
 
@@ -328,20 +460,28 @@ public abstract class TestCaseGenerator {
 		boolean isTestDataListReduced = true;
 		boolean isSimpleFieldReduced = true;
 
+		int bothReduced = 0;
+
 		do{
 			//testData
 			if(this.unGeneratedSlaveTestDataList != null && this.unGeneratedSlaveTestDataList.size() > 0){
 
 				testDataLoopFlag = true;
 
+				List<TestData> tmpList = new ArrayList<TestData>();
+
+				tmpList.addAll( unGeneratedSlaveTestDataList );
+
 				while( testDataLoopFlag ){
 
 					int unConstructedTestDataListSize = unGeneratedSlaveTestDataList.size();
 
-					for(TestData unConsTestCaseData : unGeneratedSlaveTestDataList){
+					for( int i=0; i<tmpList.size(); i++){
+						TestData unConsTestCaseData = tmpList.get(i);
 						if(this.isAllRelativeElementReady( unConsTestCaseData )){
 							generateAllTestCaseListForOneTestData(unConsTestCaseData);
 							unGeneratedSlaveTestDataList.remove(unConsTestCaseData);
+							tmpList.remove(unConsTestCaseData);
 						}
 					}
 					if(unGeneratedSlaveTestDataList.size() == 0){
@@ -393,11 +533,19 @@ public abstract class TestCaseGenerator {
 
 			//异常
 			if( !isTestDataListReduced && !isSimpleFieldReduced ){
-				System.out.println("None TestData nor SimpleField is reduced");
-				break;
+
+				bothReduced ++;
+
+				if(bothReduced >= 1){
+					System.out.println("None TestData nor SimpleField is reduced");
+				}
+
+				//break;
+			}else{
+				bothReduced = 0 ;
 			}
 
-		}while (!testDataLoopFlag && simpleFieldLoopFlag );
+		}while (testDataLoopFlag || simpleFieldLoopFlag );
 	}
 
 	private void clearSimpleFieldDependencyPathCounter(){
@@ -487,4 +635,8 @@ public abstract class TestCaseGenerator {
 		return dateTimeTypeDataFormat;
 	}
 
+
+	public BOMGenerator getBomGenerator() {
+		return bomGenerator;
+	}
 }
