@@ -110,7 +110,10 @@ public class JavaTestCaseGenerator extends TestCaseGenerator {
             }
 
             String attrName = attributeName.substring(0,1).toLowerCase() +  attributeName.substring(1);
-            BeanUtils.setProperty(newTestCaseInstance, attrName, attValueObj);
+
+            if(attValueObj != null){
+                BeanUtils.setProperty(newTestCaseInstance, attrName, attValueObj);
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
