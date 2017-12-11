@@ -412,7 +412,7 @@ public class TestCaseExpression {
             return compareRes<1;
         }else if(operationExp.equals("<=")){
             return compareRes<=1;
-        }else if(operationExp.equals("==")){
+        }else if(operationExp.equals("=")){
             return compareRes==1;
         }else if(operationExp.equals("!=")){
             return compareRes!=1;
