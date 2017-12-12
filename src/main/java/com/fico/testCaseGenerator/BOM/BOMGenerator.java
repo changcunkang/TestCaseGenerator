@@ -118,6 +118,11 @@ public abstract class BOMGenerator {
 
 	public boolean isAbsTestDataGenerateFinish(String abstractTestDataPath){
 		if( ! abstractTestDataPath.contains("@")){
+
+			if(this.getPathTestDataMap().get(abstractTestDataPath) == null){
+				String a = "";
+			}
+
 			return this.getPathTestDataMap().get(abstractTestDataPath).isGenerateTestCaseFinish();
 		}
 		else{

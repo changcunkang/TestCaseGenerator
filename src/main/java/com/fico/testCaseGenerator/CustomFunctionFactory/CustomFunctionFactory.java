@@ -246,7 +246,15 @@ public class CustomFunctionFactory {
 //end  modified by kangchangcun at 20171202
 	}
 
-	public Object getDayNumber(String due123, Object cycleNumber){
+	public Object getDayNumber(String due123, Object cycleNumber, Object businessDateObj){
+
+		Date businessDate = (Date)businessDateObj;
+
+		Calendar businessCal=Calendar.getInstance();
+		businessCal.setTime(businessDate);
+
+		int dayOfBusinessDateMonth = businessCal.getActualMaximum( Calendar.DATE );
+
 		Integer cycleNumberDouble = new Integer( new Double( cycleNumber.toString() ).intValue() );
 
 		Integer rtn = null;
@@ -258,7 +266,7 @@ public class CustomFunctionFactory {
 			rtn = 30;
 		}
 		else {
-			rtn = RandomFactory.randomIntBetween( 0, 30 );
+			rtn = RandomFactory.randomIntBetween( 1, dayOfBusinessDateMonth );
 		}
 		//end  modified by kangchangcun at 20171202
 		return rtn;

@@ -45,7 +45,9 @@ public class TestCaseExpression {
 
     private static final int STATE_FUNCTION = 0;
 
-    public static final String FIND_ALL_PATH_EXP = "(\\/)?Application(\\/@?[_a-zA-Z]{1,}[a-zA-Z0-9]{1,})*\\/";
+    //public static final String FIND_ALL_PATH_EXP = "(\\/)?Application(\\/@?[_a-zA-Z]{1,}[a-zA-Z0-9]{1,})*\\/";
+
+    public static final String FIND_ALL_PATH_EXP = "Application(\\/@?[_a-zA-Z]{1,}[a-zA-Z0-9]{1,})*\\/";
 
     private static final String FIND_PURE_NUMBERIC_PATH_EXP = "^(-?\\d+)(\\.+\\d+)?$";
 

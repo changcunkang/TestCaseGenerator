@@ -272,7 +272,7 @@ public abstract class TestCaseGenerator {
 
 			if(this.isAllRelativeElementReady(simpleField)){
 
-				if(simpleField.getName().equalsIgnoreCase("amortizationPri")){
+				if(simpleField.getName().equalsIgnoreCase("transAmt")){
 					String a = "";
 				}
 
@@ -310,6 +310,10 @@ public abstract class TestCaseGenerator {
 				TestData testData = this.bomGenerator.getPathTestDataMap().get(minimumSharedPath);
 
 				SimpleField masterSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(path);
+
+				if(masterSimpleField == null){
+					String a = "";
+				}
 
 				masterSimpleField.getRelativeManyToOnePathSet().add(minimumSharedPath);
 
