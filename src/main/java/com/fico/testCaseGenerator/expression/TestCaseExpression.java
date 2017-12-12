@@ -121,6 +121,10 @@ public class TestCaseExpression {
 
                         Object minExpRtnVal = this.recursiveParse(null, minExp, restriction );
 
+                        if("Application/Customer/PbocReport/Loan/@scheduledPaymentAmount".equalsIgnoreCase(maxExp)){
+                            String a = "";
+                        }
+
                         Object maxExpRtnVal = this.recursiveParse(null, maxExp, restriction );
 
                         return generateRandomBetweetnMaxValueAndMinValue(minExpRtnVal, maxExpRtnVal, restriction);
@@ -179,7 +183,7 @@ public class TestCaseExpression {
     private Integer convertObjectValToInteger(Object val){
         if(val instanceof String){
 
-            if(val == null || "".equalsIgnoreCase(val.toString())){
+            if(val == null || "@scheduledPaymentAmount".equalsIgnoreCase(val.toString())){
                 String a = "";
             }
 
@@ -405,17 +409,17 @@ public class TestCaseExpression {
         }
 
         if(operationExp.equals(">")){
-            return compareRes>1;
+            return compareRes>0;
         }else if(operationExp.equals(">=")){
-            return compareRes>=1;
+            return compareRes>=0;
         }else if(operationExp.equals("<")){
-            return compareRes<1;
+            return compareRes<0;
         }else if(operationExp.equals("<=")){
-            return compareRes<=1;
+            return compareRes<=0;
         }else if(operationExp.equals("=")){
-            return compareRes==1;
+            return compareRes==0;
         }else if(operationExp.equals("!=")){
-            return compareRes!=1;
+            return compareRes!=0;
         }else if(operationExp.equals("&&")){
             return (Boolean)leftVal && (Boolean)rightVal;
         }else if(operationExp.equals("||")){

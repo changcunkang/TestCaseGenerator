@@ -43,8 +43,10 @@ public abstract class TestCaseGenerator {
 	 */
 	public Object generateTestCase(){
 
+		//重置状态
 		clearSimpleFieldDependencyPathCounter();
 
+		//生成根App
 		TestData rootTestData = generateRootTestData();
 
 		if(rootTestData.getCustomFieldList() != null){
@@ -53,6 +55,7 @@ public abstract class TestCaseGenerator {
 			}
 		}
 
+		//集中处理依赖关系
 		handleLocalDependency();
 
 		return rootTestData.getTestCase().get(0);
@@ -87,7 +90,8 @@ public abstract class TestCaseGenerator {
 	private void getInstanceNumberAndGenerateAttr(Object parentTestCaseElement, TestData testData){
 
 		if(isTestDataMergeMode(testData)){
-			generateAttr(parentTestCaseElement, -1, testData);
+			tmpMergeParentTestCaseElement = parentTestCaseElement;
+			this.testCaseExpression.parse(testData.getExtendtion().getRestriction());
 			return ;
 		}
 
@@ -127,16 +131,38 @@ public abstract class TestCaseGenerator {
 	 * @param testData
 	 * @return
 	 */
+//	protected void generateAttr(Object parentTestCaseElement, int instanceSize, TestData testData){
+//
+//		if(isTestDataMergeMode(testData)){
+//			tmpMergeParentTestCaseElement = parentTestCaseElement;
+//			this.testCaseExpression.parse(testData.getExtendtion().getRestriction());
+//			return ;
+//		}
+//
+//		generateAttr1(parentTestCaseElement, instanceSize, testData);
+//	}
 	protected void generateAttr(Object parentTestCaseElement, int instanceSize, TestData testData){
 
-		if(isTestDataMergeMode(testData)){
-			tmpMergeParentTestCaseElement = parentTestCaseElement;
-			this.testCaseExpression.parse(testData.getExtendtion().getRestriction());
-			return ;
-		}
+		for(int i=0; i<instanceSize; i++){
 
-		generateAttr1(parentTestCaseElement, instanceSize, testData);
+			Object newIns = this.createEmptyTestCaseInstance(testData);
+
+			appendChildTestCaseToParentTestCase( parentTestCaseElement, newIns, testData );
+
+			testData.setGeneratingTestData(newIns);
+			testData.getTestCase().add(newIns);
+
+			if(i == 0){
+				testData.setGeneratingTestDataFirstChild(true);
+			}
+			else{
+				testData.setGeneratingTestDataFirstChild(false);
+			}
+
+			generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData);
+		}
 	}
+
 
 	private Object tmpMergeParentTestCaseElement = null;
 
@@ -197,27 +223,7 @@ public abstract class TestCaseGenerator {
 		return rtn;
 	}
 
-	protected void generateAttr1(Object parentTestCaseElement, int instanceSize, TestData testData){
 
-		for(int i=0; i<instanceSize; i++){
-
-			Object newIns = this.createEmptyTestCaseInstance(testData);
-
-			appendChildTestCaseToParentTestCase( parentTestCaseElement, newIns, testData );
-
-			testData.setGeneratingTestData(newIns);
-			testData.getTestCase().add(newIns);
-
-			if(i == 0){
-				testData.setGeneratingTestDataFirstChild(true);
-			}
-			else{
-				testData.setGeneratingTestDataFirstChild(false);
-			}
-
-			generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData);
-		}
-	}
 
 	private boolean isTestDataMergeMode(AbstractTestData testData){
 		if(testData.getExtendtion().getRestriction()!=null){
@@ -265,6 +271,10 @@ public abstract class TestCaseGenerator {
 		if(simpleField.getExtendtion() != null && simpleField.getExtendtion().getRestriction() != null){
 
 			if(this.isAllRelativeElementReady(simpleField)){
+
+				if(simpleField.getName().equalsIgnoreCase("amortizationPri")){
+					String a = "";
+				}
 
 				Object expValue = this.testCaseExpression.parse(simpleField.getExtendtion().getRestriction());
 
@@ -346,15 +356,16 @@ public abstract class TestCaseGenerator {
 	}
 
 	/**
-	 * 生成一个TestData下所有案例数据，包括主从
+	 * 递归生成一个TestData下所有案例数据，包括主从
 	 * @param testData
 	 * @return
 	 */
-
 	public void generateAllTestCaseListForOneTestData(TestData testData){
 
+		//生成自己
 		generateTestDataInstance( testData );
 
+		//递归自己下面的所有子节点
 		if(testData.getCustomFieldList() != null){
 			for(TestData tmpTestData : testData.getCustomFieldList()){
 				generateAllTestCaseListForOneTestData(tmpTestData);
@@ -367,7 +378,6 @@ public abstract class TestCaseGenerator {
 	 * @param testData
 	 * @return
 	 */
-
 	public void generateTestDataInstance( TestData testData) {
 
 		List paretnTestCaseElementList = testData.getParentTestData().getTestCase();
@@ -384,7 +394,6 @@ public abstract class TestCaseGenerator {
 					for( Object parentTestCaseElement :  paretnTestCaseElementList){
 
 						getInstanceNumberAndGenerateAttr(parentTestCaseElement, testData);
-
 					}
 
 					testData.setGenerateTestCaseFinish(true);
@@ -394,9 +403,9 @@ public abstract class TestCaseGenerator {
 					}
 					testData.setTmpGeneratedSimpleFieldSet(new HashSet<SimpleField>());
 				}
-
 			}else{
 				this.unGeneratedSlaveTestDataList.add( testData );
+
 				if( testData.getParentTestData().isGenerateTestCaseFinish() ){
 					this.recordAbstractTestDataPosition( testData );
 				}
@@ -577,10 +586,12 @@ public abstract class TestCaseGenerator {
 		testData.setGenerateTestCaseFinish(flag);
 		testData.setGeneratingTestDataFirstChild(flag);
 		testData.setGeneratingTestData(null);
+		testData.setPositionRecord(null);
 
 		for(SimpleField sf : testData.getSimpleFieldList()){
 			sf.setGenerateTestCaseFinish(flag);
 			sf.setDependencySimpleFieldPosition(new ArrayList<Integer>());
+			sf.setPositionRecord(null);
 		}
 
 		for(TestData childTestData : testData.getCustomFieldList()){
