@@ -316,7 +316,7 @@ public class CustomFunctionFactory {
 
 			cycleCalendar.add(Calendar.DAY_OF_YEAR, cycleDay - calDay);
 
-			rtnTime = RandomFactory.randomLongBetween(businessDate.getTime(), cycleCalendar.getTimeInMillis());
+			rtnTime = RandomFactory.randomLongBetween(cycleCalendar.getTimeInMillis(), businessDate.getTime());
 
 		}
 
