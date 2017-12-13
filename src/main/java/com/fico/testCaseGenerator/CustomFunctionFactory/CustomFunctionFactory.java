@@ -3,6 +3,7 @@ package com.fico.testCaseGenerator.CustomFunctionFactory;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -326,7 +327,7 @@ public class CustomFunctionFactory {
 	public Object getLastHistoryCycleDay(Object businessDateObj, Object cycleObj, Object cycleNumberObj){
 		Date businessDate = (Date)businessDateObj;
 
-		Integer cycleNumber = (Integer)cycleNumberObj;
+		Integer cycleNumber = new BigDecimal(cycleNumberObj.toString()).intValue();
 
 		Calendar calendar=Calendar.getInstance();
 
