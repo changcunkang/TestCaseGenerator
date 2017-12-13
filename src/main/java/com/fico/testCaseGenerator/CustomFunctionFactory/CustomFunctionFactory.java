@@ -323,6 +323,30 @@ public class CustomFunctionFactory {
 		return new Date(rtnTime);
 	}
 
+	public Object getLastHistoryCycleDay(Object businessDateObj, Object cycleObj, Object cycleNumberObj){
+		Date businessDate = (Date)businessDateObj;
+
+		Integer cycleNumber = (Integer)cycleNumberObj;
+
+		Calendar calendar=Calendar.getInstance();
+
+		calendar.setTime( businessDate );
+
+		Integer calDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+		calendar.add(Calendar.MONTH, cycleNumber * -1);
+
+		calendar.set(Calendar.DAY_OF_MONTH, (Integer)cycleObj);
+
+		Long thisMonthMilSec = calendar.getTimeInMillis();
+
+		calendar.add(Calendar.MONTH,  -1);
+
+		Long lastMonthMilSec = calendar.getTimeInMillis();
+
+		return new Date( RandomFactory.randomLongBetween(lastMonthMilSec, thisMonthMilSec));
+	}
+
 	public Object getStmtOdue120(String eStmtOdue120){
 
 		char[] tmpChar = new char[eStmtOdue120.length()] ;
