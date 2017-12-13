@@ -272,10 +272,6 @@ public abstract class TestCaseGenerator {
 
 			if(this.isAllRelativeElementReady(simpleField)){
 
-				if(simpleField.getName().equalsIgnoreCase("transAmt")){
-					String a = "";
-				}
-
 				Object expValue = this.testCaseExpression.parse(simpleField.getExtendtion().getRestriction());
 
 				this.setTestCaseElementValue(simpleField, newInstance, simpleField.getName(), expValue);

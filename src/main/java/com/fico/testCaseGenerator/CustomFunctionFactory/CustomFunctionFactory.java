@@ -286,7 +286,41 @@ public class CustomFunctionFactory {
 	}
 
 	public Object getLastCycleDay(Object businessDateObj, Object cycleDayObj){
-		return new Date();
+
+		Date businessDate = (Date)businessDateObj;
+
+		Integer cycleDay = (Integer)cycleDayObj;
+
+		Calendar calendar=Calendar.getInstance();
+
+		calendar.setTime( businessDate );
+
+		Integer calDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+		Long rtnTime = -1l;
+
+		if(cycleDay > calDay){
+			Calendar lastMonthCalendar=Calendar.getInstance();
+
+			lastMonthCalendar.setTime( businessDate );
+
+			lastMonthCalendar.add(Calendar.MONTH, -1);
+
+			lastMonthCalendar.add(Calendar.DAY_OF_YEAR,  cycleDay - calDay);
+
+			rtnTime = RandomFactory.randomLongBetween(lastMonthCalendar.getTimeInMillis(), businessDate.getTime());
+		}else{
+			Calendar cycleCalendar=Calendar.getInstance();
+
+			cycleCalendar.setTime(businessDate);
+
+			cycleCalendar.add(Calendar.DAY_OF_YEAR, cycleDay - calDay);
+
+			rtnTime = RandomFactory.randomLongBetween(businessDate.getTime(), cycleCalendar.getTimeInMillis());
+
+		}
+
+		return new Date(rtnTime);
 	}
 
 	public Object getStmtOdue120(String eStmtOdue120){

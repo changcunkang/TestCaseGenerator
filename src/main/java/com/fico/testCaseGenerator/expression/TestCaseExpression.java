@@ -121,11 +121,11 @@ public class TestCaseExpression {
                     }
                     else{
 
-                        Object minExpRtnVal = this.recursiveParse(null, minExp, restriction );
-
-                        if("Application/Customer/PbocReport/Loan/@scheduledPaymentAmount".equalsIgnoreCase(maxExp)){
+                        if("[Application/Temporary/MonthlyAdjustLimitHistory_Fix/@adjustLimitAmtBefore/,=,Application/Temporary/MonthlyAdjustLimitHistory_Fix/@adjustLimitAmtAfter/,$getLastCycleDay(Application/@businessDate/,Application/Customer/@cycleDay/)$,null]".equalsIgnoreCase(minExp)){
                             String a = "";
                         }
+
+                        Object minExpRtnVal = this.recursiveParse(null, minExp, restriction );
 
                         Object maxExpRtnVal = this.recursiveParse(null, maxExp, restriction );
 
@@ -167,6 +167,7 @@ public class TestCaseExpression {
 
                         if(randomMinDateInt==null || randomMaxDateInt==null){
                             String a = "";
+                            return null;
                         }
 
                         long randomBetweenInt = RandomFactory.randomLongBetween(randomMinDateInt, randomMaxDateInt);
@@ -396,6 +397,13 @@ public class TestCaseExpression {
             compareRes = leftVal.toString().compareTo(rightVal.toString());
         }else {
             if( leftVal instanceof Date ){
+                if(rightVal instanceof String){
+                    try {
+                        rightVal = new SimpleDateFormat(TestCaseUtils.DATE_FORMAT).parse(rightVal.toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
                 leftNumbericVal = new Double(((Date)leftVal).getTime());
                 rightNumberVal = new Double(((Date)rightVal).getTime());
             }else if(leftVal instanceof Double || leftVal instanceof Integer) {
@@ -420,7 +428,7 @@ public class TestCaseExpression {
             return compareRes<=0;
         }else if(operationExp.equals("=")){
             return compareRes==0;
-        }else if(operationExp.equals("!=")){
+        }else if(operationExp.equals("<>")){
             return compareRes!=0;
         }else if(operationExp.equals("&&")){
             return (Boolean)leftVal && (Boolean)rightVal;
