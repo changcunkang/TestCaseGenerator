@@ -285,6 +285,10 @@ public class CustomFunctionFactory {
 		return null;
 	}
 
+	public Object getLastCycleDay(Object businessDateObj, Object cycleDayObj){
+		return new Date();
+	}
+
 	public Object getStmtOdue120(String eStmtOdue120){
 
 		char[] tmpChar = new char[eStmtOdue120.length()] ;
