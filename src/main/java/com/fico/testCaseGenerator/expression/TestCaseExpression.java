@@ -121,7 +121,7 @@ public class TestCaseExpression {
                     }
                     else{
 
-                        if("[Application/Temporary/MonthlyAdjustLimitHistory_Fix/@adjustLimitAmtBefore/,=,Application/Temporary/MonthlyAdjustLimitHistory_Fix/@adjustLimitAmtAfter/,$getLastCycleDay(Application/@businessDate/,Application/Customer/@cycleDay/)$,null]".equalsIgnoreCase(minExp)){
+                        if("[Application/Temporary/CurrentMonthAdjustLimitHistory_Temp/@adjustLimitAmtBefore/,<>,Application/Temporary/CurrentMonthAdjustLimitHistory_Temp/@adjustLimitAmtAfter/,$getLastCycleDay(Application/@businessDate/,Application/Customer/@cycleDay/)$,1960-01-01]".equalsIgnoreCase(minExp)){
                             String a = "";
                         }
 
@@ -393,6 +393,10 @@ public class TestCaseExpression {
         Double leftNumbericVal = null;
         Double rightNumberVal = null;
 
+        if(leftVal == null || rightVal==null){
+            return false;
+        }
+
         if(leftVal instanceof String){
             compareRes = leftVal.toString().compareTo(rightVal.toString());
         }else {
@@ -464,7 +468,12 @@ public class TestCaseExpression {
             return this.recursiveParse(null, restriction.getMinStr(), restriction);
         }
         else {
-            int targeMasterSimpleFieldPos = Math.max(0, slaveSimpleField.getTestCase().size() + recursiveVar);
+            int targeMasterSimpleFieldPos = Math.max(0, slaveSimpleField.getTestCase().size() + recursiveVar );
+
+            if(targeMasterSimpleFieldPos == targetMasterSimpleField.getTestCase().size()){
+                String a = "";
+                return null;
+            }
 
             return targetMasterSimpleField.getTestCase().get( targeMasterSimpleFieldPos );
         }
