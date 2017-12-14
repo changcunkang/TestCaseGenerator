@@ -1,18 +1,23 @@
 package com.fico.testCaseGenerator.CustomFunctionFactory;
 
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
 import com.fico.testCaseGenerator.data.AbstractTestData;
 import com.fico.testCaseGenerator.data.SimpleField;
 import com.fico.testCaseGenerator.data.TestData;
+import com.fico.testCaseGenerator.expression.TestCaseExpression;
 import com.fico.testCaseGenerator.testCase.TestCaseGenerator;
+import com.fico.testCaseGenerator.util.ClassUtil;
 import com.fico.testCaseGenerator.util.RandomFactory;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
 
@@ -61,14 +66,222 @@ public class CustomFunctionFactory {
 	}
 
 	public Object testDataSize( String absTestDataPath ){
-		AbstractTestData targetAbsTestData = null;
-		if(this.bomGenerator.pathIsSimpleField(absTestDataPath) ){
-			targetAbsTestData = this.bomGenerator.getPathSimpleFieldMap().get(absTestDataPath);
-		}else {
-			targetAbsTestData = this.bomGenerator.getPathTestDataMap().get(absTestDataPath);
+
+		if(absTestDataPath.contains("[")){
+
+			List rtnList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), absTestDataPath);
+			return rtnList.size();
+
+		}else{
+
+			AbstractTestData targetAbsTestData = null;
+			if(this.bomGenerator.pathIsSimpleField(absTestDataPath) ){
+				targetAbsTestData = this.bomGenerator.getPathSimpleFieldMap().get(absTestDataPath);
+			}else {
+				targetAbsTestData = this.bomGenerator.getPathTestDataMap().get(absTestDataPath);
+			}
+
+			return targetAbsTestData.getTestCase().size();
+		}
+	}
+
+	public Object minSimpleField(String path){
+		SimpleField simpleField = this.bomGenerator.getPathSimpleFieldMap().get(path);
+
+		List testCaseList = simpleField.getTestCase();
+
+		Double sumD = new Double(0);
+
+		for(Object doubleObj : testCaseList){
+
+			if(doubleObj != null){
+				if(doubleObj instanceof Date){
+					Long dateMilsec = ((Date)doubleObj).getTime();
+					sumD = Math.min(new Double(dateMilsec), sumD );
+				}
+				else{
+					sumD = Math.min(new Double(doubleObj.toString()), sumD );
+				}
+
+			}
 		}
 
-		return targetAbsTestData.getTestCase().size();
+		return sumD;
+	}
+
+	public Object maxFilter(String query, String fieldName){
+
+		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), query);
+
+		Double sumD = new Double(0);
+
+		for(Object queryObj : queryedList){
+
+			Class queryObjCls = queryObj.getClass();
+
+			try {
+				Field field = queryObjCls.getDeclaredField(fieldName);
+
+				field.setAccessible(true);
+
+				Object doubleObj = field.get(queryObj);
+
+				if(doubleObj != null){
+					if(doubleObj instanceof Date){
+						Long dateMilsec = ((Date)doubleObj).getTime();
+						sumD = Math.min(new Double(dateMilsec), sumD );
+					}
+					else{
+						sumD = Math.min(new Double(doubleObj.toString()), sumD );
+					}
+
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return sumD;
+	}
+
+
+	public Object minFilter(String query, String fieldName){
+
+		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), query);
+
+		Double sumD = new Double(0);
+
+		for(Object queryObj : queryedList){
+
+			Class queryObjCls = queryObj.getClass();
+
+			try {
+				Field field = queryObjCls.getDeclaredField(fieldName);
+
+				field.setAccessible(true);
+
+				Object doubleObj = field.get(queryObj);
+
+				if(doubleObj != null){
+					if(doubleObj instanceof Date){
+						Long dateMilsec = ((Date)doubleObj).getTime();
+						sumD = Math.min(new Double(dateMilsec), sumD );
+					}
+					else{
+						sumD = Math.min(new Double(doubleObj.toString()), sumD );
+					}
+
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return sumD;
+	}
+
+
+	public Object avgFilter(String query, String fieldName){
+
+		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), query);
+
+		Double sumD = new Double(0);
+
+		for(Object queryObj : queryedList){
+
+			Class queryObjCls = queryObj.getClass();
+
+			try {
+				Field field = queryObjCls.getDeclaredField(fieldName);
+
+				field.setAccessible(true);
+
+				Object doubleObj = field.get(queryObj);
+
+				if(doubleObj != null){
+					if(doubleObj instanceof Date){
+						Long dateMilsec = ((Date)doubleObj).getTime();
+						sumD += new Double(dateMilsec);
+					}
+					else{
+						sumD += new Double(doubleObj.toString());
+					}
+
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return sumD/queryedList.size();
+	}
+
+
+
+
+
+	public Object sum(String query, String fieldName){
+		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), query);
+
+		Double sumD = new Double(0);
+
+		for(Object queryObj : queryedList){
+
+			Class queryObjCls = queryObj.getClass();
+
+			try {
+				Field field = queryObjCls.getDeclaredField(fieldName);
+
+				field.setAccessible(true);
+
+				Object doubleObj = field.get(queryObj);
+
+				if(doubleObj != null){
+					if(doubleObj instanceof Date){
+						Long dateMilsec = ((Date)doubleObj).getTime();
+						sumD += new Double(doubleObj.toString());
+					}
+					else{
+						sumD += new Double(doubleObj.toString());
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return sumD;
+	}
+
+	public Object setSum(String query, String fieldName){
+		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), query);
+
+		Double sumD = new Double(0);
+
+		Set<String> tmpSet = new HashSet<String>();
+
+		for(Object queryObj : queryedList){
+
+			Class queryObjCls = queryObj.getClass();
+
+			try {
+				Field field = queryObjCls.getDeclaredField(fieldName);
+
+				field.setAccessible(true);
+
+				Object doubleObj = field.get(queryObj);
+
+				if(doubleObj != null){
+
+					tmpSet.add(doubleObj.toString());
+
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return tmpSet.size();
 	}
 
 	//added by kangchangcun at 2017/12/02
@@ -167,6 +380,7 @@ public class CustomFunctionFactory {
 		return Math.min(minValDouble, maxValDouble);
 	}
 
+
 	public Double max(Object minVal, Object maxVal){
 
 		Double minValDouble = new Double(minVal.toString());
@@ -175,7 +389,6 @@ public class CustomFunctionFactory {
 
 		return Math.max(minValDouble, maxValDouble);
 	}
-
 
 	public String generateApplicationID() {
 		return java.util.UUID.randomUUID().toString();
@@ -437,10 +650,18 @@ public class CustomFunctionFactory {
 		return RandomFactory.randomDoubleBetween(minD, maxD);
 	}
 
-	public Object right(String srcStr, Double doubleLen){
-		int intLen = doubleLen.intValue();
+	public Object rightLast24States(String srcStr){
+		String lastChar = srcStr.substring(srcStr.length() - 1);
 
-		return srcStr.substring(srcStr.length() - intLen);
+		Pattern p = Pattern.compile(TestCaseExpression.FIND_PURE_NUMBERIC_PATH_EXP);
+
+		Matcher m = p.matcher( lastChar );
+
+		if(!m.matches()){
+			return "0";
+		}else{
+			return lastChar;
+		}
 	}
 //
 //	public String getLatest24State(AbstractTestData parentTest,

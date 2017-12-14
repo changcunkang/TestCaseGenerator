@@ -102,7 +102,6 @@ public class ClassUtil {
 			      }
 	    	}
 	    }
-	      
 	  }
 
 	  private static boolean isBasicType(Class fieldType){

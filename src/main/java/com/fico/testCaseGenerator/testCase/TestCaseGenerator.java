@@ -380,6 +380,10 @@ public abstract class TestCaseGenerator {
 	 */
 	public void generateTestDataInstance( TestData testData) {
 
+		if(testData.getName().equalsIgnoreCase("StandardLoancard")){
+			String a = "";
+		}
+
 		List paretnTestCaseElementList = testData.getParentTestData().getTestCase();
 
 		if(testData.getExtendtion() != null && testData.getExtendtion().getRestriction() != null){
@@ -396,12 +400,17 @@ public abstract class TestCaseGenerator {
 						getInstanceNumberAndGenerateAttr(parentTestCaseElement, testData);
 					}
 
-					testData.setGenerateTestCaseFinish(true);
-
-					for(SimpleField simpleField : testData.getTmpGeneratedSimpleFieldSet()){
-						simpleField.setGenerateTestCaseFinish( true );
+					if(testData.getTestCase().size() == 0){
+						recursiveClearTestCaseFinishFlag(testData, true);
 					}
-					testData.setTmpGeneratedSimpleFieldSet(new HashSet<SimpleField>());
+					else{
+						testData.setGenerateTestCaseFinish(true);
+
+						for(SimpleField simpleField : testData.getTmpGeneratedSimpleFieldSet()){
+							simpleField.setGenerateTestCaseFinish( true );
+						}
+						testData.setTmpGeneratedSimpleFieldSet(new HashSet<SimpleField>());
+					}
 				}
 			}else{
 				this.unGeneratedSlaveTestDataList.add( testData );

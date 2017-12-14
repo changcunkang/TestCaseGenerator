@@ -32,6 +32,10 @@ public class RandomFactory {
 	//左闭右闭
 	public static long randomLongBetween(long min, long max){
 
+		if(min == max){
+			return min;
+		}
+
 		if(min>max){
 			return min;
 		}

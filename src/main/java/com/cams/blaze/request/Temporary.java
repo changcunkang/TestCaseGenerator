@@ -23,6 +23,26 @@ public class Temporary {
 
     private List<MonthlyAdjustLimitHistory_Temp> monthlyAdjustLimitHistory_Temp = new ArrayList<MonthlyAdjustLimitHistory_Temp>();
 
+    private List<OverdueSum_Loan> overdueSum_Loan = new ArrayList<OverdueSum_Loan>();
+
+    private List<OverdueSum_Loancard> overdueSum_Loancard = new ArrayList<OverdueSum_Loancard>();
+
+    public List<OverdueSum_Loan> getOverdueSum_Loan() {
+        return overdueSum_Loan;
+    }
+
+    public void setOverdueSum_Loan(List<OverdueSum_Loan> overdueSum_Loan) {
+        this.overdueSum_Loan = overdueSum_Loan;
+    }
+
+    public List<OverdueSum_Loancard> getOverdueSum_Loancard() {
+        return overdueSum_Loancard;
+    }
+
+    public void setOverdueSum_Loancard(List<OverdueSum_Loancard> overdueSum_Loancard) {
+        this.overdueSum_Loancard = overdueSum_Loancard;
+    }
+
     public List<CurrentMonthAdjustLimitHistory_Fix> getCurrentMonthAdjustLimitHistory_Fix() {
         return currentMonthAdjustLimitHistory_Fix;
     }

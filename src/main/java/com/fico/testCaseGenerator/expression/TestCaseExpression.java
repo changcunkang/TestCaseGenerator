@@ -49,7 +49,7 @@ public class TestCaseExpression {
 
     public static final String FIND_ALL_PATH_EXP = "Application(\\/@?[_a-zA-Z]{1,}[a-zA-Z0-9]{1,})*\\/";
 
-    private static final String FIND_PURE_NUMBERIC_PATH_EXP = "^(-?\\d+)(\\.+\\d+)?$";
+    public static final String FIND_PURE_NUMBERIC_PATH_EXP = "^(-?\\d+)(\\.+\\d+)?$";
 
     private static final String FIND_PURE_INTEGER_PATH_EXP = "^\\d?$";
 
@@ -67,11 +67,27 @@ public class TestCaseExpression {
 
     public static final String TESTDATA_SIZE_FUNCTION_NAME = "testDataSize";
 
+    public static final String MAX_SIZE_FUNCTION_NAME = "maxSimpleField";
+
+    public static final String MIN_SIZE_FUNCTION_NAME = "minSimpleField";
+
+    public static final String SUM_SIZE_FUNCTION_NAME = "sum";
+
+    public static final String SETSUM_SIZE_FUNCTION_NAME = "setSum";
+
     private static List<String> ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST = new ArrayList<String>();
 
     static {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(TESTDATA_SIZE_FUNCTION_NAME);
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(MERGE_FUNCTION_NAME);
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(MAX_SIZE_FUNCTION_NAME);
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(MIN_SIZE_FUNCTION_NAME);
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(SUM_SIZE_FUNCTION_NAME);
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(SETSUM_SIZE_FUNCTION_NAME);
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("maxFilter");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("minFilter");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("avgFilter");
+
     }
 
     private CustomFunctionFactory customFunctionFactory = null;
@@ -139,6 +155,10 @@ public class TestCaseExpression {
 
     private Object generateRandomBetweetnMaxValueAndMinValue(Object minValue, Object maxValue, Restriction restriction){
         AbstractTestData abstractTestData = restriction.getExtendtion().getParentTestData();
+
+        if(minValue == null || maxValue == null){
+            String a = "";
+        }
 
         if(abstractTestData instanceof SimpleField){
             SimpleField simpleField = (SimpleField)abstractTestData;
@@ -466,12 +486,13 @@ public class TestCaseExpression {
 
         SimpleField slaveSimpleField = (SimpleField)restriction.getExtendtion().getParentTestData();
 
-        if(slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() &&  targetMasterSimpleField.getTestCase().size() == 0 ){
+        int targeMasterSimpleFieldPos = Math.max(0, slaveSimpleField.getTestCase().size() + recursiveVar );
+
+        if(slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() &&  targetMasterSimpleField.getTestCase().size() < targeMasterSimpleFieldPos +1 ){
             //minStr 就是初始值
             return this.recursiveParse(null, restriction.getMinStr(), restriction);
         }
         else {
-            int targeMasterSimpleFieldPos = Math.max(0, slaveSimpleField.getTestCase().size() + recursiveVar );
 
             if(targeMasterSimpleFieldPos == targetMasterSimpleField.getTestCase().size()){
                 String a = "";
