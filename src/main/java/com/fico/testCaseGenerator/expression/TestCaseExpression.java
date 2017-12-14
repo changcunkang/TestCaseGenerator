@@ -121,7 +121,7 @@ public class TestCaseExpression {
                     }
                     else{
 
-                        if("[Application/Temporary/CurrentMonthAdjustLimitHistory_Temp/@adjustLimitAmtBefore/,<>,Application/Temporary/CurrentMonthAdjustLimitHistory_Temp/@adjustLimitAmtAfter/,$getLastCycleDay(Application/@businessDate/,Application/Customer/@cycleDay/)$,1960-01-01]".equalsIgnoreCase(minExp)){
+                        if("$getLastHistoryCycleDay(Application/@businessDate/,Application/Customer/@cycleDay/,$IT(1,Application/Customer/Product/Account/MonthlyRecordInfo/@relativeCycleNumber/)$)$".equalsIgnoreCase(minExp)){
                             String a = "";
                         }
 
@@ -296,6 +296,9 @@ public class TestCaseExpression {
 
             }
         }
+        if(leftValue == null){
+            String a = "";
+        }
         if(leftValue.getClass() == Date.class){
             return true;
         }
@@ -463,7 +466,7 @@ public class TestCaseExpression {
 
         SimpleField slaveSimpleField = (SimpleField)restriction.getExtendtion().getParentTestData();
 
-        if(slaveSimpleField.getTestData().isGeneratingTestDataFirstChild()){
+        if(slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() &&  targetMasterSimpleField.getTestCase().size() == 0 ){
             //minStr 就是初始值
             return this.recursiveParse(null, restriction.getMinStr(), restriction);
         }
