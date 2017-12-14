@@ -327,6 +327,10 @@ public class CustomFunctionFactory {
 	public Object getLastHistoryCycleDay(Object businessDateObj, Object cycleObj, Object cycleNumberObj){
 		Date businessDate = (Date)businessDateObj;
 
+		if(cycleNumberObj == null){
+			return null;
+		}
+
 		Integer cycleNumber = new BigDecimal(cycleNumberObj.toString()).intValue();
 
 		Calendar calendar=Calendar.getInstance();
