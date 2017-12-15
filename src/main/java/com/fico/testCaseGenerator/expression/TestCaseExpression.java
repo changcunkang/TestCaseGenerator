@@ -676,6 +676,7 @@ public class TestCaseExpression {
         int i = 0;
 
         if(abstractSlaveTestData.getPositionRecord().size()>0){
+
             for(Iterator<String> it = abstractSlaveTestData.getRelativeManyToOnePathSet().iterator(); it.hasNext(); i++ ){
 
                 String tmpRellativePath = it.next();
@@ -691,7 +692,6 @@ public class TestCaseExpression {
 
                     position = ss[i];
                 }
-
             }
         }
 

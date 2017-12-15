@@ -121,7 +121,7 @@ public abstract class TestCaseGenerator {
 	}
 
 	private boolean isTempoaryTestData(AbstractTestData abstractTestData){
-		return abstractTestData.getPath().startsWith(TempoaryTestData.GLOABLE_PATH_PREFIX);
+		return false;
 	}
 
 	/**
@@ -131,16 +131,6 @@ public abstract class TestCaseGenerator {
 	 * @param testData
 	 * @return
 	 */
-//	protected void generateAttr(Object parentTestCaseElement, int instanceSize, TestData testData){
-//
-//		if(isTestDataMergeMode(testData)){
-//			tmpMergeParentTestCaseElement = parentTestCaseElement;
-//			this.testCaseExpression.parse(testData.getExtendtion().getRestriction());
-//			return ;
-//		}
-//
-//		generateAttr1(parentTestCaseElement, instanceSize, testData);
-//	}
 	protected void generateAttr(Object parentTestCaseElement, int instanceSize, TestData testData){
 
 		for(int i=0; i<instanceSize; i++){
@@ -150,6 +140,7 @@ public abstract class TestCaseGenerator {
 			appendChildTestCaseToParentTestCase( parentTestCaseElement, newIns, testData );
 
 			testData.setGeneratingTestData(newIns);
+
 			testData.getTestCase().add(newIns);
 
 			if(i == 0){
@@ -259,6 +250,11 @@ public abstract class TestCaseGenerator {
 	public Object generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(Object newIns, TestData testData){
 
 		for( SimpleField simpleField : testData.getSimpleFieldList() ){
+
+			if("consumeAmt".equalsIgnoreCase(simpleField.getName())){
+				String a = "";
+			}
+
 			if(simpleField.getExtendtion() != null){
 				generateSingleTestCaseAttributeValue(newIns, simpleField);
 			}
@@ -286,24 +282,26 @@ public abstract class TestCaseGenerator {
 
 	//找主从最近的共享节点
 	private void recordAbstractTestDataPosition(AbstractTestData absTestData){
+
+		if("Application/Customer/Product/Account/MonthlyRecordInfo/@delinquentCycle/".equalsIgnoreCase(absTestData.getPath())){
+			String a = "";
+		}
+
 		List<String> allRelativedPath = absTestData.getRelativeManyToOnePathSet();
+
 		Integer[] tmpPathPosition = new Integer[allRelativedPath.size()];
 
 		int i = 0;
 
 		for( Iterator<String> it = allRelativedPath.iterator(); it.hasNext(); i++ ){
+
 			String path = it.next();
+
 			if(this.bomGenerator.pathIsSimpleField(path)){
 
 				String minimumSharedPath = getSharedPath(absTestData.getPath(), path);
-//				SimpleField masterSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(minimumSharedPath);
-//
-//				if(masterSimpleField == null){
-//					String a = "";
-//				}
-//
-//				TestData testData = masterSimpleField.getTestData();
-				TestData testData = this.bomGenerator.getPathTestDataMap().get(minimumSharedPath);
+
+				TestData minimumTestData = this.bomGenerator.getPathTestDataMap().get(minimumSharedPath);
 
 				SimpleField masterSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(path);
 
@@ -313,7 +311,16 @@ public abstract class TestCaseGenerator {
 
 				masterSimpleField.getRelativeManyToOnePathSet().add(minimumSharedPath);
 
-				tmpPathPosition[i] = testData.getTestCase().size()-1;
+				//已生成
+				if(minimumTestData.isGenerateTestCaseFinish()){
+					int tmpPos = Math.min(absTestData.getPositionRecord().size(), minimumTestData.getTestCase().size()) -1;
+					tmpPos = Math.max(tmpPos, 0);
+					tmpPathPosition[i] = tmpPos;
+				}
+				//正在生成
+				else if(minimumTestData.getTestCase().size()>0 && minimumTestData.getGeneratingTestData() != null){
+					tmpPathPosition[i] = minimumTestData.getTestCase().size() - 1;
+				}
 			}
 		}
 
@@ -380,26 +387,23 @@ public abstract class TestCaseGenerator {
 	 */
 	public void generateTestDataInstance( TestData testData) {
 
-		if(testData.getName().equalsIgnoreCase("StandardLoancard")){
-			String a = "";
-		}
-
-		List paretnTestCaseElementList = testData.getParentTestData().getTestCase();
+		List parentTestCaseElementList = testData.getParentTestData().getTestCase();
 
 		if(testData.getExtendtion() != null && testData.getExtendtion().getRestriction() != null){
 
 			if( isAllRelativeElementReady( testData ) ){
 
-				if(paretnTestCaseElementList == null || paretnTestCaseElementList.size() == 0){
+				//先冗余写，以后这个if可能不需要
+				if(parentTestCaseElementList == null || parentTestCaseElementList.size() == 0){
 
 					recursiveClearTestCaseFinishFlag(testData, true);
 
 				}else{
-					for( Object parentTestCaseElement :  paretnTestCaseElementList){
+					for( Object parentTestCaseElement :  parentTestCaseElementList){
 
 						getInstanceNumberAndGenerateAttr(parentTestCaseElement, testData);
 					}
-
+					//根据概率，一个案例没生成的情况
 					if(testData.getTestCase().size() == 0){
 						recursiveClearTestCaseFinishFlag(testData, true);
 					}
