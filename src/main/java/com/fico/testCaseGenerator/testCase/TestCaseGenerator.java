@@ -283,10 +283,6 @@ public abstract class TestCaseGenerator {
 	//找主从最近的共享节点
 	private void recordAbstractTestDataPosition(AbstractTestData absTestData){
 
-		if("Application/Customer/Product/Account/MonthlyRecordInfo/@delinquentCycle/".equalsIgnoreCase(absTestData.getPath())){
-			String a = "";
-		}
-
 		List<String> allRelativedPath = absTestData.getRelativeManyToOnePathSet();
 
 		Integer[] tmpPathPosition = new Integer[allRelativedPath.size()];
@@ -313,9 +309,9 @@ public abstract class TestCaseGenerator {
 
 				//已生成
 				if(minimumTestData.isGenerateTestCaseFinish()){
-					int tmpPos = Math.min(absTestData.getPositionRecord().size(), minimumTestData.getTestCase().size()) -1;
+					int tmpPos = Math.min(absTestData.getPositionRecord().size(), minimumTestData.getTestCase().size());
 					tmpPos = Math.max(tmpPos, 0);
-					tmpPathPosition[i] = tmpPos;
+					tmpPathPosition[i] = tmpPos;;
 				}
 				//正在生成
 				else if(minimumTestData.getTestCase().size()>0 && minimumTestData.getGeneratingTestData() != null){
