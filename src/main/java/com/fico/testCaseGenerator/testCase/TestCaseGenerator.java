@@ -309,7 +309,19 @@ public abstract class TestCaseGenerator {
 
 				//已生成
 				if(minimumTestData.isGenerateTestCaseFinish()){
-					int tmpPos = Math.min(absTestData.getPositionRecord().size(), minimumTestData.getTestCase().size());
+
+					int tmpPos = -1;
+
+					if(absTestData.getPositionRecord().size() < minimumTestData.getTestCase().size()){
+						tmpPos = absTestData.getPositionRecord().size();
+					}else{
+						tmpPos = minimumTestData.getTestCase().size() -1;
+					}
+
+					if(tmpPos == -1){
+						String a = "";
+					}
+
 					tmpPos = Math.max(tmpPos, 0);
 					tmpPathPosition[i] = tmpPos;;
 				}
