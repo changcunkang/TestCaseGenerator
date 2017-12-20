@@ -777,7 +777,7 @@ public class CustomFunctionFactory {
 	private static String randomCharAll = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 	public Object randomChar(Object lenObj){
-		Integer len = (Integer)lenObj;
+		Integer len = new Double(lenObj.toString()).intValue();
 
 		StringBuffer sb = new StringBuffer();
 
