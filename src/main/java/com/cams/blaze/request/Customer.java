@@ -43,11 +43,7 @@ public class Customer {
 	@Column
     private	 Double annualIncome;
 	@Column
-    private	 Double innerPay;
-	@Column
-    private	 Double innerOwnPercent;
-	@Column
-    private	 Double innerComPercent;
+	private Double innerFundRadix;
 	@Column
     private	 String educDes;
 	@Column
@@ -65,11 +61,18 @@ public class Customer {
 	@Column
     private	 String riskLevel;
 	@Column
+	private String riskLevel1;
+	@Column
+	private String riskLevel2;
+	@Column
     private	 String txFlag;
 	@Column
-    private	 String layerCode2;
+	private String txFlag1;
+
 	@Column
-    private	 String layerCoder2;
+	private String layerCode2Acct;
+	@Column
+	private String layerCoder2Custr;
 	@Column
     private	 Integer fraudCusterFlag;
 	@Column
@@ -271,12 +274,6 @@ public class Customer {
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public String getLayerCoder2() {
-		return layerCoder2;
-	}
-	public void setLayerCoder2(String layerCoder2) {
-		this.layerCoder2 = layerCoder2;
 	}
 	public Double getCapitalCostRatio() {
 		return capitalCostRatio;
@@ -780,24 +777,6 @@ public class Customer {
 	public void setAnnualIncome(Double annualIncome) {
 		this.annualIncome = annualIncome;
 	}
-	public Double getInnerPay() {
-		return innerPay;
-	}
-	public void setInnerPay(Double innerPay) {
-		this.innerPay = innerPay;
-	}
-	public Double getInnerOwnPercent() {
-		return innerOwnPercent;
-	}
-	public void setInnerOwnPercent(Double innerOwnPercent) {
-		this.innerOwnPercent = innerOwnPercent;
-	}
-	public Double getInnerComPercent() {
-		return innerComPercent;
-	}
-	public void setInnerComPercent(Double innerComPercent) {
-		this.innerComPercent = innerComPercent;
-	}
 	public String getEducDes() {
 		return educDes;
 	}
@@ -943,12 +922,6 @@ public class Customer {
 	public void setPnote(List<Pnote> pnote) {
 		this.pnote = pnote;
 	}
-	public String getLayerCode2() {
-		return layerCode2;
-	}
-	public void setLayerCode2(String layerCode2) {
-		this.layerCode2 = layerCode2;
-	}
 	public List<PbocReport> getPbocReport() {
 		return pbocReport;
 	}
@@ -990,5 +963,53 @@ public class Customer {
 	}
 	public void setUserDefinedField(List<UserDefinedField> userDefinedField) {
 		this.userDefinedField = userDefinedField;
+	}
+
+	public String getRiskLevel2() {
+		return riskLevel2;
+	}
+
+	public void setRiskLevel2(String riskLevel2) {
+		this.riskLevel2 = riskLevel2;
+	}
+
+	public String getRiskLevel1() {
+		return riskLevel1;
+	}
+
+	public void setRiskLevel1(String riskLevel1) {
+		this.riskLevel1 = riskLevel1;
+	}
+
+	public String getTxFlag1() {
+		return txFlag1;
+	}
+
+	public void setTxFlag1(String txFlag1) {
+		this.txFlag1 = txFlag1;
+	}
+
+	public String getLayerCoder2Custr() {
+		return layerCoder2Custr;
+	}
+
+	public void setLayerCoder2Custr(String layerCoder2Custr) {
+		this.layerCoder2Custr = layerCoder2Custr;
+	}
+
+	public String getLayerCode2Acct() {
+		return layerCode2Acct;
+	}
+
+	public void setLayerCode2Acct(String layerCode2Acct) {
+		this.layerCode2Acct = layerCode2Acct;
+	}
+
+	public Double getInnerFundRadix() {
+		return innerFundRadix;
+	}
+
+	public void setInnerFundRadix(Double innerFundRadix) {
+		this.innerFundRadix = innerFundRadix;
 	}
 }

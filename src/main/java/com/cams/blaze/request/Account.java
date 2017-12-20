@@ -59,6 +59,8 @@ public class Account {
 	@Column
     private	 Double lastRepaymentAmt;
 	@Column
+	private Date lastTransDate;
+	@Column
     private	 Date firstActiveDate;
 	@Column
     private	 Integer mob;

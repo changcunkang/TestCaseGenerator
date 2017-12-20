@@ -39,8 +39,6 @@ public class Loancard {
 	@Column
 	private Date stateEndDate;
 	@Column
-	private String stateEndMonth;
-	@Column
 	private Double shareCreditLimitAmount;
 	@Column
 	private Double usedCreditLimitAmount;
@@ -121,12 +119,6 @@ public class Loancard {
 	}
 	public void setStateEndDate(Date stateEndDate) {
 		this.stateEndDate = stateEndDate;
-	}
-	public String getStateEndMonth() {
-		return stateEndMonth;
-	}
-	public void setStateEndMonth(String stateEndMonth) {
-		this.stateEndMonth = stateEndMonth;
 	}
 	public Double getShareCreditLimitAmount() {
 		return shareCreditLimitAmount;

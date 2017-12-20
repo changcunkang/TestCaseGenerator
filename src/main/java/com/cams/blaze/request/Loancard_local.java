@@ -34,8 +34,7 @@ public class Loancard_local {
     private String guaranteeType;
     
     private Date stateEndDate;
-    
-    private String stateEndMonth;
+
     
     private Double shareCreditLimitAmount;
     
@@ -117,12 +116,6 @@ public class Loancard_local {
     }
     public void setStateEndDate(Date stateEndDate) {
         this.stateEndDate = stateEndDate;
-    }
-    public String getStateEndMonth() {
-        return stateEndMonth;
-    }
-    public void setStateEndMonth(String stateEndMonth) {
-        this.stateEndMonth = stateEndMonth;
     }
     public Double getShareCreditLimitAmount() {
         return shareCreditLimitAmount;

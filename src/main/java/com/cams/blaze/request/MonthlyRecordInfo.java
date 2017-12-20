@@ -57,15 +57,11 @@ public class MonthlyRecordInfo {
 	@Column
     private	 Double overdraftAmtTot;
 	@Column
-    private	 Double dailyCreditLimtSum;
-	@Column
     private	 Double maxBalance;
 	@Column
     private	 Double billInstaledAmt;
 	@Column
     private	 Double billPaymentAmt;
-	@Column
-    private	 Integer maxFqTerms;
 	@Column
     private	 String billInstalmentKeys;
 	@Column
@@ -82,6 +78,15 @@ public class MonthlyRecordInfo {
     private	 Double top4TransanctionAmt;
 	@Column
     private	 Double top5TransanctionAmt;
+	@Column
+	private Integer ifApplyAfl;
+	@Column
+	private Integer ifApplyAtl;
+	@Column
+	private Integer ifApplyConsInstals;
+	@Column
+	private Integer ifApplyBillInstals;
+
 	@Column
 	private Integer cashAmtOccupiedDays;
 	@Column
@@ -181,12 +186,6 @@ public class MonthlyRecordInfo {
 	public void setOverdraftAmtTot(Double overdraftAmtTot) {
 		this.overdraftAmtTot = overdraftAmtTot;
 	}
-	public Double getDailyCreditLimtSum() {
-		return dailyCreditLimtSum;
-	}
-	public void setDailyCreditLimtSum(Double dailyCreditLimtSum) {
-		this.dailyCreditLimtSum = dailyCreditLimtSum;
-	}
 	public Double getMaxBalance() {
 		return maxBalance;
 	}
@@ -205,12 +204,6 @@ public class MonthlyRecordInfo {
 	public void setBillPaymentAmt(Double billPaymentAmt) {
 		this.billPaymentAmt = billPaymentAmt;
 	}	
-	public Integer getMaxFqTerms() {
-		return maxFqTerms;
-	}
-	public void setMaxFqTerms(Integer maxFqTerms) {
-		this.maxFqTerms = maxFqTerms;
-	}
 	public String getBillInstalmentKeys() {
 		return billInstalmentKeys;
 	}
@@ -289,5 +282,36 @@ public class MonthlyRecordInfo {
 	public void setUserDefinedField(List<UserDefinedField> userDefinedField) {
 		this.userDefinedField = userDefinedField;
 	}
-	
+
+	public Integer getIfApplyAfl() {
+		return ifApplyAfl;
+	}
+
+	public void setIfApplyAfl(Integer ifApplyAfl) {
+		this.ifApplyAfl = ifApplyAfl;
+	}
+
+	public Integer getIfApplyAtl() {
+		return ifApplyAtl;
+	}
+
+	public void setIfApplyAtl(Integer ifApplyAtl) {
+		this.ifApplyAtl = ifApplyAtl;
+	}
+
+	public Integer getIfApplyConsInstals() {
+		return ifApplyConsInstals;
+	}
+
+	public void setIfApplyConsInstals(Integer ifApplyConsInstals) {
+		this.ifApplyConsInstals = ifApplyConsInstals;
+	}
+
+	public Integer getIfApplyBillInstals() {
+		return ifApplyBillInstals;
+	}
+
+	public void setIfApplyBillInstals(Integer ifApplyBillInstals) {
+		this.ifApplyBillInstals = ifApplyBillInstals;
+	}
 }

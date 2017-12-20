@@ -48,8 +48,6 @@ public class Loan {
 	@Column
 	private Date stateEndDate;
 	@Column
-	private String stateEndMonth;
-	@Column
 	private String class5State;
 	@Column
 	private Double balance;
@@ -160,12 +158,6 @@ public class Loan {
 	}
 	public void setStateEndDate(Date stateEndDate) {
 		this.stateEndDate = stateEndDate;
-	}
-	public String getStateEndMonth() {
-		return stateEndMonth;
-	}
-	public void setStateEndMonth(String stateEndMonth) {
-		this.stateEndMonth = stateEndMonth;
 	}
 	public String getClass5State() {
 		return class5State;

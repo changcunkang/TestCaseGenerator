@@ -38,6 +38,8 @@ public class Product {
 	@Column
     private	 Double xhCuScore;
 	@Column
+	private Double gykScore;
+	@Column
     private	 Double score01;
 	@Column
     private	 Double score02;
@@ -62,9 +64,13 @@ public class Product {
 	@Column
     private	 String customerSegmentation;
 	@Column
+	private String customerSegmentation1;
+	@Column
+	private String customerSegmentation2;
+	@Column
     private	 String adjustLimitType;
 	@Column
-    private	 Date tempAlVaildDate;
+	private String adjustLimitReason;
 	@Column
     private	 Double applyALAmt;
 	@Column
@@ -91,8 +97,6 @@ public class Product {
     private	 Double preALAmt5;
 	@Column
     private	 Date preALVaildDate5;
-	@Column
-    private	 Double adjustLimitRatio;
 
 	@Column
     private	 String reservedString01;
@@ -330,12 +334,6 @@ public class Product {
 	}
 	public void setPreALVaildDate5(Date preALVaildDate5) {
 		this.preALVaildDate5 = preALVaildDate5;
-	}
-	public Double getAdjustLimitRatio() {
-		return adjustLimitRatio;
-	}
-	public void setAdjustLimitRatio(Double adjustLimitRatio) {
-		this.adjustLimitRatio = adjustLimitRatio;
 	}
 	public String getReservedString01() {
 		return reservedString01;
@@ -913,12 +911,6 @@ public class Product {
 	public void setAdjustLimitType(String adjustLimitType) {
 		this.adjustLimitType = adjustLimitType;
 	}
-	public Date getTempAlVaildDate() {
-		return tempAlVaildDate;
-	}
-	public void setTempAlVaildDate(Date tempAlVaildDate) {
-		this.tempAlVaildDate = tempAlVaildDate;
-	}
 	public Double getApplyALAmt() {
 		return applyALAmt;
 	}
@@ -960,5 +952,37 @@ public class Product {
 	}
 	public void setUserDefinedField(List<UserDefinedField> userDefinedField) {
 		this.userDefinedField = userDefinedField;
+	}
+
+	public Double getGykScore() {
+		return gykScore;
+	}
+
+	public void setGykScore(Double gykScore) {
+		this.gykScore = gykScore;
+	}
+
+	public String getCustomerSegmentation1() {
+		return customerSegmentation1;
+	}
+
+	public void setCustomerSegmentation1(String customerSegmentation1) {
+		this.customerSegmentation1 = customerSegmentation1;
+	}
+
+	public String getCustomerSegmentation2() {
+		return customerSegmentation2;
+	}
+
+	public void setCustomerSegmentation2(String customerSegmentation2) {
+		this.customerSegmentation2 = customerSegmentation2;
+	}
+
+	public String getAdjustLimitReason() {
+		return adjustLimitReason;
+	}
+
+	public void setAdjustLimitReason(String adjustLimitReason) {
+		this.adjustLimitReason = adjustLimitReason;
 	}
 }

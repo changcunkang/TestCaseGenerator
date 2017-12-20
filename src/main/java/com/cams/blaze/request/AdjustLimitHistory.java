@@ -26,8 +26,11 @@ public class AdjustLimitHistory {
 	private String adjustLimitType;
 	@Column
 	private Date tempALunValidDate;
+	@Column
+	private String adjustLimitDirection;
 
-	
+
+
 	public Date getTempALunValidDate() {
 		return tempALunValidDate;
 	}
@@ -58,7 +61,13 @@ public class AdjustLimitHistory {
 	public void setAdjustLimitType(String adjustLimitType) {
 		this.adjustLimitType = adjustLimitType;
 	}
-	
-	
 
+
+	public String getAdjustLimitDirection() {
+		return adjustLimitDirection;
+	}
+
+	public void setAdjustLimitDirection(String adjustLimitDirection) {
+		this.adjustLimitDirection = adjustLimitDirection;
+	}
 }
