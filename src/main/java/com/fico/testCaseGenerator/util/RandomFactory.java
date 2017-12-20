@@ -37,7 +37,7 @@ public class RandomFactory {
 		}
 
 		if(min>max){
-			return min;
+			return max;
 		}
 
 		return new RandomDataGenerator().nextLong(min, max);

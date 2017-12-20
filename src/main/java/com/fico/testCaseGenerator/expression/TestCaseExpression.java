@@ -288,7 +288,8 @@ public class TestCaseExpression {
             if(this.isSimpleFieldDateType(restriction, tempValue)){
                 GregorianCalendar gc=new GregorianCalendar();
                 gc.setTime( (Date)tempValue );
-                gc.add(GregorianCalendar.DATE, new Double( rightValue.toString() ).intValue() * -1);
+
+                gc.add(GregorianCalendar.DATE, new Double( this.recursiveParse(null, rightValue.toString(), restriction).toString() ).intValue() * -1);
                 return gc.getTime();
             }
             BigDecimal leftBigDec = new BigDecimal(leftValue.toString());

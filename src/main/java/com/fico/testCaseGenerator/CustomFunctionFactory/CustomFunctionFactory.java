@@ -213,6 +213,10 @@ public class CustomFunctionFactory {
 			}
 		}
 
+		if(queryedList.size() == 0){
+			return 0;
+		}
+
 		return sumD/queryedList.size();
 	}
 
@@ -390,8 +394,29 @@ public class CustomFunctionFactory {
 		return Math.max(minValDouble, maxValDouble);
 	}
 
+	private int guid = 100;
+
 	public String generateApplicationID() {
-		return java.util.UUID.randomUUID().toString();
+
+		guid += 1;
+
+		long now = System.currentTimeMillis();
+		//获取4位年份数字
+		SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy");
+		//获取时间戳
+		String time=dateFormat.format(now);
+		String info=now+"";
+		//获取三位随机数
+		//int ran=(int) ((Math.random()*9+1)*100);
+		//要是一段时间内的数据连过大会有重复的情况，所以做以下修改
+		int ran=0;
+		if(guid>999){
+			guid=100;
+		}
+		ran=guid;
+
+		return time+info+ran;
+
 	}
 
 	/**
@@ -742,6 +767,28 @@ public class CustomFunctionFactory {
 
 	}
 
+	public Integer getAge(Object applicationDateObj, Object birthDateObj){
+		Date applicationDate = (Date)applicationDateObj;
+		Date birthDate = (Date)birthDateObj;
+
+		return new Integer( applicationDate.getYear() - birthDate.getYear() );
+	}
+
+	private static String randomCharAll = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+	public Object randomChar(Object lenObj){
+		Integer len = (Integer)lenObj;
+
+		StringBuffer sb = new StringBuffer();
+
+		for(int i=0; i<len; i++){
+			int random = RandomFactory.randomIntBetween(0, randomCharAll.length()-1);
+			sb.append( randomCharAll.charAt(random) );
+		}
+
+		return sb.toString();
+	}
+
 	public String generateNodeInfoNodeTypeElement(AbstractTestData parentTest,
 			AbstractTestData currentTetsData) {
 
@@ -822,6 +869,4 @@ public class CustomFunctionFactory {
 		rtn = g.generate();
 		return rtn;
 	}
-	//end by kcc at 20170719
-	
 }

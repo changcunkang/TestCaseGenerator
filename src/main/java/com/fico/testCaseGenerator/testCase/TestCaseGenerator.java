@@ -266,6 +266,10 @@ public abstract class TestCaseGenerator {
 
 		if(simpleField.getExtendtion() != null && simpleField.getExtendtion().getRestriction() != null){
 
+			if(simpleField.getName().equalsIgnoreCase("latest6MonthUsedAvgAmount")){
+				String a = "";
+			}
+
 			if(this.isAllRelativeElementReady(simpleField)){
 
 				Object expValue = this.testCaseExpression.parse(simpleField.getExtendtion().getRestriction());
@@ -542,6 +546,10 @@ public abstract class TestCaseGenerator {
 						SimpleField unConsTestCaseData = tmpList.get(i);
 
 						if( this.isAllRelativeElementReady(unConsTestCaseData) ){
+
+							if(unConsTestCaseData.getName().equalsIgnoreCase("latest6MonthUsedAvgAmount")){
+								String a = "";
+							}
 
 							for(Object testCaseIns : unConsTestCaseData.getTestData().getTestCase() ){
 								generateSingleTestCaseAttributeValue(testCaseIns,unConsTestCaseData);
