@@ -33,7 +33,29 @@ public abstract class TestData extends AbstractTestData {
 
 	private Object generatingTestData;
 
-	private boolean isGeneratingTestDataFirstChild = false;
+	private Object[] tempGeneratingArr = null;
+
+	public Object[] getTempGeneratingArr() {
+		return tempGeneratingArr;
+	}
+
+	public void setTempGeneratingArr(Object[] tempGeneratingArr) {
+		this.tempGeneratingArr = tempGeneratingArr;
+	}
+
+	public boolean isGeneratingTestDataLastChild() {
+		if(this.getTempGeneratingArr()!=null && this.getTempGeneratingArr()[this.getTempGeneratingArr().length -1] != null){
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isGeneratingTestDataFirstChild() {
+		if(this.getTempGeneratingArr()!=null && this.getTempGeneratingArr()[0] != null && this.getTempGeneratingArr()[1]==null){
+			return true;
+		}
+		return false;
+	}
 
 	public Set<SimpleField> getTmpGeneratedSimpleFieldSet() {
 
@@ -51,14 +73,6 @@ public abstract class TestData extends AbstractTestData {
 	private Set<SimpleField> tmpGeneratedSimpleFieldSet = null;
 
 
-
-	public boolean isGeneratingTestDataFirstChild() {
-		return isGeneratingTestDataFirstChild;
-	}
-
-	public void setGeneratingTestDataFirstChild(boolean generatingTestDataFirstChild) {
-		isGeneratingTestDataFirstChild = generatingTestDataFirstChild;
-	}
 
 	public Object getGeneratingTestData() {
 		return generatingTestData;

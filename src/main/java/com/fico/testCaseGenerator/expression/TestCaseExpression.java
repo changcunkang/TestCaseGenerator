@@ -63,6 +63,8 @@ public class TestCaseExpression {
 
     private static final String IT_RECURSIVE_FUNCTION_NAME = "IT";
 
+    private static final String STRING_NULL = "null";
+
     public static final String MERGE_FUNCTION_NAME = "merge";
 
     public static final String TESTDATA_SIZE_FUNCTION_NAME = "testDataSize";
@@ -87,6 +89,7 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("maxFilter");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("minFilter");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("avgFilter");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("enumuationFill");
 
     }
 
@@ -137,7 +140,7 @@ public class TestCaseExpression {
                     }
                     else{
 
-                        if("$getLastHistoryCycleDay(Application/@businessDate/,Application/Customer/@cycleDay/,$IT(1,Application/Customer/Product/Account/MonthlyRecordInfo/@relativeCycleNumber/)$)$".equalsIgnoreCase(minExp)){
+                        if("[Application/Customer/PbocReport/Loan/@currOverdueCyc/,>,0,Application/Customer/PbocReport/Loan/@scheduledPaymentAmount/]".equalsIgnoreCase(minExp)){
                             String a = "";
                         }
 
@@ -158,6 +161,7 @@ public class TestCaseExpression {
 
         if(minValue == null || maxValue == null){
             String a = "";
+            return null;
         }
 
         if(abstractTestData instanceof SimpleField){
@@ -206,9 +210,10 @@ public class TestCaseExpression {
     private Integer convertObjectValToInteger(Object val){
         if(val instanceof String){
 
-            if(val == null || "@scheduledPaymentAmount".equalsIgnoreCase(val.toString())){
+            if(val.toString().equalsIgnoreCase("")){
                 String a = "";
             }
+
 
             return new Integer ( new Double(val.toString()).intValue() );
         }else if(val instanceof Double){
@@ -217,10 +222,6 @@ public class TestCaseExpression {
             return ((BigDecimal)val).intValue();
         }
         return (Integer)val;
-    }
-
-    public Object parseInitialValue(Restriction restriction){
-       return this.recursiveParse(null, restriction.getMinStr(), restriction );
     }
 
     private Object recursiveParse(Object tempValue, String path, Restriction restriction){
@@ -254,7 +255,7 @@ public class TestCaseExpression {
             return parseBooleanExp(path, restriction);
         }
         //纯文本
-        else if(true){
+        else if( !STRING_NULL.equalsIgnoreCase(path) ){
             return path;
         }
         return null;
@@ -267,6 +268,10 @@ public class TestCaseExpression {
 
         Object leftValue = tempValue;
 
+        if(tempValue == null){
+            return null;
+        }
+
         Object rightValue = this.recursiveParse(null, subPath, restriction);;
 
         if("+".equals(operator)){
@@ -274,6 +279,9 @@ public class TestCaseExpression {
             //现只支持左边日期右边数字，左边数字右边日期暂时没考虑
             if(this.isSimpleFieldDateType(restriction, tempValue)){
                 GregorianCalendar gc=new GregorianCalendar();
+                if(tempValue == null){
+                    String a = "";
+                }
                 gc.setTime( (Date)tempValue );
                 gc.add(GregorianCalendar.DATE, new Double( rightValue.toString() ).intValue());
                 return gc.getTime();
@@ -293,6 +301,9 @@ public class TestCaseExpression {
                 return gc.getTime();
             }
             BigDecimal leftBigDec = new BigDecimal(leftValue.toString());
+            if(recursiveParse(null, subPath, restriction)==null){
+                String a = "";
+            }
             return leftBigDec.subtract( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
 
         }else if ("*".equals(operator)){
@@ -414,35 +425,39 @@ public class TestCaseExpression {
     private boolean booleanOperatorResult(Object leftVal, Object rightVal, String operationExp){
         int compareRes = 0;
 
-        Double leftNumbericVal = null;
+        Double leftNumberVal = null;
         Double rightNumberVal = null;
 
         if(leftVal == null || rightVal==null){
-            return false;
-        }
 
-        if(leftVal instanceof String){
-            compareRes = leftVal.toString().compareTo(rightVal.toString());
-        }else {
-            if( leftVal instanceof Date ){
-                if(rightVal instanceof String){
-                    try {
-                        rightVal = new SimpleDateFormat(TestCaseUtils.DATE_FORMAT).parse(rightVal.toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-                leftNumbericVal = new Double(((Date)leftVal).getTime());
-                rightNumberVal = new Double(((Date)rightVal).getTime());
-            }else if(leftVal instanceof Double || leftVal instanceof Integer) {
-                leftNumbericVal = new Double(leftVal.toString());
-                rightNumberVal = new Double(rightVal.toString());
-            }else if(leftVal instanceof Boolean ){
-                leftNumbericVal = (Boolean)leftVal?1d:0d;
-                rightNumberVal = (Boolean)rightVal?1d:0d;
+            if( !(leftVal == null && rightVal==null)){
+                compareRes = 1;
             }
-            if(leftVal instanceof Double || leftVal instanceof Integer ){
-                compareRes = new BigDecimal( leftNumbericVal ).compareTo( new BigDecimal(rightNumberVal) );
+
+        }else{
+            if(leftVal instanceof String){
+                compareRes = leftVal.toString().compareTo(rightVal.toString());
+            }else {
+                if( leftVal instanceof Date ){
+                    if(rightVal instanceof String){
+                        try {
+                            rightVal = new SimpleDateFormat(TestCaseUtils.DATE_FORMAT).parse(rightVal.toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    leftNumberVal = new Double(((Date)leftVal).getTime());
+                    rightNumberVal = new Double(((Date)rightVal).getTime());
+                }else if(leftVal instanceof Double || leftVal instanceof Integer) {
+                    leftNumberVal = new Double(leftVal.toString());
+                    rightNumberVal = new Double(rightVal.toString());
+                }else if(leftVal instanceof Boolean ){
+                    leftNumberVal = (Boolean)leftVal?1d:0d;
+                    rightNumberVal = (Boolean)rightVal?1d:0d;
+                }
+                if(leftVal instanceof Double || leftVal instanceof Integer ){
+                    compareRes = new BigDecimal( leftNumberVal ).compareTo( new BigDecimal(rightNumberVal) );
+                }
             }
         }
 
@@ -489,9 +504,15 @@ public class TestCaseExpression {
 
         int targeMasterSimpleFieldPos = Math.max(0, slaveSimpleField.getTestCase().size() + recursiveVar );
 
-        if(slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() &&  targetMasterSimpleField.getTestCase().size() < targeMasterSimpleFieldPos +1 ){
+        int recursiveOffset = new Integer(rtn[0].toString());
+
+        if( (slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() && recursiveOffset<0) ||
+                (slaveSimpleField.getTestData().isGeneratingTestDataLastChild() && recursiveOffset>0)  ){
             //minStr 就是初始值
-            return this.recursiveParse(null, restriction.getMinStr(), restriction);
+            if(rtn.length<3){
+                String a = "";
+            }
+            return this.recursiveParse(null, rtn[2], restriction);
         }
         else {
 
@@ -572,7 +593,13 @@ public class TestCaseExpression {
 
             //这里有些冗余问题，以后继续优化
             SimpleField slaveSimpleField = (SimpleField)restriction.getExtendtion().getParentTestData();
-            if( slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() ){
+//            if( slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() ){
+//
+//            }
+            int recursiveOffset = new Integer(rtn[0].toString());
+            if( (slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() && recursiveOffset<0) ||
+                    (slaveSimpleField.getTestData().isGeneratingTestDataLastChild() && recursiveOffset>0)  ){
+                //minStr 就是初始值
                 return thisFunctionResultValue;
             }
 
@@ -592,6 +619,9 @@ public class TestCaseExpression {
         else{
             if(expRtnValueArr != null && expRtnValueArr.length>0){
                 for(int j=0; j<expRtnValueArr.length; j++){
+                    if(rtn[j].equalsIgnoreCase("Application/Customer/Product/Account/@firstConsDate/")){
+                        String a = "";
+                    }
                     expRtnValueArr[j] = this.recursiveParse(null,rtn[j], restriction);
                 }
             }
@@ -633,7 +663,16 @@ public class TestCaseExpression {
      * 通过xpath 和 restriction 获取主的TestData或者SimpleField的具体属性
      * @return
      */
+    private int ii = 0;
+
     private Object getAbsTestDataValueFromPath(String path, Restriction restriction){
+
+        if("Application/Temporary/MonthlyAdjustLimitHistory_Temp/@adjustLimitDate/".equalsIgnoreCase(path)){
+            ii ++;
+            if(ii == 25){
+                String a = "";
+            }
+        }
 
         AbstractTestData abstractSlaveTestData = restriction.getExtendtion().getParentTestData();
 

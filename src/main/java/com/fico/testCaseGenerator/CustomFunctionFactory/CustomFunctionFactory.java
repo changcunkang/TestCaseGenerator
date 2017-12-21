@@ -20,6 +20,9 @@ import com.fico.testCaseGenerator.testCase.TestCaseGenerator;
 import com.fico.testCaseGenerator.util.ClassUtil;
 import com.fico.testCaseGenerator.util.RandomFactory;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 
 public class CustomFunctionFactory {
 
@@ -63,6 +66,53 @@ public class CustomFunctionFactory {
 			}
 		}
 		return null;
+	}
+
+	public Object enumuationFill(Object pathObj, Object joinEnumOjb){
+
+		List joinedEnumList = new ArrayList();
+
+		for(String tmp : joinEnumOjb.toString().split("_") ){
+			joinedEnumList.add(tmp);
+		}
+
+		String path = pathObj.toString();
+
+		SimpleField simpleField = this.bomGenerator.getPathSimpleFieldMap().get(path);
+
+		TestData simpleFieldParentTestData = simpleField.getTestData();
+
+		Object[] tmpGeneratingArr = simpleFieldParentTestData.getTempGeneratingArr();
+
+		List tmpPickedList = new ArrayList();
+
+		for(Object tmpNewTestCase : tmpGeneratingArr){
+			try {
+				if(tmpNewTestCase != null){
+					Object alreadyGeneratedSimpleFieldValue = PropertyUtils.getSimpleProperty(tmpNewTestCase, simpleField.getName());
+					if(alreadyGeneratedSimpleFieldValue != null){
+						if(joinedEnumList.contains(alreadyGeneratedSimpleFieldValue)){
+							joinedEnumList.remove(alreadyGeneratedSimpleFieldValue);
+						}
+					}
+				}
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return joinedEnumList.get( RandomFactory.randomIntBetween(0, joinedEnumList.size()-1) );
+
+	}
+
+	public Object randomString(Object... enumObj){
+		int len = enumObj.length;
+
+		return enumObj[ RandomFactory.randomIntBetween(0,len-1 ) ];
 	}
 
 	public Object testDataSize( String absTestDataPath ){
@@ -377,9 +427,25 @@ public class CustomFunctionFactory {
 
 	public Double min(Object minVal, Object maxVal){
 
-		Double minValDouble = new Double(minVal.toString());
+		if(minVal == null || maxVal == null){
+			return null;
+		}
 
-		Double maxValDouble = new Double(maxVal.toString());
+		Double minValDouble = null;
+
+		if(minVal instanceof Date){
+			minValDouble = new Double( ((Date)minVal).getTime() );
+		}else{
+			minValDouble = new Double(minVal.toString());
+		}
+
+		Double maxValDouble = null;
+
+		if(minVal instanceof Date){
+			maxValDouble = new Double( ((Date)maxVal).getTime() );
+		}else{
+			maxValDouble = new Double(maxVal.toString());
+		}
 
 		return Math.min(minValDouble, maxValDouble);
 	}

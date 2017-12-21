@@ -78,7 +78,6 @@ public abstract class TestCaseGenerator {
 			simpleField.setGenerateTestCaseFinish(true);
 		}
 
-
 		return rootTestData;
 	}
 
@@ -133,25 +132,30 @@ public abstract class TestCaseGenerator {
 	 */
 	protected void generateAttr(Object parentTestCaseElement, int instanceSize, TestData testData){
 
-		for(int i=0; i<instanceSize; i++){
+		if(instanceSize > 0){
 
-			Object newIns = this.createEmptyTestCaseInstance(testData);
+			Object[] tmpGeneratingArr = new Object[instanceSize];
 
-			appendChildTestCaseToParentTestCase( parentTestCaseElement, newIns, testData );
+			testData.setTempGeneratingArr(tmpGeneratingArr);
 
-			testData.setGeneratingTestData(newIns);
+			for(int i=0; i<instanceSize; i++){
 
-			testData.getTestCase().add(newIns);
+				Object newIns = this.createEmptyTestCaseInstance(testData);
 
-			if(i == 0){
-				testData.setGeneratingTestDataFirstChild(true);
+				appendChildTestCaseToParentTestCase( parentTestCaseElement, newIns, testData );
+
+				testData.setGeneratingTestData(newIns);
+
+				tmpGeneratingArr[i] = newIns;
+
+				testData.getTestCase().add(newIns);
+
+				generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData);
 			}
-			else{
-				testData.setGeneratingTestDataFirstChild(false);
-			}
 
-			generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(newIns, testData);
+			testData.setTempGeneratingArr(null);
 		}
+
 	}
 
 
@@ -251,7 +255,7 @@ public abstract class TestCaseGenerator {
 
 		for( SimpleField simpleField : testData.getSimpleFieldList() ){
 
-			if("consumeAmt".equalsIgnoreCase(simpleField.getName())){
+			if("relativeCycleNumber".equalsIgnoreCase(simpleField.getName())){
 				String a = "";
 			}
 
@@ -266,7 +270,7 @@ public abstract class TestCaseGenerator {
 
 		if(simpleField.getExtendtion() != null && simpleField.getExtendtion().getRestriction() != null){
 
-			if(simpleField.getName().equalsIgnoreCase("latest6MonthUsedAvgAmount")){
+			if(simpleField.getName().equalsIgnoreCase("actualPaymentAmount")){
 				String a = "";
 			}
 
@@ -547,7 +551,7 @@ public abstract class TestCaseGenerator {
 
 						if( this.isAllRelativeElementReady(unConsTestCaseData) ){
 
-							if(unConsTestCaseData.getName().equalsIgnoreCase("latest6MonthUsedAvgAmount")){
+							if(unConsTestCaseData.getName().equalsIgnoreCase("firstActiveDate")){
 								String a = "";
 							}
 
@@ -613,7 +617,7 @@ public abstract class TestCaseGenerator {
 	private void recursiveClearTestCaseFinishFlag(TestData testData, boolean flag){
 
 		testData.setGenerateTestCaseFinish(flag);
-		testData.setGeneratingTestDataFirstChild(flag);
+		testData.setTempGeneratingArr(null);
 		testData.setGeneratingTestData(null);
 		testData.setPositionRecord(null);
 

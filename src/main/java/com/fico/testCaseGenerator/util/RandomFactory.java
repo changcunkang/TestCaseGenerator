@@ -26,6 +26,14 @@ public class RandomFactory {
 	
 	//左闭右闭
 	public static int randomIntBetween(int min, int max){
+
+		if(min == max){
+			return min;
+		}
+
+		if(min>max){
+			return max;
+		}
 		return new RandomDataGenerator().nextInt(min, max);
 	}
 
