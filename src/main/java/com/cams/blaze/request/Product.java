@@ -21,7 +21,7 @@ public class Product {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<Account> account = new ArrayList<Account>();
-	@Transient
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
 	@Transient
     private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
