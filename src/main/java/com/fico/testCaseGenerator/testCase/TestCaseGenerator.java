@@ -270,11 +270,11 @@ public abstract class TestCaseGenerator {
 
 		if(simpleField.getExtendtion() != null && simpleField.getExtendtion().getRestriction() != null){
 
-			if(simpleField.getName().equalsIgnoreCase("actualPaymentAmount")){
-				String a = "";
-			}
-
 			if(this.isAllRelativeElementReady(simpleField)){
+
+				if(simpleField.getName().equalsIgnoreCase("adjustLimitDate")){
+					String a = "";
+				}
 
 				Object expValue = this.testCaseExpression.parse(simpleField.getExtendtion().getRestriction());
 
@@ -408,6 +408,10 @@ public abstract class TestCaseGenerator {
 		if(testData.getExtendtion() != null && testData.getExtendtion().getRestriction() != null){
 
 			if( isAllRelativeElementReady( testData ) ){
+
+				if(testData.getName().equalsIgnoreCase("EnabledDecisionArea")){
+					String a = "";
+				}
 
 				//先冗余写，以后这个if可能不需要
 				if(parentTestCaseElementList == null || parentTestCaseElementList.size() == 0){
@@ -551,7 +555,7 @@ public abstract class TestCaseGenerator {
 
 						if( this.isAllRelativeElementReady(unConsTestCaseData) ){
 
-							if(unConsTestCaseData.getName().equalsIgnoreCase("firstActiveDate")){
+							if(unConsTestCaseData.getName().equalsIgnoreCase("adjustLimitDate")){
 								String a = "";
 							}
 

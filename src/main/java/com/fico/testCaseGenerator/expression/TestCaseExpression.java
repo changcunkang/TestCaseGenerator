@@ -448,14 +448,14 @@ public class TestCaseExpression {
                     }
                     leftNumberVal = new Double(((Date)leftVal).getTime());
                     rightNumberVal = new Double(((Date)rightVal).getTime());
-                }else if(leftVal instanceof Double || leftVal instanceof Integer) {
+                }else if(leftVal instanceof Double || leftVal instanceof Integer || leftVal instanceof BigDecimal) {
                     leftNumberVal = new Double(leftVal.toString());
                     rightNumberVal = new Double(rightVal.toString());
                 }else if(leftVal instanceof Boolean ){
                     leftNumberVal = (Boolean)leftVal?1d:0d;
                     rightNumberVal = (Boolean)rightVal?1d:0d;
                 }
-                if(leftVal instanceof Double || leftVal instanceof Integer ){
+                if(leftVal instanceof Double || leftVal instanceof Integer || leftVal instanceof BigDecimal ){
                     compareRes = new BigDecimal( leftNumberVal ).compareTo( new BigDecimal(rightNumberVal) );
                 }
             }
