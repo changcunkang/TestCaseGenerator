@@ -272,7 +272,7 @@ public abstract class TestCaseGenerator {
 
 			if(this.isAllRelativeElementReady(simpleField)){
 
-				if(simpleField.getName().equalsIgnoreCase("adjustLimitDate")){
+				if(simpleField.getName().equalsIgnoreCase("adjustLimitDirection")){
 					String a = "";
 				}
 
