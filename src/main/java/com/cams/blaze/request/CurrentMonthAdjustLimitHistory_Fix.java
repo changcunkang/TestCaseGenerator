@@ -18,6 +18,7 @@ public class CurrentMonthAdjustLimitHistory_Fix {
     private String adjustLimitType;
 
     private Date tempALunValidDate;
+
     private String adjustLimitDirection;
 
     public Date getAdjustLimitDate() {
