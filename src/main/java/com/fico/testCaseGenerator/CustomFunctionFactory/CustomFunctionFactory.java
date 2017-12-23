@@ -115,7 +115,7 @@ public class CustomFunctionFactory {
 		return enumObj[ RandomFactory.randomIntBetween(0,len-1 ) ];
 	}
 
-	public Object testDataSize( String absTestDataPath ){
+	public Object testDataSize( TestData testData, String absTestDataPath ){
 
 		if(absTestDataPath.contains("[")){
 
@@ -124,14 +124,40 @@ public class CustomFunctionFactory {
 
 		}else{
 
+			String sheredPath = this.testCaseGenerator.getSharedPath(testData.getPath(), absTestDataPath);
+
+			TestData sharedTestData = this.bomGenerator.getPathTestDataMap().get(sheredPath);
+
 			AbstractTestData targetAbsTestData = null;
+
 			if(this.bomGenerator.pathIsSimpleField(absTestDataPath) ){
 				targetAbsTestData = this.bomGenerator.getPathSimpleFieldMap().get(absTestDataPath);
 			}else {
 				targetAbsTestData = this.bomGenerator.getPathTestDataMap().get(absTestDataPath);
 			}
 
-			return targetAbsTestData.getTestCase().size();
+			if(sharedTestData.getTestCase().size() == 1){
+				return targetAbsTestData.getTestCase().size();
+			}
+
+			Object currentTestDataCaseUnit = testData.getTestCase().get(testData.getTestCase().size() - 1);
+
+			Object sharedTestDataTargetTestCaseUnit = this.testCaseGenerator.getParentTestCaseBaseOnChildTestCase(testData, currentTestDataCaseUnit, sharedTestData);
+
+			Object generatingSrcTestCaseIns = sharedTestData.getTestCase().get( sharedTestData.getTestCase().size()-1 );
+
+
+			List targetAbsTestDataTestCase = targetAbsTestData.getTestCase();
+
+			int rtnCnt = 0;
+
+			for(Object tmpTargetAbsTestDataTestCaseUnit : targetAbsTestDataTestCase){
+				if( this.testCaseGenerator.getParentTestCaseBaseOnChildTestCase((TestData) targetAbsTestData, tmpTargetAbsTestDataTestCaseUnit, sharedTestData) == sharedTestDataTargetTestCaseUnit ){
+					rtnCnt ++;
+				}
+			}
+
+			return rtnCnt;
 		}
 	}
 

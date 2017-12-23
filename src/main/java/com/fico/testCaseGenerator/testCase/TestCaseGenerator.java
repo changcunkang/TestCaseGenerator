@@ -1,6 +1,7 @@
 package com.fico.testCaseGenerator.testCase;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -12,6 +13,7 @@ import com.fico.testCaseGenerator.data.configuration.Restriction;
 import com.fico.testCaseGenerator.expression.TestCaseExpression;
 import com.fico.testCaseGenerator.util.ClassUtil;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import sun.java2d.pipe.SpanShapeRenderer;
 
 public abstract class TestCaseGenerator {
@@ -272,7 +274,7 @@ public abstract class TestCaseGenerator {
 
 			if(this.isAllRelativeElementReady(simpleField)){
 
-				if(simpleField.getName().equalsIgnoreCase("adjustLimitDirection")){
+				if(simpleField.getName().equalsIgnoreCase("tempALunValidDate")){
 					String a = "";
 				}
 
@@ -343,7 +345,7 @@ public abstract class TestCaseGenerator {
 		absTestData.getPositionRecord().add( tmpPathPosition );
 	}
 
-	private String getSharedPath(String path1, String path2){
+	public String getSharedPath(String path1, String path2){
 		String rtn = null;
 		int lastOprPosition = -1;
 		int minLen = Math.min(path1.length(), path2.length());
@@ -363,6 +365,77 @@ public abstract class TestCaseGenerator {
 
 		}
 		return path1.substring(0, Math.min(i, lastOprPosition)+1 );
+	}
+
+	public Object getParentTestCaseBaseOnChildTestCase(TestData childTestData, Object childTestCaseIns, TestData parentTestData){
+		if(childTestData.getPath().equalsIgnoreCase(parentTestData.getPath())){
+			return childTestData.getTestCase().size()-1;
+		}
+
+		String childTestDataPath = childTestData.getPath();
+
+		String parentTestDataPath = parentTestData.getPath();
+
+		String relativePath = parentTestDataPath.substring(childTestDataPath.length());
+
+		relativePath = relativePath.substring( 0, relativePath.length()-1 );
+
+		String[] relativeArr = relativePath.split("/");
+
+		List[] tmpCustomArr = new List[relativeArr.length];
+
+		boolean loopFlag = true;
+
+		Object tmpChildTestDataIns = childTestCaseIns;
+
+		int depth = relativeArr.length - 2;
+
+		Object targetParent = null;
+
+		TestData tmpChildTestData = childTestData;
+
+		while(loopFlag){
+			TestData tmpParentTestData = tmpChildTestData.getParentTestData();
+			List tmpParentTestDataTestCaseList = tmpParentTestData.getTestCase();
+			Object tmpParent = findParent(tmpParentTestDataTestCaseList, tmpChildTestDataIns,relativeArr[depth] );
+
+			if(parentTestData.getPath().equalsIgnoreCase(tmpParentTestData.getPath())){
+				targetParent = tmpParent;
+				return tmpParent;
+			}else{
+				depth --;
+				tmpChildTestData = tmpParentTestData;
+			}
+		}
+//		if(targetParent != null){
+//			for(int i=0; i<parentTestData.getTestCase().size(); i++){
+//				if(targetParent == parentTestData.getTestCase().get(i)){
+//					return new Integer(i);
+//				}
+//			}
+//		}
+		return null;
+	}
+
+	private Object findParent(List parentList, Object childIns, String fieldName){
+		for(Object obj : parentList){
+			try {
+				List tmpParentTestCaseList = (List)PropertyUtils.getProperty(obj, fieldName);
+
+				for(Object tmpParentTestCaseListUnit : tmpParentTestCaseList){
+					if(tmpParentTestCaseListUnit == childIns){
+						return obj;
+					}
+				}
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 	private void setTestCaseElementValue(SimpleField simpleField , Object newInstantceArrElement, String attributeName, Object attributeValue){

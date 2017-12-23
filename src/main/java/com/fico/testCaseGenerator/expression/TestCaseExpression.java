@@ -611,6 +611,21 @@ public class TestCaseExpression {
                 functionArgs[1] = restriction.getExtendtion().getParentTestData();
                 functionArgs[2] = rtn;
                 return this.functionInvocation(targetFunctionName, functionArgs);
+            }else if(targetFunctionName.equalsIgnoreCase(TESTDATA_SIZE_FUNCTION_NAME)){
+                AbstractTestData abstractTestData = restriction.getExtendtion().getParentTestData();
+                TestData testData = null;
+                if( abstractTestData instanceof TestData ){
+                    testData = (TestData)abstractTestData;
+                }else{
+                    testData = ((SimpleField)abstractTestData).getTestData();
+                }
+
+                Object[] functionArgs = new Object[2];
+
+                functionArgs[0] = testData;
+                functionArgs[1] = rtn[0];
+
+                return this.functionInvocation(targetFunctionName, functionArgs);
             }
             else{
                 return this.functionInvocation(targetFunctionName, rtn);
