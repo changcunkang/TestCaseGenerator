@@ -31,7 +31,25 @@ public class Account {
     private	 List<AdjustLimitHistory> adjustLimitHistory = new ArrayList<AdjustLimitHistory>();
 	@Transient
     private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
-	
+	@Transient
+	private List<AccountTemporary> accountTemporary = new ArrayList<AccountTemporary>();
+
+	public List<AccountTemporary> getAccountTemporary() {
+		return accountTemporary;
+	}
+
+	public void setAccountTemporary(List<AccountTemporary> accountTemporary) {
+		this.accountTemporary = accountTemporary;
+	}
+
+	public Date getLastTransDate() {
+		return lastTransDate;
+	}
+
+	public void setLastTransDate(Date lastTransDate) {
+		this.lastTransDate = lastTransDate;
+	}
+
 	@Column
     private	 String accountNumber;
 	@Column

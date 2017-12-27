@@ -79,7 +79,6 @@ public class JavaTestCaseGenerator extends TestCaseGenerator {
 
                 if(Collection.class.isAssignableFrom(childField.getType())){
                     List parentChildList = (List) PropertyUtils.getProperty( parentIns, childTestData.getParentFieldName() );
-
                     if(parentChildList == null){
                         parentChildList = new ArrayList();
                     }

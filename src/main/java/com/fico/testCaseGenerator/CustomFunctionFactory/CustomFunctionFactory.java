@@ -115,50 +115,116 @@ public class CustomFunctionFactory {
 		return enumObj[ RandomFactory.randomIntBetween(0,len-1 ) ];
 	}
 
-	public Object testDataSize( TestData testData, String absTestDataPath ){
+	/**
+	 * 后续还要改造这个方法，目前先这么用，后续要传两个参数，path和筛选条件，path找到目标TestCase，筛选条件进行过滤
+	 * @param testData
+	 * @param absTestDataPath
+	 * @return
+	 */
+	public Object testDataSize( AbstractTestData testData, String absTestDataPath ){
 
 		if(absTestDataPath.contains("[")){
 
 			List rtnList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), absTestDataPath);
+
 			return rtnList.size();
 
 		}else{
 
-			String sheredPath = this.testCaseGenerator.getSharedPath(testData.getPath(), absTestDataPath);
-
-			TestData sharedTestData = this.bomGenerator.getPathTestDataMap().get(sheredPath);
-
-			AbstractTestData targetAbsTestData = null;
-
-			if(this.bomGenerator.pathIsSimpleField(absTestDataPath) ){
-				targetAbsTestData = this.bomGenerator.getPathSimpleFieldMap().get(absTestDataPath);
-			}else {
-				targetAbsTestData = this.bomGenerator.getPathTestDataMap().get(absTestDataPath);
+			if("Application/Customer/Product/Account/".equalsIgnoreCase(absTestDataPath)){
+				String a = "";
 			}
 
-			if(sharedTestData.getTestCase().size() == 1){
-				return targetAbsTestData.getTestCase().size();
-			}
+			List targetSharedTestCase = findCrorrespondingTestCaseUnit(testData, absTestDataPath);
 
-			Object currentTestDataCaseUnit = testData.getTestCase().get(testData.getTestCase().size() - 1);
-
-			Object sharedTestDataTargetTestCaseUnit = this.testCaseGenerator.getParentTestCaseBaseOnChildTestCase(testData, currentTestDataCaseUnit, sharedTestData);
-
-			Object generatingSrcTestCaseIns = sharedTestData.getTestCase().get( sharedTestData.getTestCase().size()-1 );
-
-
-			List targetAbsTestDataTestCase = targetAbsTestData.getTestCase();
-
-			int rtnCnt = 0;
-
-			for(Object tmpTargetAbsTestDataTestCaseUnit : targetAbsTestDataTestCase){
-				if( this.testCaseGenerator.getParentTestCaseBaseOnChildTestCase((TestData) targetAbsTestData, tmpTargetAbsTestDataTestCaseUnit, sharedTestData) == sharedTestDataTargetTestCaseUnit ){
-					rtnCnt ++;
-				}
-			}
-
-			return rtnCnt;
+			return targetSharedTestCase.size();
 		}
+	}
+
+
+	/**
+	 * 中间节点合并函数
+	 * @param testData
+	 * @param testDataPath
+	 * @return
+	 */
+	public Object merge(Object parentTestDataIns, TestData testData, String[] testDataPath){
+
+		if(testData.getName().equalsIgnoreCase("LoanCard")){
+			String a = "";
+		}
+
+		List<List> srcMergeList = new ArrayList<List>();
+
+		for(String tmpTestDataPath : testDataPath){
+
+			List targetList = findCrorrespondingTestCaseUnit(testData, tmpTestDataPath);
+
+			srcMergeList.add( targetList );
+		}
+
+		this.testCaseGenerator.merge(parentTestDataIns, testData, srcMergeList);
+
+		return null;
+	}
+
+	public List findCrorrespondingTestCaseUnit(AbstractTestData testData, String absTestDataPath){
+		String sheredPath = this.testCaseGenerator.getSharedPath(testData.getPath(), absTestDataPath);
+
+		TestData sharedTestData = this.bomGenerator.getPathTestDataMap().get(sheredPath);
+
+		TestData callIngTestData = null;
+
+		if(testData instanceof TestData){
+			callIngTestData = (TestData) testData;
+			//sharedTestDataTestCaseInsPos = testData.getTestCase().size();
+		}else if(testData instanceof SimpleField){
+			callIngTestData = ((SimpleField)testData).getTestData();
+			//sharedTestDataTestCaseInsPos = testData.getTestCase().size() -1;
+		}
+
+		if(callIngTestData == null){
+			String a = "";
+		}
+
+		TestData callingParentTestData = callIngTestData.getParentTestData();
+
+		Object callingParentTestDataGeneratingTestCase = callingParentTestData.getGeneratingChildrenTestCase();
+
+		Object targetSharedTestCase = null;
+
+		if(callingParentTestData.getPath().equalsIgnoreCase(sharedTestData.getPath())){
+			targetSharedTestCase = callingParentTestDataGeneratingTestCase;
+		}else{
+			targetSharedTestCase = this.testCaseGenerator.getParentTestCaseBaseOnChildTestCase(callingParentTestData, callingParentTestDataGeneratingTestCase, sharedTestData);
+		}
+
+		AbstractTestData targetAbsTestData = null;
+
+		if(this.bomGenerator.pathIsSimpleField(absTestDataPath) ){
+			targetAbsTestData = this.bomGenerator.getPathSimpleFieldMap().get(absTestDataPath);
+		}else {
+			targetAbsTestData = this.bomGenerator.getPathTestDataMap().get(absTestDataPath);
+		}
+
+		List targetAbsTestDataTestCase = targetAbsTestData.getTestCase();
+
+		List rtn = new ArrayList();
+
+		for(Object tmpTargetAbsTestDataTestCaseUnit : targetAbsTestDataTestCase){
+
+			Object targetObjUnit = this.testCaseGenerator.getParentTestCaseBaseOnChildTestCase((TestData) targetAbsTestData, tmpTargetAbsTestDataTestCaseUnit, sharedTestData);
+
+			if(targetObjUnit == targetSharedTestCase ){
+				rtn.add(tmpTargetAbsTestDataTestCaseUnit);
+			}
+		}
+
+
+		return rtn;
+//		List targetAbsTestDataTestCase = targetAbsTestData.getTestCase();
+//
+//		return targetAbsTestDataTestCase;
 	}
 
 	public Object minSimpleField(String path){
@@ -572,6 +638,11 @@ public class CustomFunctionFactory {
 		Integer relativeCycleNumInt = new Integer( new Double(relativeCycleNum.toString()).intValue() );
 
 		String convertedDue123Str = due123.replace('N','0');
+
+		if(convertedDue123Str.length() < relativeCycleNumInt){
+			return "";
+		}
+
 //modified by kangchangcun at 20171202
 		return Character.toString(convertedDue123Str.charAt(relativeCycleNumInt-1));
 //end  modified by kangchangcun at 20171202
@@ -603,18 +674,7 @@ public class CustomFunctionFactory {
 		return rtn;
 	}
 
-	/**
-	 * 中间节点合并函数
-	 * @param testData
-	 * @param testDataPath
-	 * @return
-	 */
-	public Object merge(Object parentTestDataIns, TestData testData, String[] testDataPath){
 
-		this.testCaseGenerator.merge(parentTestDataIns, testData, testDataPath);
-
-		return null;
-	}
 
 	public Object getLastCycleDay(Object businessDateObj, Object cycleDayObj){
 

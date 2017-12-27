@@ -83,7 +83,15 @@ public abstract class AbstractTestData {
 		this.relativeManyToOnePathSet = relativeManyToOnePathSet;
 	}
 
+	private Object generatingChildrenTestCase;
 
+	public Object getGeneratingChildrenTestCase() {
+		return generatingChildrenTestCase;
+	}
+
+	public void setGeneratingChildrenTestCase(Object generatingChildrenTestCase) {
+		this.generatingChildrenTestCase = generatingChildrenTestCase;
+	}
 
 	private boolean generateTestCaseFinish = false;
 	

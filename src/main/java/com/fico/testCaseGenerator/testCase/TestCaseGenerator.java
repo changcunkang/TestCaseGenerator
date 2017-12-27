@@ -167,15 +167,11 @@ public abstract class TestCaseGenerator {
 	 * 这里以后要考虑类似多个人行的情况，目前只考虑一个
 	 * @param parentTestDataIns
 	 * @param testData
-	 * @param pathArr
+	 * @param testCaseListArr
 	 */
-	public void merge(Object parentTestDataIns, TestData testData, String[] pathArr){
-		int parentTestInsInParentTestDataPos = getTestDataInstanceInTestDataPos(tmpMergeParentTestCaseElement, testData.getParentTestData());
-
-		for(String path : pathArr){
-			List tmpObjList = ClassUtil.search(this.getBomGenerator().getRootTestData().getTestCase().get(0),"/" + path.substring(0,path.length()-1));
-
-			appendTempoaryToTargetTestData(tmpMergeParentTestCaseElement, testData, tmpObjList);
+	public void merge(Object parentTestDataIns, TestData testData, List<List> testCaseListArr){
+		for(List tmpTestCaseList : testCaseListArr){
+			appendTempoaryToTargetTestData(tmpMergeParentTestCaseElement, testData, tmpTestCaseList);
 		}
 	}
 
@@ -368,6 +364,7 @@ public abstract class TestCaseGenerator {
 	}
 
 	public Object getParentTestCaseBaseOnChildTestCase(TestData childTestData, Object childTestCaseIns, TestData parentTestData){
+
 		if(childTestData.getPath().equalsIgnoreCase(parentTestData.getPath())){
 			return childTestData.getTestCase().size()-1;
 		}
@@ -376,7 +373,7 @@ public abstract class TestCaseGenerator {
 
 		String parentTestDataPath = parentTestData.getPath();
 
-		String relativePath = parentTestDataPath.substring(childTestDataPath.length());
+		String relativePath = childTestDataPath.substring(parentTestDataPath.length());
 
 		relativePath = relativePath.substring( 0, relativePath.length()-1 );
 
@@ -388,7 +385,7 @@ public abstract class TestCaseGenerator {
 
 		Object tmpChildTestDataIns = childTestCaseIns;
 
-		int depth = relativeArr.length - 2;
+		int depth = relativeArr.length - 1;
 
 		Object targetParent = null;
 
@@ -397,7 +394,7 @@ public abstract class TestCaseGenerator {
 		while(loopFlag){
 			TestData tmpParentTestData = tmpChildTestData.getParentTestData();
 			List tmpParentTestDataTestCaseList = tmpParentTestData.getTestCase();
-			Object tmpParent = findParent(tmpParentTestDataTestCaseList, tmpChildTestDataIns,relativeArr[depth] );
+			Object tmpParent = findParent(tmpParentTestDataTestCaseList, tmpChildTestDataIns,tmpChildTestData.getParentFieldName() );
 
 			if(parentTestData.getPath().equalsIgnoreCase(tmpParentTestData.getPath())){
 				targetParent = tmpParent;
@@ -405,6 +402,7 @@ public abstract class TestCaseGenerator {
 			}else{
 				depth --;
 				tmpChildTestData = tmpParentTestData;
+				tmpChildTestDataIns = tmpParent;
 			}
 		}
 //		if(targetParent != null){
@@ -420,13 +418,23 @@ public abstract class TestCaseGenerator {
 	private Object findParent(List parentList, Object childIns, String fieldName){
 		for(Object obj : parentList){
 			try {
-				List tmpParentTestCaseList = (List)PropertyUtils.getProperty(obj, fieldName);
 
-				for(Object tmpParentTestCaseListUnit : tmpParentTestCaseList){
-					if(tmpParentTestCaseListUnit == childIns){
+				Object paretnObj = PropertyUtils.getProperty(obj, fieldName);
+
+				if(paretnObj instanceof Collection){
+					List tmpParentTestCaseList = (List)paretnObj;
+
+					for(Object tmpParentTestCaseListUnit : tmpParentTestCaseList){
+						if(tmpParentTestCaseListUnit == childIns){
+							return obj;
+						}
+					}
+				}else{
+					if(paretnObj == childIns){
 						return obj;
 					}
 				}
+
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
@@ -493,6 +501,8 @@ public abstract class TestCaseGenerator {
 
 				}else{
 					for( Object parentTestCaseElement :  parentTestCaseElementList){
+
+						testData.getParentTestData().setGeneratingChildrenTestCase(parentTestCaseElement);
 
 						getInstanceNumberAndGenerateAttr(parentTestCaseElement, testData);
 					}
