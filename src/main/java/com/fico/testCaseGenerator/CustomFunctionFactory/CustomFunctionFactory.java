@@ -1,6 +1,5 @@
 package com.fico.testCaseGenerator.CustomFunctionFactory;
 
-import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,14 +13,13 @@ import java.util.regex.Pattern;
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
 import com.fico.testCaseGenerator.data.AbstractTestData;
 import com.fico.testCaseGenerator.data.SimpleField;
+import com.fico.testCaseGenerator.data.TestCaseUnit;
 import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.expression.TestCaseExpression;
 import com.fico.testCaseGenerator.testCase.TestCaseGenerator;
 import com.fico.testCaseGenerator.util.ClassUtil;
 import com.fico.testCaseGenerator.util.RandomFactory;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 
 public class CustomFunctionFactory {
@@ -82,12 +80,15 @@ public class CustomFunctionFactory {
 
 		TestData simpleFieldParentTestData = simpleField.getTestData();
 
-		Object[] tmpGeneratingArr = simpleFieldParentTestData.getTempGeneratingArr();
+		TestCaseUnit[] tmpGeneratingArr = simpleFieldParentTestData.getTempGeneratingTestCaseUnitArr();
 
 		List tmpPickedList = new ArrayList();
 
-		for(Object tmpNewTestCase : tmpGeneratingArr){
+		for(TestCaseUnit tmpTestCaseUnit : tmpGeneratingArr){
 			try {
+
+				Object tmpNewTestCase = tmpTestCaseUnit.getTestCaseInstance();
+
 				if(tmpNewTestCase != null){
 					Object alreadyGeneratedSimpleFieldValue = PropertyUtils.getSimpleProperty(tmpNewTestCase, simpleField.getName());
 					if(alreadyGeneratedSimpleFieldValue != null){
@@ -125,7 +126,7 @@ public class CustomFunctionFactory {
 
 		if(absTestDataPath.contains("[")){
 
-			List rtnList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), absTestDataPath);
+			List rtnList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), absTestDataPath);
 
 			return rtnList.size();
 
@@ -148,7 +149,7 @@ public class CustomFunctionFactory {
 	 * @param testDataPath
 	 * @return
 	 */
-	public Object merge(Object parentTestDataIns, TestData testData, String[] testDataPath){
+	public Object merge(TestData testData, String[] testDataPath){
 
 		if(testData.getName().equalsIgnoreCase("LoanCard")){
 			String a = "";
@@ -163,68 +164,79 @@ public class CustomFunctionFactory {
 			srcMergeList.add( targetList );
 		}
 
-		this.testCaseGenerator.merge(parentTestDataIns, testData, srcMergeList);
+		this.testCaseGenerator.merge(testData, srcMergeList);
 
 		return null;
 	}
 
-	public List findCrorrespondingTestCaseUnit(AbstractTestData testData, String absTestDataPath){
-		String sheredPath = this.testCaseGenerator.getSharedPath(testData.getPath(), absTestDataPath);
+	public Object mergeFilter(TestData testData, String[] testDataPathFilterPairArr){
 
-		TestData sharedTestData = this.bomGenerator.getPathTestDataMap().get(sheredPath);
+		int pairLen = testDataPathFilterPairArr.length / 2;
 
-		TestData callIngTestData = null;
+		List srcMergeList = new ArrayList();
 
-		if(testData instanceof TestData){
-			callIngTestData = (TestData) testData;
-			//sharedTestDataTestCaseInsPos = testData.getTestCase().size();
-		}else if(testData instanceof SimpleField){
-			callIngTestData = ((SimpleField)testData).getTestData();
-			//sharedTestDataTestCaseInsPos = testData.getTestCase().size() -1;
-		}
-
-		if(callIngTestData == null){
-			String a = "";
-		}
-
-		TestData callingParentTestData = callIngTestData.getParentTestData();
-
-		Object callingParentTestDataGeneratingTestCase = callingParentTestData.getGeneratingChildrenTestCase();
-
-		Object targetSharedTestCase = null;
-
-		if(callingParentTestData.getPath().equalsIgnoreCase(sharedTestData.getPath())){
-			targetSharedTestCase = callingParentTestDataGeneratingTestCase;
-		}else{
-			targetSharedTestCase = this.testCaseGenerator.getParentTestCaseBaseOnChildTestCase(callingParentTestData, callingParentTestDataGeneratingTestCase, sharedTestData);
-		}
-
-		AbstractTestData targetAbsTestData = null;
-
-		if(this.bomGenerator.pathIsSimpleField(absTestDataPath) ){
-			targetAbsTestData = this.bomGenerator.getPathSimpleFieldMap().get(absTestDataPath);
-		}else {
-			targetAbsTestData = this.bomGenerator.getPathTestDataMap().get(absTestDataPath);
-		}
-
-		List targetAbsTestDataTestCase = targetAbsTestData.getTestCase();
-
-		List rtn = new ArrayList();
-
-		for(Object tmpTargetAbsTestDataTestCaseUnit : targetAbsTestDataTestCase){
-
-			Object targetObjUnit = this.testCaseGenerator.getParentTestCaseBaseOnChildTestCase((TestData) targetAbsTestData, tmpTargetAbsTestDataTestCaseUnit, sharedTestData);
-
-			if(targetObjUnit == targetSharedTestCase ){
-				rtn.add(tmpTargetAbsTestDataTestCaseUnit);
+		for(int i=0; i<pairLen; i++){
+			List targetList = findCrorrespondingTestCaseUnit(testData, testDataPathFilterPairArr[i*2]);
+			for(Object obj : targetList){
+				Object tmpTargetMergeObj = ClassUtil.search(obj, testDataPathFilterPairArr[ i*2+1 ]);
+				if(tmpTargetMergeObj != null){
+					srcMergeList.add(tmpTargetMergeObj);
+				}
 			}
 		}
 
+		this.testCaseGenerator.merge(testData, srcMergeList);
 
+		return null;
+	}
+
+	public List<TestCaseUnit> findCrorrespondingTestCaseUnit(AbstractTestData testData, String absTestDataPath){
+
+		List<TestCaseUnit> rtn = new ArrayList<TestCaseUnit>();
+
+		TestData callIngTestData = getBelongingTestData(testData);
+
+		TestData targetTestData = getBelongingTestData( this.bomGenerator.getAbsTestDataFromPath(absTestDataPath) );
+
+		if(callIngTestData.equals(targetTestData)){
+			assert callIngTestData.getGeneratingTestCaseUnit() == null : "in findCrorrespondingTestCaseUnit, GeneratingTestCaseUnit is null";
+			rtn.add(callIngTestData.getGeneratingTestCaseUnit());
+			return rtn;
+		}
+
+		TestCaseUnit callingTestCaseUnit = callIngTestData.getGeneratingTestCaseUnit();
+
+		//自己一个案例都没有，找父亲
+		if(callingTestCaseUnit == null){
+			callIngTestData = callIngTestData.getParentTestData();
+			callingTestCaseUnit = callIngTestData.getGeneratingChildrenTestCaseUnit();
+		}
+
+		String sharedPath = this.testCaseGenerator.getSharedPath(testData.getPath(), absTestDataPath);
+
+		TestData sharedTestData = this.bomGenerator.getPathTestDataMap().get(sharedPath);
+
+		TestCaseUnit targetSharedTestCaseUnit = this.testCaseGenerator.getParentTestCaseUnitBaseOnChildTestCase(callingTestCaseUnit, sharedTestData);
+
+		for(TestCaseUnit tmpTargetDataTestCaseUnit : targetTestData.getTestCaseUnitList()){
+
+			TestCaseUnit tmpSharedTestCaseUnit = this.testCaseGenerator.getParentTestCaseUnitBaseOnChildTestCase(tmpTargetDataTestCaseUnit, sharedTestData);
+
+			if(tmpSharedTestCaseUnit == targetSharedTestCaseUnit){
+				rtn.add(tmpTargetDataTestCaseUnit);
+			}
+		}
 		return rtn;
-//		List targetAbsTestDataTestCase = targetAbsTestData.getTestCase();
-//
-//		return targetAbsTestDataTestCase;
+	}
+
+
+	public TestData getBelongingTestData(AbstractTestData abstractTestData){
+		if(abstractTestData instanceof TestData){
+			return (TestData)abstractTestData;
+		}else if(abstractTestData instanceof SimpleField){
+			return  ((SimpleField)abstractTestData).getTestData();
+		}
+		return null;
 	}
 
 	public Object minSimpleField(String path){
@@ -253,7 +265,7 @@ public class CustomFunctionFactory {
 
 	public Object maxFilter(String query, String fieldName){
 
-		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), query);
+		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
 
 		Double sumD = new Double(0);
 
@@ -289,7 +301,7 @@ public class CustomFunctionFactory {
 
 	public Object minFilter(String query, String fieldName){
 
-		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), query);
+		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
 
 		Double sumD = new Double(0);
 
@@ -325,7 +337,7 @@ public class CustomFunctionFactory {
 
 	public Object avgFilter(String query, String fieldName){
 
-		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), query);
+		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
 
 		Double sumD = new Double(0);
 
@@ -367,7 +379,7 @@ public class CustomFunctionFactory {
 
 
 	public Object sum(String query, String fieldName){
-		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), query);
+		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
 
 		Double sumD = new Double(0);
 
@@ -400,7 +412,7 @@ public class CustomFunctionFactory {
 	}
 
 	public Object setSum(String query, String fieldName){
-		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCase().get(0), query);
+		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
 
 		Double sumD = new Double(0);
 
@@ -976,12 +988,6 @@ public class CustomFunctionFactory {
 		SimpleField stateEndDate = (SimpleField) currentTetsData;
 
 		TestData loanTestData = stateEndDate.getTestData();
-
-		List loanIns = loanTestData.getTestCase();
-
-		if (loanIns != null) {
-
-		}
 	}
 
 	private int getMonthItemMonthCnt = 0;

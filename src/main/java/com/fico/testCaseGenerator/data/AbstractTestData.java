@@ -18,7 +18,7 @@ public abstract class AbstractTestData {
 	
 	private Long id;
 
-	private List testCase = null;
+	private List<TestCaseUnit> testCaseUnitList = null;
 
 	protected String path;
 
@@ -43,55 +43,46 @@ public abstract class AbstractTestData {
 		}
 		return false;
 	}
+//
+//	private List<Integer[]> positionRecord = null;
+//
+//	public List<Integer[]> getPositionRecord() {
+//		if(this.positionRecord == null){
+//			positionRecord = new ArrayList<Integer[]>();
+//		}
+//		return positionRecord;
+//	}
+//
+//	public void setPositionRecord(List<Integer[]> positionRecord) {
+//		this.positionRecord = positionRecord;
+//	}
+//
+//	private List<String> relativeManyToOnePathSet = null;
+//
+//	public List<String> getRelativeManyToOnePathSet() {
+//
+//		if(this.relativeManyToOnePathSet == null){
+//			Set<String> tmpList = new HashSet<String>();
+//			if( this.getExtendtion() !=null && this.getExtendtion().getRestriction() != null ){
+//				if(this.getExtendtion().getRestriction().getMinStr() != null){
+//					tmpList.addAll(TestCaseUtils.getAllAbsTestData( this.getExtendtion().getRestriction().getMinStr() ));
+//				}
+//				for(Item item : this.getExtendtion().getRestriction().getItem()){
+//					tmpList.addAll(TestCaseUtils.getAllAbsTestData(item.getMinExpression()));
+//					tmpList.addAll(TestCaseUtils.getAllAbsTestData(item.getMaxExpression()));
+//				}
+//			}
+//			this.relativeManyToOnePathSet = new ArrayList<String>();
+//			this.relativeManyToOnePathSet.addAll(tmpList);
+//		}
+//
+//		return relativeManyToOnePathSet;
+//	}
+//
+//	public void setRelativeManyToOnePathSet(List<String> relativeManyToOnePathSet) {
+//		this.relativeManyToOnePathSet = relativeManyToOnePathSet;
+//	}
 
-	private List<Integer[]> positionRecord = null;
-
-	public List<Integer[]> getPositionRecord() {
-		if(this.positionRecord == null){
-			positionRecord = new ArrayList<Integer[]>();
-		}
-		return positionRecord;
-	}
-
-	public void setPositionRecord(List<Integer[]> positionRecord) {
-		this.positionRecord = positionRecord;
-	}
-
-	private List<String> relativeManyToOnePathSet = null;
-
-	public List<String> getRelativeManyToOnePathSet() {
-
-		if(this.relativeManyToOnePathSet == null){
-			Set<String> tmpList = new HashSet<String>();
-			if( this.getExtendtion() !=null && this.getExtendtion().getRestriction() != null ){
-				if(this.getExtendtion().getRestriction().getMinStr() != null){
-					tmpList.addAll(TestCaseUtils.getAllAbsTestData( this.getExtendtion().getRestriction().getMinStr() ));
-				}
-				for(Item item : this.getExtendtion().getRestriction().getItem()){
-					tmpList.addAll(TestCaseUtils.getAllAbsTestData(item.getMinExpression()));
-					tmpList.addAll(TestCaseUtils.getAllAbsTestData(item.getMaxExpression()));
-				}
-			}
-			this.relativeManyToOnePathSet = new ArrayList<String>();
-			this.relativeManyToOnePathSet.addAll(tmpList);
-		}
-
-		return relativeManyToOnePathSet;
-	}
-
-	public void setRelativeManyToOnePathSet(List<String> relativeManyToOnePathSet) {
-		this.relativeManyToOnePathSet = relativeManyToOnePathSet;
-	}
-
-	private Object generatingChildrenTestCase;
-
-	public Object getGeneratingChildrenTestCase() {
-		return generatingChildrenTestCase;
-	}
-
-	public void setGeneratingChildrenTestCase(Object generatingChildrenTestCase) {
-		this.generatingChildrenTestCase = generatingChildrenTestCase;
-	}
 
 	private boolean generateTestCaseFinish = false;
 	
@@ -143,12 +134,18 @@ public abstract class AbstractTestData {
 		this.projectID = projectID;
 	}
 
-	public List getTestCase() {
-		if(testCase == null){
-			testCase = new ArrayList();
+
+	public List<TestCaseUnit> getTestCaseUnitList() {
+		if(testCaseUnitList == null){
+			testCaseUnitList = new ArrayList<TestCaseUnit>();
 		}
-		return testCase;
+		return testCaseUnitList;
 	}
+
+	public void setTestCaseUnitList(List<TestCaseUnit> testCaseUnitList) {
+		this.testCaseUnitList = testCaseUnitList;
+	}
+
 
 	public String getPath() {
 		return path;
@@ -156,10 +153,6 @@ public abstract class AbstractTestData {
 
 	public void setPath(String path) {
 		this.path = path;
-	}
-
-	public void setTestCase(List testCase) {
-		this.testCase = testCase;
 	}
 
 	@Override

@@ -14,12 +14,10 @@ public class TempoaryTestData extends TestData {
 
     private List<TempoaryTestCase> tempoaryTestCaseList = null;
 
-    @Override
     public List getTestCase() {
         return tempoaryTestCaseList;
     }
 
-    @Override
     public void setTestCase(List testCase) {
         this.tempoaryTestCaseList = testCase;
     }

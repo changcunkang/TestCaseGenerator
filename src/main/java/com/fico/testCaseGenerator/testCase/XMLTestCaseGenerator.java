@@ -67,7 +67,7 @@ public class XMLTestCaseGenerator extends TestCaseGenerator {
 	private void generateTestCaseUnitDataAttribute(Element newInstantceArrElement, XMLTestData xmlTestData){
 		if(xmlTestData.getSimpleFieldList() != null){
 			for( SimpleField simpleField : xmlTestData.getSimpleFieldList() ){
-				generateSingleTestCaseAttributeValue(newInstantceArrElement, simpleField);
+				//generateSingleTestCaseAttributeValue(newInstantceArrElement, simpleField);
 			}
 		}
 	}

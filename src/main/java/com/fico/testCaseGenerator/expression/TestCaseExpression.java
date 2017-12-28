@@ -4,6 +4,7 @@ import com.fico.testCaseGenerator.BOM.BOMGenerator;
 import com.fico.testCaseGenerator.CustomFunctionFactory.CustomFunctionFactory;
 import com.fico.testCaseGenerator.data.AbstractTestData;
 import com.fico.testCaseGenerator.data.SimpleField;
+import com.fico.testCaseGenerator.data.TestCaseUnit;
 import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.data.configuration.Restriction;
 import com.fico.testCaseGenerator.testCase.TestCaseGenerator;
@@ -66,6 +67,8 @@ public class TestCaseExpression {
     private static final String STRING_NULL = "null";
 
     public static final String MERGE_FUNCTION_NAME = "merge";
+
+    public static final String MERGE_FILTER_FUNCTION_NAME = "mergeFilter";
 
     public static final String TESTDATA_SIZE_FUNCTION_NAME = "testDataSize";
 
@@ -506,8 +509,8 @@ public class TestCaseExpression {
 
         int recursiveOffset = new Integer(rtn[0].toString());
 
-        if( (slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() && recursiveOffset<0) ||
-                (slaveSimpleField.getTestData().isGeneratingTestDataLastChild() && recursiveOffset>0)  ){
+        if( (recursiveOffset<0 && slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() ) ||
+                (recursiveOffset>0 && slaveSimpleField.getTestData().isGeneratingTestDataLastChild() )  ){
             //minStr 就是初始值
             if(rtn.length<3){
                 String a = "";
@@ -597,19 +600,18 @@ public class TestCaseExpression {
 //
 //            }
             int recursiveOffset = new Integer(rtn[0].toString());
-            if( (slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() && recursiveOffset<0) ||
-                    (slaveSimpleField.getTestData().isGeneratingTestDataLastChild() && recursiveOffset>0)  ){
+            if( (recursiveOffset<0 && slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() ) ||
+                    (recursiveOffset>0 && slaveSimpleField.getTestData().isGeneratingTestDataLastChild() ) ){
                 //minStr 就是初始值
                 return thisFunctionResultValue;
             }
 
         }else if( isAbstractTestDataOperationFunction(targetFunctionName) ){
-            if(targetFunctionName.equalsIgnoreCase(MERGE_FUNCTION_NAME)){
-                Object[] functionArgs = new Object[3];
+            if(targetFunctionName.equalsIgnoreCase(MERGE_FUNCTION_NAME) || targetFunctionName.equalsIgnoreCase(MERGE_FILTER_FUNCTION_NAME)){
+                Object[] functionArgs = new Object[2];
                 //这块以后要改
                 functionArgs[0] = restriction.getExtendtion().getParentTestData();
-                functionArgs[1] = restriction.getExtendtion().getParentTestData();
-                functionArgs[2] = rtn;
+                functionArgs[1] = rtn;
                 return this.functionInvocation(targetFunctionName, functionArgs);
             }else if(targetFunctionName.equalsIgnoreCase(TESTDATA_SIZE_FUNCTION_NAME)){
                 AbstractTestData abstractTestData = restriction.getExtendtion().getParentTestData();
@@ -678,80 +680,40 @@ public class TestCaseExpression {
      * 通过xpath 和 restriction 获取主的TestData或者SimpleField的具体属性
      * @return
      */
-    private int ii = 0;
 
     private Object getAbsTestDataValueFromPath(String path, Restriction restriction){
 
-        if("Application/Temporary/MonthlyAdjustLimitHistory_Temp/@adjustLimitDate/".equalsIgnoreCase(path)){
-            ii ++;
-            if(ii == 25){
-                String a = "";
-            }
+        List<TestCaseUnit> targetTestCaseUnit = this.customFunctionFactory.findCrorrespondingTestCaseUnit(restriction.getExtendtion().getParentTestData(), path);
+
+        assert targetTestCaseUnit==null || targetTestCaseUnit.size()==0 : "getAbsTestDataValueFromPath : testCaseUnitList is null or blank.";
+
+        TestData currentTestData = this.customFunctionFactory.getBelongingTestData( restriction.getExtendtion().getParentTestData() ) ;
+
+        int pos = -1;
+
+        //这块逻辑有点不好理解，以后可能有问题
+        if(currentTestData.getTestCaseUnitList().size() == 0){
+            pos = currentTestData.getParentTestData().getGeneratingChildrenTestCaseUnit().getPositionInParent();
+        }else{
+            pos = currentTestData.getTestCaseUnitList().size()-1;
         }
-
-        AbstractTestData abstractSlaveTestData = restriction.getExtendtion().getParentTestData();
-
-        AbstractTestData absMasterTestData = null;
-
-        List slaveTestCaseList = (List)abstractSlaveTestData.getTestCase();
-
-        int slaveTestCasePos = slaveTestCaseList.size();
-
-        AbstractTestData masterAbsTestData = this.bomGenerator.getAbsTestDataFromPath(path);
-
-        List masterTestCaseList = masterAbsTestData.getTestCase();
-
-        int targetMasterPos = -1;
+        pos = Math.min( pos, targetTestCaseUnit.size()-1 );
+        // end of 这块逻辑有点不好理解，以后可能有问题
 
 
-        if(abstractSlaveTestData.getPositionRecord().size()>0){
+        TestCaseUnit testCaseUnit = targetTestCaseUnit.get( pos );
 
-            targetMasterPos = getMasterAbstractTestDataPosition(path, abstractSlaveTestData);
-
-        }
-        else{
-
-            targetMasterPos = slaveTestCasePos == 0 ? 0 : slaveTestCasePos -1;
-
-            targetMasterPos = Math.min(targetMasterPos, masterTestCaseList.size() -1);
-
-        }
-
-        if( targetMasterPos == -1 ){
-            String a = "";
-        }
-
-        return masterTestCaseList.get(targetMasterPos);
+        return testCaseUnit.getFieldValue(getFieldNameFromPath(path));
     }
 
-    private int getMasterAbstractTestDataPosition(String masterPath, AbstractTestData abstractSlaveTestData){
 
-        int position = -1;
+    public String getFieldNameFromPath(String path){
+        String temp1 = path.substring(0, path.length()-1);
 
-        int i = 0;
-
-        if(abstractSlaveTestData.getPositionRecord().size()>0){
-
-            for(Iterator<String> it = abstractSlaveTestData.getRelativeManyToOnePathSet().iterator(); it.hasNext(); i++ ){
-
-                String tmpRellativePath = it.next();
-
-                if( masterPath.equals( tmpRellativePath )  ){
-                    int slaveTestCasePosition = Math.max( abstractSlaveTestData.getTestCase().size(), 0);
-
-                    Integer[] ss = abstractSlaveTestData.getPositionRecord().get(slaveTestCasePosition);
-
-                    if(ss[i] == null){
-                        String a = "";
-                    }
-
-                    position = ss[i];
-                }
-            }
-        }
-
-        return position;
+        String fieldName = temp1.substring(temp1.lastIndexOf("/")+2, temp1.length());
+        return fieldName;
     }
+
 
     /**
      * 从字符串中找到所有的path

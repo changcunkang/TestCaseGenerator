@@ -1,11 +1,11 @@
 package com.fico.testCaseGenerator.util;
 
+import com.cams.blaze.request.Loancard;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ClassUtil {
 	
@@ -246,6 +246,11 @@ public class ClassUtil {
 	      Field field = o.getClass().getDeclaredField(attr);
 	      field.setAccessible(true);
 	      objects[1] = field.get(o);
+
+	      if(field.getType() == Date.class){
+	      	objects[0] = new SimpleDateFormat( TestCaseUtils.DATE_FORMAT ).parse(value);
+		  }
+
 	    } catch (Exception localException) {
 	    }
 	    return objects;
@@ -287,5 +292,18 @@ public class ClassUtil {
 	    return o == null;
 	  }
 	  
-	  
+	  public static void main(String[] args) throws Exception {
+		  Loancard l1 = new Loancard();
+
+		  l1.setCue("123");
+		  l1.setOpenDate(new SimpleDateFormat(TestCaseUtils.DATE_FORMAT).parse("2017-12-27"));
+
+		  Loancard l2 = new Loancard();
+
+		  l2.setCue("456");
+
+		  Object o1 = ClassUtil.search(l1, "/Loancard[openDate='2017-12-27']");
+
+		  System.out.println("1234");;
+	  }
 }

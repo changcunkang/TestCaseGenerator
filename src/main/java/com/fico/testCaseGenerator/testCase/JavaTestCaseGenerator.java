@@ -1,6 +1,7 @@
 package com.fico.testCaseGenerator.testCase;
 
 import com.fico.testCaseGenerator.BOM.BOMGenerator;
+import com.fico.testCaseGenerator.data.TestCaseUnit;
 import com.fico.testCaseGenerator.data.TestData;
 import com.fico.testCaseGenerator.data.java.JavaTestData;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
@@ -61,7 +62,7 @@ public class JavaTestCaseGenerator extends TestCaseGenerator {
 
         Object rootTestCaseInstance = createEmptyTestCaseInstance(testData);
 
-        generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(rootTestCaseInstance, testData);
+
 
         return rootTestCaseInstance;
 

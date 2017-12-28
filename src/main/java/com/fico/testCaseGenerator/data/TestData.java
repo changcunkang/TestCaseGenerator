@@ -31,30 +31,36 @@ public abstract class TestData extends AbstractTestData {
 
 	private String parentFieldName;
 
-	private Object generatingTestData;
+	private TestCaseUnit generatingTestCaseUnit;
 
-	private Object[] tempGeneratingArr = null;
+	private TestCaseUnit generatingChildrenTestCaseUnit;
 
-	public Object[] getTempGeneratingArr() {
+	private TestCaseUnit[] tempGeneratingArr = null;
+
+	public TestCaseUnit[] getTempGeneratingTestCaseUnitArr() {
 		return tempGeneratingArr;
 	}
 
-	public void setTempGeneratingArr(Object[] tempGeneratingArr) {
+	public void setTempGeneratingArr(TestCaseUnit[] tempGeneratingArr) {
 		this.tempGeneratingArr = tempGeneratingArr;
 	}
 
 	public boolean isGeneratingTestDataLastChild() {
-		if(this.getTempGeneratingArr()!=null && this.getTempGeneratingArr()[this.getTempGeneratingArr().length -1] != null){
-			return true;
-		}
-		return false;
+		return this.getGeneratingTestCaseUnit().isLastChild();
 	}
 
+	public TestCaseUnit getGeneratingChildrenTestCaseUnit() {
+		return generatingChildrenTestCaseUnit;
+	}
+
+	public void setGeneratingChildrenTestCaseUnit(TestCaseUnit generatingChildrenTestCaseUnit) {
+		this.generatingChildrenTestCaseUnit = generatingChildrenTestCaseUnit;
+	}
+
+
 	public boolean isGeneratingTestDataFirstChild() {
-		if(this.getTempGeneratingArr()!=null && this.getTempGeneratingArr()[0] != null && this.getTempGeneratingArr()[1]==null){
-			return true;
-		}
-		return false;
+
+		return this.getGeneratingTestCaseUnit().isFirstChild();
 	}
 
 	public Set<SimpleField> getTmpGeneratedSimpleFieldSet() {
@@ -74,12 +80,12 @@ public abstract class TestData extends AbstractTestData {
 
 
 
-	public Object getGeneratingTestData() {
-		return generatingTestData;
+	public TestCaseUnit getGeneratingTestCaseUnit() {
+		return generatingTestCaseUnit;
 	}
 
-	public void setGeneratingTestData(Object generatingTestData) {
-		this.generatingTestData = generatingTestData;
+	public void setGeneratingTestCaseUnit(TestCaseUnit generatingTestData) {
+		this.generatingTestCaseUnit = generatingTestData;
 	}
 
 	public void setPath(String path) {

@@ -35,7 +35,20 @@ public abstract class SimpleField extends AbstractTestData {
 		fieldTypeStrMap.put(5, "string");
 		fieldTypeStrMap.put(6, "datetime");
 	}
-	
+
+	private List testCase;
+
+	public List getTestCase() {
+		if(testCase == null){
+			testCase = new ArrayList();
+		}
+		return testCase;
+	}
+
+	public void setTestCase(List testCase) {
+		this.testCase = testCase;
+	}
+
 	private int fieldType;
 
 	private Object simpleImplementField;
