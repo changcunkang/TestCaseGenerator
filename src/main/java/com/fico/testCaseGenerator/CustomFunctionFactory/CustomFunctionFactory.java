@@ -82,18 +82,25 @@ public class CustomFunctionFactory {
 
 		TestCaseUnit[] tmpGeneratingArr = simpleFieldParentTestData.getTempGeneratingTestCaseUnitArr();
 
+		if(tmpGeneratingArr == null){
+			String a = "";
+			tmpGeneratingArr = null;
+		}
+
 		List tmpPickedList = new ArrayList();
 
 		for(TestCaseUnit tmpTestCaseUnit : tmpGeneratingArr){
 			try {
 
-				Object tmpNewTestCase = tmpTestCaseUnit.getTestCaseInstance();
+				if(tmpTestCaseUnit != null){
+					Object tmpNewTestCase = tmpTestCaseUnit.getTestCaseInstance();
 
-				if(tmpNewTestCase != null){
-					Object alreadyGeneratedSimpleFieldValue = PropertyUtils.getSimpleProperty(tmpNewTestCase, simpleField.getName());
-					if(alreadyGeneratedSimpleFieldValue != null){
-						if(joinedEnumList.contains(alreadyGeneratedSimpleFieldValue)){
-							joinedEnumList.remove(alreadyGeneratedSimpleFieldValue);
+					if(tmpNewTestCase != null){
+						Object alreadyGeneratedSimpleFieldValue = PropertyUtils.getSimpleProperty(tmpNewTestCase, simpleField.getName());
+						if(alreadyGeneratedSimpleFieldValue != null){
+							if(joinedEnumList.contains(alreadyGeneratedSimpleFieldValue)){
+								joinedEnumList.remove(alreadyGeneratedSimpleFieldValue);
+							}
 						}
 					}
 				}
