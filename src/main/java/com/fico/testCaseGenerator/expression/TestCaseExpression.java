@@ -685,7 +685,7 @@ public class TestCaseExpression {
 
         AbstractTestData abstractTestData = restriction.getExtendtion().getParentTestData();
 
-        if(abstractTestData.getName().equalsIgnoreCase("MonthlyRecordInfo")){
+        if(abstractTestData.getPath().equalsIgnoreCase("Application/Customer/Product/Account/CurInstalmentInfo/@AmortizationTerms/")){
             String a = "";
         }
 
@@ -711,6 +711,10 @@ public class TestCaseExpression {
 
 
         TestCaseUnit testCaseUnit = targetTestCaseUnit.get( pos );
+
+        if(testCaseUnit == null){
+            String a = "";
+        }
 
         return testCaseUnit.getFieldValue(getFieldNameFromPath(path));
     }

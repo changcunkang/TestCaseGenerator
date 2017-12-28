@@ -200,6 +200,11 @@ public class CustomFunctionFactory {
 
 		if(callIngTestData.equals(targetTestData)){
 			assert callIngTestData.getGeneratingTestCaseUnit() == null : "in findCrorrespondingTestCaseUnit, GeneratingTestCaseUnit is null";
+
+			if(callIngTestData.getGeneratingTestCaseUnit() == null){
+				String a = "";
+			}
+
 			rtn.add(callIngTestData.getGeneratingTestCaseUnit());
 			return rtn;
 		}
@@ -223,6 +228,9 @@ public class CustomFunctionFactory {
 			TestCaseUnit tmpSharedTestCaseUnit = this.testCaseGenerator.getParentTestCaseUnitBaseOnChildTestCase(tmpTargetDataTestCaseUnit, sharedTestData);
 
 			if(tmpSharedTestCaseUnit == targetSharedTestCaseUnit){
+				if(tmpTargetDataTestCaseUnit == null){
+					String a = "";
+				}
 				rtn.add(tmpTargetDataTestCaseUnit);
 			}
 		}

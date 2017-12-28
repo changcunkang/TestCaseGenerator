@@ -559,20 +559,19 @@ public abstract class TestCaseGenerator {
 
 					for(int i=0; i<tmpList.size(); i ++){
 
-						SimpleField unConsTestCaseData = tmpList.get(i);
+						SimpleField unConsSimple = tmpList.get(i);
 
-						if( this.isAllRelativeElementReady(unConsTestCaseData) ){
+						if( this.isAllRelativeElementReady(unConsSimple) ){
 
-							if(unConsTestCaseData.getName().equalsIgnoreCase("adjustLimitDate")){
-								String a = "";
+							for(TestCaseUnit testCaseUnit : unConsSimple.getTestData().getTestCaseUnitList() ){
+								unConsSimple.getTestData().setGeneratingTestCaseUnit(testCaseUnit);
+								generateSingleTestCaseAttributeValue(testCaseUnit,unConsSimple);
 							}
+							unConsSimple.getTestData().setGeneratingTestCaseUnit(null);
 
-							for(TestCaseUnit testCaseUnit : unConsTestCaseData.getTestData().getTestCaseUnitList() ){
-								generateSingleTestCaseAttributeValue(testCaseUnit,unConsTestCaseData);
-							}
-							unConsTestCaseData.setGenerateTestCaseFinish(true);
-							unGeneratedSlaveSimpleFieldList.remove(unConsTestCaseData);
-							tmpList.remove(unConsTestCaseData);
+							unConsSimple.setGenerateTestCaseFinish(true);
+							unGeneratedSlaveSimpleFieldList.remove(unConsSimple);
+							tmpList.remove(unConsSimple);
 						}
 					}
 					if(unGeneratedSlaveSimpleFieldList.size() == 0){
