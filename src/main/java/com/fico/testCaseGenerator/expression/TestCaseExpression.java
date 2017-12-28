@@ -683,6 +683,12 @@ public class TestCaseExpression {
 
     private Object getAbsTestDataValueFromPath(String path, Restriction restriction){
 
+        AbstractTestData abstractTestData = restriction.getExtendtion().getParentTestData();
+
+        if(abstractTestData.getName().equalsIgnoreCase("MonthlyRecordInfo")){
+            String a = "";
+        }
+
         List<TestCaseUnit> targetTestCaseUnit = this.customFunctionFactory.findCrorrespondingTestCaseUnit(restriction.getExtendtion().getParentTestData(), path);
 
         assert targetTestCaseUnit==null || targetTestCaseUnit.size()==0 : "getAbsTestDataValueFromPath : testCaseUnitList is null or blank.";
@@ -691,12 +697,15 @@ public class TestCaseExpression {
 
         int pos = -1;
 
+
+
         //这块逻辑有点不好理解，以后可能有问题
-        if(currentTestData.getTestCaseUnitList().size() == 0){
+        if(abstractTestData instanceof TestData){
             pos = currentTestData.getParentTestData().getGeneratingChildrenTestCaseUnit().getPositionInParent();
-        }else{
+        }else if(abstractTestData instanceof SimpleField){
             pos = currentTestData.getTestCaseUnitList().size()-1;
         }
+
         pos = Math.min( pos, targetTestCaseUnit.size()-1 );
         // end of 这块逻辑有点不好理解，以后可能有问题
 

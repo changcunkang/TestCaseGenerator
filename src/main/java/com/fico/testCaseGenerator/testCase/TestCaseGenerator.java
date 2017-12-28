@@ -199,6 +199,7 @@ public abstract class TestCaseGenerator {
 				}
 			}
 			testData.setTempGeneratingArr(null);
+			testData.setGeneratingTestCaseUnit(null);
 		}
 	}
 
