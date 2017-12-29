@@ -1,16 +1,15 @@
+import com.cams.blaze.request.Application;
+import com.fico.testCaseGenerator.XSTream.XSTreamHelper;
+import com.fico.testCaseGenerator.blazeServer.BlazeServer;
+import com.fico.testCaseGenerator.blazeServer.BlazeServers;
 import com.fico.testCaseGenerator.facade.TestCaseGeneratorFacade;
 import com.fico.testCaseGenerator.project.Project;
 import com.fico.testCaseGenerator.testCase.RIDOInstance;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class TestMain {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception{
+
         RIDOInstance rtnInstance = new RIDOInstance();
 
         TestCaseGeneratorFacade testCaseGeneratorFacade = new TestCaseGeneratorFacade();
@@ -19,9 +18,16 @@ public class TestMain {
 
         Project cafsProject = testCaseGeneratorFacade.getProject("cafs");
         cafsProject.setProjectID(4L);
-        Object testCase = cafsProject.generateTestCase();
+        Application testCase = (Application)cafsProject.generateTestCase();
+
+        System.out.println("testCase Generating Complete.");
+
+        BlazeServer blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\bom\\blaze.server");
+
+        Application blazeResponse = blazeServer.invokeExternalMain( testCase );
+
+        System.out.println(XSTreamHelper.getXStream().toXML(testCase) );
 
         System.out.println("111");
     }
-
 }

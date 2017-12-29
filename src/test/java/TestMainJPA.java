@@ -33,5 +33,9 @@ public class TestMainJPA {
 
         appDao.save(testCase);
 
+        Application findedApp = appDao.findById(1l);
+
+        System.out.println("");
+
     }
 }
