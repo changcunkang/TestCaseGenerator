@@ -18,23 +18,19 @@ public class Limit {
 	}
 	/**行动值域*/
 	@Column
-	private String actionValue;
-	/**行动类型*/
+	private String limitItemID;
 	@Column
-	private String actionType;
-
-	public String getActionType() {
-		return actionType;
+	private Double limitItemValue;
+	public Double getLimitItemValue() {
+		return limitItemValue;
 	}
-
-	public void setActionType(String actionType) {
-		this.actionType = actionType;
+	public void setLimitItemValue(Double limitItemValue) {
+		this.limitItemValue = limitItemValue;
 	}
-	public String getActionValue() {
-		return actionValue;
+	public String getLimitItemID() {
+		return limitItemID;
 	}
-
-	public void setActionValue(String actionValue) {
-		this.actionValue = actionValue;
+	public void setLimitItemID(String limitItemID) {
+		this.limitItemID = limitItemID;
 	}
 }

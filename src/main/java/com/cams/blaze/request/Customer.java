@@ -68,6 +68,8 @@ public class Customer {
     private	 String txFlag;
 	@Column
 	private String txFlag1;
+	@Column
+	private String layerCoder2Acct;
 
 	@Column
 	private String layerCode2Acct;
@@ -1011,5 +1013,13 @@ public class Customer {
 
 	public void setInnerFundRadix(Double innerFundRadix) {
 		this.innerFundRadix = innerFundRadix;
+	}
+
+	public String getLayerCoder2Acct() {
+		return layerCoder2Acct;
+	}
+
+	public void setLayerCoder2Acct(String layerCoder2Acct) {
+		this.layerCoder2Acct = layerCoder2Acct;
 	}
 }

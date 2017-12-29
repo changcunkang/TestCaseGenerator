@@ -40,6 +40,8 @@ public class Product {
 	@Column
 	private Double gykScore;
 	@Column
+	private Double gykbScore;
+	@Column
     private	 Double score01;
 	@Column
     private	 Double score02;
@@ -976,6 +978,14 @@ public class Product {
 
 	public void setCustomerSegmentation2(String customerSegmentation2) {
 		this.customerSegmentation2 = customerSegmentation2;
+	}
+
+	public Double getGykbScore() {
+		return gykbScore;
+	}
+
+	public void setGykbScore(Double gykbScore) {
+		this.gykbScore = gykbScore;
 	}
 
 	public String getAdjustLimitReason() {

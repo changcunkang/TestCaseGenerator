@@ -40,6 +40,9 @@ public class ScoredCharacteristic{
 
   @Column
 	private Boolean unexpectedValueFlag;
+
+  @Column
+  private Double weight;
  
   public String getCharacteristicName()
   {
@@ -96,4 +99,10 @@ public String getMappedFieldName() {
 public void setMappedFieldName(String mappedFieldName) {
 	this.mappedFieldName = mappedFieldName;
 }
+  public Double getWeight() {
+    return weight;
+  }
+  public void setWeight(Double weight) {
+    this.weight = weight;
+  }
 }

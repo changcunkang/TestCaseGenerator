@@ -596,9 +596,7 @@ public class TestCaseExpression {
 
             //这里有些冗余问题，以后继续优化
             SimpleField slaveSimpleField = (SimpleField)restriction.getExtendtion().getParentTestData();
-//            if( slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() ){
-//
-//            }
+
             int recursiveOffset = new Integer(rtn[0].toString());
             if( (recursiveOffset<0 && slaveSimpleField.getTestData().isGeneratingTestDataFirstChild() ) ||
                     (recursiveOffset>0 && slaveSimpleField.getTestData().isGeneratingTestDataLastChild() ) ){

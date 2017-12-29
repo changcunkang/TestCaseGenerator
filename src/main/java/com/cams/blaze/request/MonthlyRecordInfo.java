@@ -314,4 +314,6 @@ public class MonthlyRecordInfo {
 	public void setIfApplyBillInstals(Integer ifApplyBillInstals) {
 		this.ifApplyBillInstals = ifApplyBillInstals;
 	}
+
+
 }

@@ -3,10 +3,11 @@ package com.fico.testCaseGenerator.blazeServer;
 import com.blazesoft.server.base.NdServiceException;
 import com.blazesoft.server.deploy.NdStatelessServer;
 import com.blazesoft.server.local.NdLocalServerException;
+import com.cams.blaze.request.Application;
 
-public class BlazeServers {
+public class BlazeServers  {
 
-    private static final String FRD_SERVER_FILE_PATH = "C:\\projects\\testCaseGenerator\\eclipse_work_space\\TestCaseGenerator\\adb\\FRD\\FRD_ser.server";
+    private static final String FRD_SERVER_FILE_PATH = "C:\\FICO\\CAMS\\bom\\blaze.server";
 
     private static final String RSK_SERVER_FILE_PATH = "C:\\projects\\testCaseGenerator\\eclipse_work_space\\TestCaseGenerator\\adb\\RSK\\RSK_ser.server";
 
@@ -20,7 +21,7 @@ public class BlazeServers {
 
     private static Integer oprNumBlazeServer = 1;
 
-    private static NdStatelessServer[] frdServers = null;
+    private static BlazeServer[] frdServers = null;
 
     private static NdStatelessServer[] rskServers = null;
 
@@ -51,11 +52,11 @@ public class BlazeServers {
     private static NdStatelessServer[] getFrdServers() {
 
         if(frdServers == null){
-            frdServers = new NdStatelessServer[frdNumBlazeServer];
+            frdServers = new BlazeServer[frdNumBlazeServer];
 
             for(int i=0; i<frdNumBlazeServer; i++){
                 try {
-                    frdServers[i] = NdStatelessServer.createStatelessServer(FRD_SERVER_FILE_PATH);
+                    frdServers[i] = (BlazeServer) BlazeServer.createServer(FRD_SERVER_FILE_PATH);
                 } catch (NdLocalServerException e) {
                     e.printStackTrace();
                 }
@@ -103,16 +104,16 @@ public class BlazeServers {
 
 
     private static int frdExecutionPointer = 0;
-    public static String invokeFrdBlazeServer(String blazeInput) {
+    public static Object invokeFrdBlazeServer(Object applicationObj) {
 
         Object[] applicationArgs = new Object[1];
-        applicationArgs[0] = blazeInput;
+        applicationArgs[0] = applicationObj;
 
-        String rtn = null;
+        Object rtn = null;
 
         try {
             //rtn = (String) getFrdServers()[frdExecutionPointer>=frdNumBlazeServer?frdNumBlazeServer-1:frdExecutionPointer].invokeService("FraudRuleService", "invokeExternalMain", null, applicationArgs);
-            rtn = (String) getFrdServers()[0].invokeService("FraudRuleService", "invokeExternalMain", null, applicationArgs);
+            rtn = getFrdServers()[0].invokeService("StrategyRuleService", "invokeExternalMain", null, applicationArgs);
 
         } catch (NdLocalServerException e) {
             e.printStackTrace();
@@ -174,4 +175,6 @@ public class BlazeServers {
 
         return rtn;
     }
+
+
 }

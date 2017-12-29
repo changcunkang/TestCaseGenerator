@@ -94,7 +94,9 @@ public class RIDORuleProcessor implements ItemProcessor<RIDOInstance, RIDOInstan
 
             loopFlag ++;
 
-            frdBlazeOutput = BlazeServers.invokeFrdBlazeServer(frdEle.asXML());
+            //frdBlazeOutput = BlazeServers.invokeFrdBlazeServer(frdEle.asXML());
+
+
 
             bufferAppend(frdBF, frdEle, frdBlazeOutput);
 

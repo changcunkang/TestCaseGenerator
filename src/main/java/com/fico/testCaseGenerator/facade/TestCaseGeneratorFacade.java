@@ -414,7 +414,7 @@ public class TestCaseGeneratorFacade implements InitializingBean {
 			
 			loopFlag ++;
 
-			frdBlazeOutput = BlazeServers.invokeFrdBlazeServer(frdEle.asXML());
+			//frdBlazeOutput = BlazeServers.invokeFrdBlazeServer(frdEle.asXML());
 
 			bufferAppend(frdBF, frdEle, frdBlazeOutput);
 

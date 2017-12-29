@@ -58,6 +58,16 @@ public class StrategyDecision {
 	private Integer tempALvalidDays;
 	@Column
 	private String decisionResult;
+	@Column
+	private String riskSegment1;
+	@Column
+	private String riskSegment2;
+	@Column
+	private String riskSegment3;
+	@Column
+	private String riskSegment4;
+	@Column
+	private String riskSegment5;
 
 	public String getStrategyEntityLevel() {
 		return strategyEntityLevel;
@@ -166,5 +176,45 @@ public class StrategyDecision {
 	}
 	public void setReasonCodeSet(List<ReasonCodeSet> reasonCodeSet) {
 		this.reasonCodeSet = reasonCodeSet;
+	}
+
+	public String getRiskSegment1() {
+		return riskSegment1;
+	}
+
+	public void setRiskSegment1(String riskSegment1) {
+		this.riskSegment1 = riskSegment1;
+	}
+
+	public String getRiskSegment2() {
+		return riskSegment2;
+	}
+
+	public void setRiskSegment2(String riskSegment2) {
+		this.riskSegment2 = riskSegment2;
+	}
+
+	public String getRiskSegment3() {
+		return riskSegment3;
+	}
+
+	public void setRiskSegment3(String riskSegment3) {
+		this.riskSegment3 = riskSegment3;
+	}
+
+	public String getRiskSegment4() {
+		return riskSegment4;
+	}
+
+	public void setRiskSegment4(String riskSegment4) {
+		this.riskSegment4 = riskSegment4;
+	}
+
+	public String getRiskSegment5() {
+		return riskSegment5;
+	}
+
+	public void setRiskSegment5(String riskSegment5) {
+		this.riskSegment5 = riskSegment5;
 	}
 }

@@ -44,6 +44,10 @@ public class PbocReport {
 	private List<AdminPunishment> adminPunishment = new ArrayList<AdminPunishment>();
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<RecordDetail> recordDetail = new ArrayList<RecordDetail>();
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	private List<LoanGuaranteeDetail> loanGuaranteeDetail = new ArrayList<LoanGuaranteeDetail>();
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	private List<CreditGuaranteeDetail> creditGuaranteeDetail = new ArrayList<CreditGuaranteeDetail>();
 	@Column
 	private String reportSN;
 	@Column
@@ -210,6 +214,19 @@ public class PbocReport {
 	public void setCreditSummaryCue(List<CreditSummaryCue> creditSummaryCue) {
 		this.creditSummaryCue = creditSummaryCue;
 	}
+	public List<LoanGuaranteeDetail> getLoanGuaranteeDetail() {
+		return loanGuaranteeDetail;
+	}
 
+	public void setLoanGuaranteeDetail(List<LoanGuaranteeDetail> loanGuaranteeDetail) {
+		this.loanGuaranteeDetail = loanGuaranteeDetail;
+	}
 
+	public List<CreditGuaranteeDetail> getCreditGuaranteeDetail() {
+		return creditGuaranteeDetail;
+	}
+
+	public void setCreditGuaranteeDetail(List<CreditGuaranteeDetail> creditGuaranteeDetail) {
+		this.creditGuaranteeDetail = creditGuaranteeDetail;
+	}
 }
