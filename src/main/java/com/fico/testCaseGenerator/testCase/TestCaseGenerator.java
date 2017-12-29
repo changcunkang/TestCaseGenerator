@@ -195,7 +195,7 @@ public abstract class TestCaseGenerator {
 					generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(testCaseUnit, testData);
 				}else if(simpleFieldGeneratingType == SIMPLE_FIELD_GENERATING_TYPE_MERGE){
 					//
-					generateAllSimpleFeildTestCaseForMergeMode(testCaseUnit, testData);
+					generateAllSimpleFeildTestCaseForMergeMode(testCaseUnit, testData, mergeSrcTestCaseUnitList);
 				}
 			}
 			testData.setTempGeneratingArr(null);
@@ -203,24 +203,32 @@ public abstract class TestCaseGenerator {
 		}
 	}
 
-	public void generateAllSimpleFeildTestCaseForMergeMode(TestCaseUnit parentTestCaseUnit, TestData testData){
+	public void generateAllSimpleFeildTestCaseForMergeMode(TestCaseUnit parentTestCaseUnit, TestData testData, List<TestCaseUnit> srcTempInstanceList){
 
-		Object obj = parentTestCaseUnit.getTestCaseInstance();
+		Object targetObj = parentTestCaseUnit.getTestCaseInstance();
 
-		Class objCls = obj.getClass();
+		Class targetObjCls = targetObj.getClass();
 
-		for (Field field : objCls.getDeclaredFields()) {
+		for (TestCaseUnit tmpTestCaseUnit : srcTempInstanceList){
 
-			String fieldName = field.getName();
+			Object tmpObj = tmpTestCaseUnit.getTestCaseInstance();
+
+			Class tmpCls = tmpObj.getClass();
 
 			for(SimpleField simpleField : testData.getSimpleFieldList()){
 
-				if(simpleField.getName().equalsIgnoreCase(fieldName)) {
-					try {
-						field.setAccessible(true);
-						setTestCaseElementValue(simpleField, parentTestCaseUnit, fieldName, field.get(obj));
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
+				String simpleFieldName = simpleField.getName();
+
+				for(Field tmpField : tmpCls.getDeclaredFields()){
+					if(simpleFieldName.equals(tmpField.getName())){
+						try {
+							tmpField.setAccessible(true);
+							Object tmpObjTargetFieldValue = tmpField.get(tmpObj);
+
+							setTestCaseElementValue(simpleField, parentTestCaseUnit, simpleFieldName, tmpObjTargetFieldValue);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
