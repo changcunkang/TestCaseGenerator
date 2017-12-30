@@ -357,6 +357,20 @@ public abstract class TestCaseGenerator {
 		return path1.substring(0, Math.min(i, lastOprPosition)+1 );
 	}
 
+	public List<TestCaseUnit> findAllChildrenForOneParentTestCaseUnit(TestData childTestData, TestCaseUnit parentTestCaseUnit){
+		List rtn = new ArrayList();
+		for(TestCaseUnit tmpTargetDataTestCaseUnit : childTestData.getTestCaseUnitList()){
+
+			TestCaseUnit tmpSharedTestCaseUnit = this.getParentTestCaseUnitBaseOnChildTestCase(tmpTargetDataTestCaseUnit, parentTestCaseUnit.getTestData());
+
+			if(tmpSharedTestCaseUnit == parentTestCaseUnit){
+
+				rtn.add(tmpTargetDataTestCaseUnit);
+			}
+		}
+		return rtn;
+	}
+
 	public TestCaseUnit getParentTestCaseUnitBaseOnChildTestCase(TestCaseUnit childTestCaseUnit, TestData parentTestData){
 
 		TestData childTestData = childTestCaseUnit.getTestData();
@@ -372,6 +386,10 @@ public abstract class TestCaseGenerator {
 		while(loopFlag){
 
 			TestCaseUnit tmpParentTestDataUnit = tmpChildTestDataIns.getParentTestCaseUnit();
+
+			if(tmpParentTestDataUnit == null){
+				String a = "";
+			}
 
 			TestData tmpParentTestData = tmpParentTestDataUnit.getTestData();
 
@@ -570,11 +588,18 @@ public abstract class TestCaseGenerator {
 						SimpleField unConsSimple = tmpList.get(i);
 
 						if( this.isAllRelativeElementReady(unConsSimple) ){
-
-							for(TestCaseUnit testCaseUnit : unConsSimple.getTestData().getTestCaseUnitList() ){
+							int ii=0;
+							for(; ii< unConsSimple.getTestData().getTestCaseUnitList().size();ii++ ){
+								if(unConsSimple.getName().equals( "instalmentType") && unConsSimple.getTestData().getName().equals("InstalmentDetail_Old") ){
+									String a = "";
+								}
+								TestCaseUnit testCaseUnit = unConsSimple.getTestData().getTestCaseUnitList().get(ii);
+								unConsSimple.getTestData().getParentTestData().setGeneratingChildrenTestCaseUnit(testCaseUnit.getParentTestCaseUnit());
 								unConsSimple.getTestData().setGeneratingTestCaseUnit(testCaseUnit);
 								generateSingleTestCaseAttributeValue(testCaseUnit,unConsSimple);
 							}
+							ii = 0;
+							unConsSimple.getTestData().getParentTestData().setGeneratingChildrenTestCaseUnit(null);
 							unConsSimple.getTestData().setGeneratingTestCaseUnit(null);
 
 							unConsSimple.setGenerateTestCaseFinish(true);

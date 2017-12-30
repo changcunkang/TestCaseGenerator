@@ -34,6 +34,7 @@ public class Account {
 	@Transient
 	private List<AccountTemporary> accountTemporary = new ArrayList<AccountTemporary>();
 
+
 	public List<AccountTemporary> getAccountTemporary() {
 		return accountTemporary;
 	}

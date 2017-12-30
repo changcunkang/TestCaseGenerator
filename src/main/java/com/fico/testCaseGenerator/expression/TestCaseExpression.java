@@ -93,6 +93,9 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("minFilter");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("avgFilter");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("enumuationFill");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastMonthlyRecordInfoNonEndInstalmentNum");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastMonthlyRecordInfoNonEndInstalmentInstalmentID");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastMonthlyRecordInfoNonEndInstalmentInstalmentType");
 
     }
 
@@ -228,6 +231,10 @@ public class TestCaseExpression {
     }
 
     private Object recursiveParse(Object tempValue, String path, Restriction restriction){
+
+        if(path.equals("Application/Customer/Product/Account/MonthlyRecordInfo/InstalmentDetail_New/@period/")){
+            String a = "";
+        }
 
         Object val = null;
 
@@ -455,8 +462,8 @@ public class TestCaseExpression {
                     leftNumberVal = new Double(leftVal.toString());
                     rightNumberVal = new Double(rightVal.toString());
                 }else if(leftVal instanceof Boolean ){
-                    leftNumberVal = (Boolean)leftVal?1d:0d;
-                    rightNumberVal = (Boolean)rightVal?1d:0d;
+                    leftNumberVal = new Boolean(leftVal.toString())?1d:0d;
+                    rightNumberVal = new Boolean(rightVal.toString())?1d:0d;
                 }
                 //if(leftVal instanceof Double || leftVal instanceof Integer || leftVal instanceof BigDecimal ){
                 compareRes = new BigDecimal( leftNumberVal ).compareTo( new BigDecimal(rightNumberVal) );

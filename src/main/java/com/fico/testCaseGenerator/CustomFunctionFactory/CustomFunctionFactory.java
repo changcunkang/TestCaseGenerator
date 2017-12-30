@@ -21,6 +21,8 @@ import com.fico.testCaseGenerator.util.ClassUtil;
 import com.fico.testCaseGenerator.util.RandomFactory;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.xmlbeans.impl.xb.ltgfmt.TestCase;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 public class CustomFunctionFactory {
 
@@ -149,6 +151,197 @@ public class CustomFunctionFactory {
 		}
 	}
 
+	public Integer getLastMonthlyRecordInfoNonEndInstalmentNum(String selfPath, String instalmentNewPath, String newPeriod){
+
+		SimpleField sf = this.bomGenerator.getPathSimpleFieldMap().get(newPeriod);
+
+		TestData testData = this.bomGenerator.getPathTestDataMap().get( selfPath );
+
+		TestData instalmentNewTestData = this.bomGenerator.getPathTestDataMap().get( instalmentNewPath );
+
+		TestCaseUnit callingParentMonthlyRecordInfo = testData.getParentTestData().getGeneratingChildrenTestCaseUnit();
+
+		if(callingParentMonthlyRecordInfo.isFirstChild()){
+			return 0;
+		}
+
+		TestCaseUnit[] callingParentMonthlyUnitForOneParentArr = callingParentMonthlyRecordInfo.getBrotherListForOneParent();
+
+		TestCaseUnit callingParentMonthlyRecordInfoPreviousSibling =callingParentMonthlyUnitForOneParentArr[callingParentMonthlyRecordInfo.getPositionInParent() - 1];
+
+		return getLastMonthSumInstalmentList(callingParentMonthlyRecordInfoPreviousSibling, testData, instalmentNewTestData).size();
+
+	}
+
+	public String getLastMonthlyRecordInfoNonEndInstalmentInstalmentID(String selfInstalmentSimpleFieldPath, String instalmentNewPath){
+
+		SimpleField instalmentSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(selfInstalmentSimpleFieldPath);
+
+		TestData testData = instalmentSimpleField.getTestData();
+
+		TestData instalmentNewTestData = this.bomGenerator.getPathTestDataMap().get( instalmentNewPath );
+
+		TestCaseUnit callingParentMonthlyRecordInfo = testData.getParentTestData().getGeneratingChildrenTestCaseUnit();
+
+		TestCaseUnit[] callingParentMonthlyUnitForOneParentArr = callingParentMonthlyRecordInfo.getBrotherListForOneParent();
+
+		TestCaseUnit callingParentMonthlyRecordInfoPreviousSibling =callingParentMonthlyUnitForOneParentArr[callingParentMonthlyRecordInfo.getPositionInParent() - 1];
+
+		List<TestCaseUnit> lastMonthSumInstalmentList = getLastMonthSumInstalmentList(callingParentMonthlyRecordInfoPreviousSibling, testData, instalmentNewTestData);
+
+		List instalmentIDWholeList = new ArrayList();
+
+		for(TestCaseUnit tmpPreviouosTestCaseUnit : lastMonthSumInstalmentList){
+			if(tmpPreviouosTestCaseUnit != null){
+				Object tmpFieldValue = tmpPreviouosTestCaseUnit.getFieldValue(instalmentSimpleField.getName());
+				if(tmpFieldValue != null){
+					instalmentIDWholeList.add( tmpPreviouosTestCaseUnit.getFieldValue(instalmentSimpleField.getName()) );
+				}
+			}
+		}
+
+		TestCaseUnit[] tmpGeneratingArr = testData.getTempGeneratingTestCaseUnitArr();
+
+		for(TestCaseUnit tmpGeneratingTestCaseUnit : tmpGeneratingArr){
+			if(tmpGeneratingTestCaseUnit!=null){
+				Object tmpInstalmentID = tmpGeneratingTestCaseUnit.getFieldValue(instalmentSimpleField.getName());
+				if(tmpInstalmentID != null && instalmentIDWholeList.contains(tmpInstalmentID)){
+					instalmentIDWholeList.remove(tmpInstalmentID);
+				}
+			}
+		}
+		return (String)instalmentIDWholeList.get(0);
+	}
+
+	public Object getLastMonthlyRecordInfoNonEndInstalmentInstalmentCurrentPeriod(){
+		SimpleField instalmentSimpleField = this.bomGenerator.getPathSimpleFieldMap().get("Application/Customer/Product/Account/MonthlyRecordInfo/InstalmentDetail_Old/@currentInstalmentPeriod/");
+
+		TestData testData = instalmentSimpleField.getTestData();
+
+		TestData instalmentNewTestData = this.bomGenerator.getPathTestDataMap().get( "Application/Customer/Product/Account/MonthlyRecordInfo/InstalmentDetail_New/" );
+
+		//TestCaseUnit callingParentMonthlyRecordInfo = testData.getGeneratingTestCaseUnit().getParentTestCaseUnit();
+
+		//if(callingParentMonthlyRecordInfo == null){
+		TestCaseUnit callingParentMonthlyRecordInfo = testData.getParentTestData().getGeneratingChildrenTestCaseUnit();
+		//}
+
+		TestCaseUnit[] callingParentMonthlyUnitForOneParentArr = callingParentMonthlyRecordInfo.getBrotherListForOneParent();
+
+		TestCaseUnit callingParentMonthlyRecordInfoPreviousSibling =callingParentMonthlyUnitForOneParentArr[callingParentMonthlyRecordInfo.getPositionInParent() - 1];
+
+		List<TestCaseUnit> lastMonthSumInstalmentList = getLastMonthSumInstalmentList(callingParentMonthlyRecordInfoPreviousSibling, testData, instalmentNewTestData);
+
+		List instalmentIDWholeList = new ArrayList();
+
+		SimpleField idSimpleField = this.bomGenerator.getPathSimpleFieldMap().get( "Application/Customer/Product/Account/MonthlyRecordInfo/InstalmentDetail_Old/@instalmentID/");
+
+		SimpleField targetSimpleField = this.bomGenerator.getPathSimpleFieldMap().get( "Application/Customer/Product/Account/MonthlyRecordInfo/InstalmentDetail_Old/@currentInstalmentPeriod/");
+
+		for(TestCaseUnit tmpPreviouosTestCaseUnit : lastMonthSumInstalmentList){
+			String idFieldName = idSimpleField.getName();
+			if(tmpPreviouosTestCaseUnit.getFieldValue(idFieldName).equals(testData.getGeneratingTestCaseUnit().getFieldValue(idFieldName))){
+				Object tmpPreviousVal = tmpPreviouosTestCaseUnit.getFieldValue(targetSimpleField.getName());
+				if(targetSimpleField.getName().equals("currentInstalmentPeriod")){
+
+					if(tmpPreviousVal == null){
+						String a = "";
+					}
+
+					return new Integer(new Integer(tmpPreviousVal.toString()) - 1);
+//				}else if(targetSimpleField.getName().equals("currentInstalmentPeriod")){
+//					return new BigDecimal();
+				}
+
+				return tmpPreviousVal ;
+
+			}
+		}
+
+		return null;
+	}
+
+	public Object getLastMonthlyRecordInfoNonEndInstalmentInstalmentType(String selfInstalmentSimpleFieldPath, String instalmentNewPath, String instalmentIDpath, String targetSimpleFieldpath){
+
+		SimpleField instalmentSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(selfInstalmentSimpleFieldPath);
+
+		TestData testData = instalmentSimpleField.getTestData();
+
+		TestData instalmentNewTestData = this.bomGenerator.getPathTestDataMap().get( instalmentNewPath );
+
+		//TestCaseUnit callingParentMonthlyRecordInfo = testData.getGeneratingTestCaseUnit().getParentTestCaseUnit();
+
+		//if(callingParentMonthlyRecordInfo == null){
+		TestCaseUnit callingParentMonthlyRecordInfo = testData.getParentTestData().getGeneratingChildrenTestCaseUnit();
+		//}
+
+		TestCaseUnit[] callingParentMonthlyUnitForOneParentArr = callingParentMonthlyRecordInfo.getBrotherListForOneParent();
+
+		TestCaseUnit callingParentMonthlyRecordInfoPreviousSibling =callingParentMonthlyUnitForOneParentArr[callingParentMonthlyRecordInfo.getPositionInParent() - 1];
+
+		List<TestCaseUnit> lastMonthSumInstalmentList = getLastMonthSumInstalmentList(callingParentMonthlyRecordInfoPreviousSibling, testData, instalmentNewTestData);
+
+		List instalmentIDWholeList = new ArrayList();
+
+		SimpleField idSimpleField = this.bomGenerator.getPathSimpleFieldMap().get( instalmentIDpath);
+
+		SimpleField targetSimpleField = this.bomGenerator.getPathSimpleFieldMap().get( targetSimpleFieldpath);
+
+
+		for(TestCaseUnit tmpPreviouosTestCaseUnit : lastMonthSumInstalmentList){
+			String idFieldName = idSimpleField.getName();
+			if(tmpPreviouosTestCaseUnit.getFieldValue(idFieldName).equals(testData.getGeneratingTestCaseUnit().getFieldValue(idFieldName))){
+				Object tmpPreviousVal = tmpPreviouosTestCaseUnit.getFieldValue(targetSimpleField.getName());
+				if(targetSimpleField.getName().equals("currentInstalmentPeriod")){
+
+					if(tmpPreviousVal == null){
+						String a = "";
+					}
+
+					return new Integer(new Integer(tmpPreviousVal.toString()) - 1);
+//				}else if(targetSimpleField.getName().equals("currentInstalmentPeriod")){
+//					return new BigDecimal();
+				}
+
+				return tmpPreviousVal ;
+
+			}
+		}
+
+		return null;
+	}
+
+
+	private List<TestCaseUnit> getLastMonthSumInstalmentList(TestCaseUnit callingParentMonthlyRecordInfoPreviousSibling, TestData oldInstalmentTestData, TestData newInstalmentTestData){
+
+		List<TestCaseUnit> previousOldTestDataList = this.testCaseGenerator.findAllChildrenForOneParentTestCaseUnit(oldInstalmentTestData ,callingParentMonthlyRecordInfoPreviousSibling );
+
+		List<TestCaseUnit> previdousNewTestDataList = this.testCaseGenerator.findAllChildrenForOneParentTestCaseUnit(newInstalmentTestData ,callingParentMonthlyRecordInfoPreviousSibling );
+
+		for(int i=0; i<previousOldTestDataList.size(); i++){
+			TestCaseUnit tmpTestCaseUnit = previousOldTestDataList.get(i);
+
+			if(tmpTestCaseUnit.getFieldValue("currentInstalmentPeriod") == null){
+				String a = "";
+			}
+
+			if(tmpTestCaseUnit.getFieldValue("currentInstalmentPeriod").toString().equals("1")){
+				previousOldTestDataList.remove(tmpTestCaseUnit);
+			}
+		}
+
+		List<TestCaseUnit> rtnList = new ArrayList<TestCaseUnit>();
+
+		if(previousOldTestDataList != null && previousOldTestDataList.size()>0){
+			rtnList.addAll(previousOldTestDataList);
+		}
+		if(previdousNewTestDataList != null && previdousNewTestDataList.size()>0){
+			rtnList.addAll(previdousNewTestDataList);
+		}
+
+		return rtnList;
+	}
+
 
 	/**
 	 * 中间节点合并函数
@@ -245,6 +438,7 @@ public class CustomFunctionFactory {
 	}
 
 
+
 	public TestData getBelongingTestData(AbstractTestData abstractTestData){
 		if(abstractTestData instanceof TestData){
 			return (TestData)abstractTestData;
@@ -252,6 +446,17 @@ public class CustomFunctionFactory {
 			return  ((SimpleField)abstractTestData).getTestData();
 		}
 		return null;
+	}
+
+	public Boolean inStr(Object src, Object strArrObj){
+		String srcStr = (String)src;
+		String strArr = (String)strArrObj;
+
+		if(strArr.indexOf(srcStr) != -1){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	public Object minSimpleField(String path){

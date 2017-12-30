@@ -29,7 +29,9 @@ public class MonthlyRecordInfo {
     private	 List<HighRiskTrans> highRiskTrans = new ArrayList<HighRiskTrans>();
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
-	
+	@Transient
+	private List<InstalmentDetail> instalmentDetail = new ArrayList<InstalmentDetail>();
+
 	@Column
     private	 Integer relativeCycleNumber;
 	@Column
@@ -91,6 +93,28 @@ public class MonthlyRecordInfo {
 	private Integer cashAmtOccupiedDays;
 	@Column
 	private Integer limitUsedDays;
+
+	@Transient
+	private List<InstalmentDetail_New> instalmentDetail_New = new ArrayList<InstalmentDetail_New>();
+
+	@Transient
+	private List<InstalmentDetail_Old> instalmentDetail_Old = new ArrayList<InstalmentDetail_Old>();
+
+	public List<InstalmentDetail_New> getInstalmentDetail_New() {
+		return instalmentDetail_New;
+	}
+
+	public void setInstalmentDetail_New(List<InstalmentDetail_New> instalmentDetail_New) {
+		this.instalmentDetail_New = instalmentDetail_New;
+	}
+
+	public List<InstalmentDetail_Old> getInstalmentDetail_Old() {
+		return instalmentDetail_Old;
+	}
+
+	public void setInstalmentDetail_Old(List<InstalmentDetail_Old> instalmentDetail_Old) {
+		this.instalmentDetail_Old = instalmentDetail_Old;
+	}
 
 	public Integer getCashAmtOccupiedDays() {
 		return cashAmtOccupiedDays;
@@ -315,5 +339,11 @@ public class MonthlyRecordInfo {
 		this.ifApplyBillInstals = ifApplyBillInstals;
 	}
 
+	public List<InstalmentDetail> getInstalmentDetail() {
+		return instalmentDetail;
+	}
 
+	public void setInstalmentDetail(List<InstalmentDetail> instalmentDetail) {
+		this.instalmentDetail = instalmentDetail;
+	}
 }
