@@ -20,11 +20,13 @@ public class TestMain {
         cafsProject.setProjectID(4L);
         Application testCase = (Application)cafsProject.generateTestCase();
 
-        System.out.println("testCase Generating Complete.");
+        System.out.println("TestCase Generating Complete.");
 
-        BlazeServer blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\bom\\blaze.server");
+        System.out.println("Creating Blaze Server.");
+        //BlazeServer blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\bom\\blaze.server");
+        System.out.println("Creating Blaze Server Complete.");
 
-        Application blazeResponse = blazeServer.invokeExternalMain( testCase );
+        //Application blazeResponse = blazeServer.invokeExternalMain( testCase );
 
         System.out.println(XSTreamHelper.getXStream().toXML(testCase) );
 
