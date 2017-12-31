@@ -6,6 +6,18 @@ package com.cams.blaze.request;
  */
 public class InstalmentDetail {
 
+    //id
+    private String instalmentID;
+
+    public String getInstalmentID() {
+        return instalmentID;
+    }
+
+    public void setInstalmentID(String instalmentID) {
+        this.instalmentID = instalmentID;
+    }
+
+
     //类型
     private String instalmentType;
 

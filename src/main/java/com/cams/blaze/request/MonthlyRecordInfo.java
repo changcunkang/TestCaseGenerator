@@ -29,8 +29,6 @@ public class MonthlyRecordInfo {
     private	 List<HighRiskTrans> highRiskTrans = new ArrayList<HighRiskTrans>();
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
-	@Transient
-	private List<InstalmentDetail> instalmentDetail = new ArrayList<InstalmentDetail>();
 
 	@Column
     private	 Integer relativeCycleNumber;
@@ -99,6 +97,9 @@ public class MonthlyRecordInfo {
 
 	@Transient
 	private List<InstalmentDetail_Old> instalmentDetail_Old = new ArrayList<InstalmentDetail_Old>();
+
+	@Transient
+	private List<InstalmentDetail> instalmentDetail = new ArrayList<InstalmentDetail>();
 
 	public List<InstalmentDetail_New> getInstalmentDetail_New() {
 		return instalmentDetail_New;
