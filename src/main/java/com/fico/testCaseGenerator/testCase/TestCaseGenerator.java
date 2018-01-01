@@ -1,7 +1,6 @@
 package com.fico.testCaseGenerator.testCase;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -11,13 +10,10 @@ import com.fico.testCaseGenerator.data.configuration.Item;
 import com.fico.testCaseGenerator.data.configuration.Restriction;
 import com.fico.testCaseGenerator.expression.TestCaseExpression;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
-import org.apache.commons.beanutils.PropertyUtils;
 
 public abstract class TestCaseGenerator {
 
 	protected BOMGenerator bomGenerator = null;
-
-	protected Map<String, Integer> simpleFieldDependencyLocalPathCounter = null;
 
 	private TestCaseExpression testCaseExpression = null;
 
@@ -53,6 +49,7 @@ public abstract class TestCaseGenerator {
 		//生成根App
 		TestData rootTestData = generateRootTestData();
 
+		//按层次遍历所有哦结构
 		if(rootTestData.getCustomFieldList() != null){
 			for(TestData testData : rootTestData.getCustomFieldList()){
 				generateAllTestCaseListForOneTestData(testData);
@@ -65,7 +62,14 @@ public abstract class TestCaseGenerator {
 		return rootTestData.getTestCaseUnitList().get(0).getTestCaseInstance();
 	}
 
+	/**
+	 *
+	 * 生成根App
+ 	 * @return
+	 */
 	private TestData generateRootTestData(){
+
+		// Todo 以后要优化
 
 		TestData rootTestData = getRootTestData();
 
@@ -83,11 +87,7 @@ public abstract class TestCaseGenerator {
 		rootTestData.getTestCaseUnitList().add(testCaseUnit);
 
 		rootTestData.setGenerateTestCaseFinish(true);
-
-
 		generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(testCaseUnit, rootTestData);
-
-
 		for(SimpleField simpleField : rootTestData.getTmpGeneratedSimpleFieldSet()){
 			simpleField.setGenerateTestCaseFinish(true);
 		}
@@ -96,12 +96,15 @@ public abstract class TestCaseGenerator {
 	}
 
 	/**
+	 *
+	 * 生成要创建结构的个数以及生成属性
 	 * @param parentTestCaseUnit 父亲已经生成的测试案例的实例
 	 * @param testData 要生成的testData
 	 * @return
 	 */
 	private void getInstanceNumberAndGenerateAttr(TestCaseUnit parentTestCaseUnit, TestData testData){
 
+		//Merege 特殊处理
 		if(isTestDataMergeMode(testData)){
 			tmpMergeParentTestCaseUnitElement = parentTestCaseUnit;
 			this.testCaseExpression.parse(testData.getExtendtion().getRestriction());
@@ -113,6 +116,7 @@ public abstract class TestCaseGenerator {
 		Integer instanceSize = generateTestCaseNumberFromRestriction(testData.getExtendtion().getRestriction());
 
 		if(isTempoaryTestData(testData)){
+			// Todo 临时节点目前没放开，都是实体节点
 			//临时节点
 			generateTempoaryTestDataTestCase(instanceSize, testData);
 		}else{
@@ -121,8 +125,12 @@ public abstract class TestCaseGenerator {
 		}
 	}
 
+	/**
+	 * 根据依赖关系或者直接的数值生成要生成元素的个数
+	 * @param restriction 元素结构的约束
+	 * @return 要生成元素的个数
+	 */
 	private Integer generateTestCaseNumberFromRestriction(Restriction restriction){
-		//Object intVal = this.testCaseExpression.parseInitialValue( restriction );
 
 		Object intVal = this.testCaseExpression.parse( restriction );
 
@@ -135,19 +143,25 @@ public abstract class TestCaseGenerator {
 		return instanceSize;
 	}
 
+	/**
+	 * 判断是否为临时结构
+	 * @param abstractTestData
+	 * @return
+	 */
 	private boolean isTempoaryTestData(AbstractTestData abstractTestData){
+		// Todo 以后将实体临时结构改为动态临时结构
 		return false;
 	}
 
 	/**
-	 *
+	 * 生成真正实体及实例
 	 * @param parentTestCaseUnit 父元素
 	 * @param normalInstanceSize 正常生成的testData节点的个数
 	 * @param testData 目标生成的testData
 	 * @param mergeSrcTestCaseUnitList merge的时候的源案例节点列表
 	 * @param simpleFieldGeneratingType 生成类型标识，正常生成还是merge生成
 	 */
-	protected void generateAttr(TestCaseUnit parentTestCaseUnit, Integer normalInstanceSize, TestData testData, List mergeSrcTestCaseUnitList, int simpleFieldGeneratingType){
+	protected void generateAttr(TestCaseUnit parentTestCaseUnit, Integer normalInstanceSize, TestData testData, List<TestCaseUnit> mergeSrcTestCaseUnitList, int simpleFieldGeneratingType){
 
 		int instanceSize = -1;
 
@@ -195,7 +209,7 @@ public abstract class TestCaseGenerator {
 					generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(testCaseUnit, testData);
 				}else if(simpleFieldGeneratingType == SIMPLE_FIELD_GENERATING_TYPE_MERGE){
 					//
-					generateAllSimpleFeildTestCaseForMergeMode(testCaseUnit, testData, mergeSrcTestCaseUnitList);
+					generateAllSimpleFieldTestCaseForMergeMode(testCaseUnit, testData, mergeSrcTestCaseUnitList.get(i));
 				}
 			}
 			testData.setTempGeneratingArr(null);
@@ -203,13 +217,23 @@ public abstract class TestCaseGenerator {
 		}
 	}
 
-	public void generateAllSimpleFeildTestCaseForMergeMode(TestCaseUnit parentTestCaseUnit, TestData testData, List<TestCaseUnit> srcTempInstanceList){
+	/**
+	 * 对于Merge的模型，生成Simple
+	 * @param parentTestCaseUnit 要生成simple属性的的TestCaseUnit
+	 * @param testData 参数稍微多余，以后去掉
+	 * @param tmpTestCaseUnit merge好的临时结构数组
+	 */
+	public void generateAllSimpleFieldTestCaseForMergeMode(TestCaseUnit parentTestCaseUnit, TestData testData, TestCaseUnit tmpTestCaseUnit){
 
-		Object targetObj = parentTestCaseUnit.getTestCaseInstance();
+		// Todo 需要测试去掉中间参数
 
-		Class targetObjCls = targetObj.getClass();
-
-		for (TestCaseUnit tmpTestCaseUnit : srcTempInstanceList){
+//		if(testData.getName().equals("InstalmentDetail")){
+//			String a = "";
+//		}
+//
+//		Object targetObj = parentTestCaseUnit.getTestCaseInstance();
+//
+//		for (TestCaseUnit tmpTestCaseUnit : srcTempInstanceList){
 
 			Object tmpObj = tmpTestCaseUnit.getTestCaseInstance();
 
@@ -226,13 +250,15 @@ public abstract class TestCaseGenerator {
 							Object tmpObjTargetFieldValue = tmpField.get(tmpObj);
 
 							setTestCaseElementValue(simpleField, parentTestCaseUnit, simpleFieldName, tmpObjTargetFieldValue);
+
+							break;
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
 				}
 			}
-		}
+//		}
 	}
 
 	private TestCaseUnit tmpMergeParentTestCaseUnitElement = null;
@@ -243,12 +269,23 @@ public abstract class TestCaseGenerator {
 	 * @param testCaseListArr
 	 */
 	public void merge(TestData testData, List<List> testCaseListArr){
+
+		// Todo 去掉中间变量
+
 		for(List tmpTestCaseList : testCaseListArr){
 			appendTempoaryToTargetTestData(tmpMergeParentTestCaseUnitElement, testData, tmpTestCaseList);
 		}
 	}
 
+	/**
+	 *
+	 * @param parentTestCaseUnit
+	 * @param testData
+	 * @param objList
+	 */
 	private void appendTempoaryToTargetTestData(TestCaseUnit parentTestCaseUnit, TestData testData, List objList){
+
+		// Todo 去掉中间变量
 
 		generateAttr(parentTestCaseUnit,null, testData, objList, SIMPLE_FIELD_GENERATING_TYPE_MERGE);
 
@@ -278,6 +315,11 @@ public abstract class TestCaseGenerator {
 //		}
 	}
 
+	/**
+	 * 是否merge模式
+	 * @param testData
+	 * @return
+	 */
 	private boolean isTestDataMergeMode(AbstractTestData testData){
 		if(testData.getExtendtion().getRestriction()!=null){
 			Restriction restriction = testData.getExtendtion().getRestriction();
@@ -638,14 +680,6 @@ public abstract class TestCaseGenerator {
 
 		//重置状态
 		this.clearTestCaseFinishFlag();
-		
-		if( simpleFieldDependencyLocalPathCounter == null ){
-			simpleFieldDependencyLocalPathCounter = new HashMap<String, Integer>();
-		}
-		
-		for( SimpleField simpleField : this.bomGenerator.getDependencySimpleFieldList() ){
-			simpleFieldDependencyLocalPathCounter.put(simpleField.getPath(), 0);
-		}
 
 		this.unGeneratedSlaveTestDataList = new HashSet<TestData>();
 

@@ -21,7 +21,6 @@ import com.fico.testCaseGenerator.util.ClassUtil;
 import com.fico.testCaseGenerator.util.RandomFactory;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.xmlbeans.impl.xb.ltgfmt.TestCase;
 import sun.java2d.pipe.SpanShapeRenderer;
 
 public class CustomFunctionFactory {
@@ -52,6 +51,7 @@ public class CustomFunctionFactory {
 					if(args == null){
 						rtn = method.invoke(this);
 					}else{
+
 						rtn = method.invoke(this, args);
 					}
 
@@ -114,10 +114,80 @@ public class CustomFunctionFactory {
 				e.printStackTrace();
 			}
 		}
-
 		return joinedEnumList.get( RandomFactory.randomIntBetween(0, joinedEnumList.size()-1) );
-
 	}
+
+	public Integer testDataSimpleFieldSetSize(TestData testData, String targetSimpleFieldPath){
+
+		Set set = setTestDataSimpleFieldSet(testData, targetSimpleFieldPath);
+
+		return set.size();
+	}
+
+	public Object testDataSimpleFieldSetType( String simpleFieldPath, String targetPath ){
+
+		SimpleField simpleField = this.bomGenerator.getPathSimpleFieldMap().get(simpleFieldPath);
+
+		TestData testData = simpleField.getTestData();
+
+		Set set = setTestDataSimpleFieldSet(testData, targetPath);
+
+		int i=0;
+
+		StringBuffer sb = new StringBuffer();
+
+		TestCaseUnit[] tmpGeneratingArr = testData.getTempGeneratingTestCaseUnitArr();
+
+		for(TestCaseUnit tmpTestCaseUnit : tmpGeneratingArr){
+			try {
+
+				if(tmpTestCaseUnit != null){
+					Object tmpNewTestCase = tmpTestCaseUnit.getTestCaseInstance();
+
+					if(tmpNewTestCase != null){
+						Object alreadyGeneratedSimpleFieldValue = PropertyUtils.getSimpleProperty(tmpNewTestCase, simpleField.getName());
+						if(alreadyGeneratedSimpleFieldValue != null){
+							if(set.contains(alreadyGeneratedSimpleFieldValue)){
+								set.remove(alreadyGeneratedSimpleFieldValue);
+							}
+						}
+					}
+				}
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return set.toArray()[0];
+	}
+
+	public Set setTestDataSimpleFieldSet(TestData testData, String targetSimpleFieldPath){
+
+		// Todo 目前只有分期用，其它地方用可能有问题
+
+		TestCaseUnit callingParentMonthlyRecordInfo = testData.getParentTestData().getGeneratingChildrenTestCaseUnit();
+
+		SimpleField tmpSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(targetSimpleFieldPath);
+
+		TestData targetSimpleFieldTestData = tmpSimpleField.getTestData();
+
+		List<TestCaseUnit> testCaseUnitList = this.testCaseGenerator.findAllChildrenForOneParentTestCaseUnit( targetSimpleFieldTestData, callingParentMonthlyRecordInfo );
+
+		Set rtnSet = new HashSet();
+
+		for(TestCaseUnit tmpTestCaseUnit : testCaseUnitList){
+			Object tmpFieldVal = tmpTestCaseUnit.getFieldValue(tmpSimpleField.getName());
+			if(tmpFieldVal != null){
+				rtnSet.add(tmpFieldVal);
+			}
+		}
+		return rtnSet;
+	}
+
 
 	public Object randomString(Object... enumObj){
 		int len = enumObj.length;

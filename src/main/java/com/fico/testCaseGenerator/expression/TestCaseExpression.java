@@ -72,6 +72,10 @@ public class TestCaseExpression {
 
     public static final String TESTDATA_SIZE_FUNCTION_NAME = "testDataSize";
 
+    public static final String TESTDATASIMPLEFIELDSETSIZE = "testDataSimpleFieldSetSize";
+
+    public static final String TEST_DATA_SIMPLEFIELDSET_TYPE = "testDataSimpleFieldSetType";
+
     public static final String MAX_SIZE_FUNCTION_NAME = "maxSimpleField";
 
     public static final String MIN_SIZE_FUNCTION_NAME = "minSimpleField";
@@ -96,6 +100,8 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastMonthlyRecordInfoNonEndInstalmentNum");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastMonthlyRecordInfoNonEndInstalmentInstalmentID");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastMonthlyRecordInfoNonEndInstalmentInstalmentType");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(TESTDATASIMPLEFIELDSETSIZE);
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("testDataSimpleFieldSetType");
 
     }
 
@@ -499,6 +505,9 @@ public class TestCaseExpression {
     }
 
     private Object functionInvocation(String functionName, Object[] args){
+        if(functionName.equals("testDataSimpleFieldSetType")){
+            String a = "";
+        }
         return this.customFunctionFactory.invokeCustomFunction(functionName, args);
     }
 
@@ -530,6 +539,7 @@ public class TestCaseExpression {
                 String a = "";
                 return null;
             }
+
 
             return targetMasterSimpleField.getTestCase().get( targeMasterSimpleFieldPos );
         }
@@ -618,7 +628,7 @@ public class TestCaseExpression {
                 functionArgs[0] = restriction.getExtendtion().getParentTestData();
                 functionArgs[1] = rtn;
                 return this.functionInvocation(targetFunctionName, functionArgs);
-            }else if(targetFunctionName.equalsIgnoreCase(TESTDATA_SIZE_FUNCTION_NAME)){
+            }else if(targetFunctionName.equalsIgnoreCase(TESTDATA_SIZE_FUNCTION_NAME) || targetFunctionName.equalsIgnoreCase(TESTDATASIMPLEFIELDSETSIZE)){
                 AbstractTestData abstractTestData = restriction.getExtendtion().getParentTestData();
                 TestData testData = null;
                 if( abstractTestData instanceof TestData ){
