@@ -38,6 +38,61 @@ public class InstalmentDetail_Old {
     //当前摊销总金额
     private Double currentTotalInstalmentAmount;
 
+    //未摊销本金
+    private Double unAmortizationPri;
+
+    //已摊销手续费
+    private Double totAmortizationFee;
+
+    //未摊销总期数
+    private Integer unAmortizationTerms;
+
+    //已摊销总期数
+    private Integer amortizationTerms;
+
+    //已摊销总期数
+    private Integer totAppTerms;
+
+    public Double getUnAmortizationPri() {
+        return unAmortizationPri;
+    }
+
+    public void setUnAmortizationPri(Double unAmortizationPri) {
+        this.unAmortizationPri = unAmortizationPri;
+    }
+
+    public Double getTotAmortizationFee() {
+        return totAmortizationFee;
+    }
+
+    public void setTotAmortizationFee(Double totAmortizationFee) {
+        this.totAmortizationFee = totAmortizationFee;
+    }
+
+    public Integer getUnAmortizationTerms() {
+        return unAmortizationTerms;
+    }
+
+    public void setUnAmortizationTerms(Integer unAmortizationTerms) {
+        this.unAmortizationTerms = unAmortizationTerms;
+    }
+
+    public Integer getAmortizationTerms() {
+        return amortizationTerms;
+    }
+
+    public void setAmortizationTerms(Integer amortizationTerms) {
+        this.amortizationTerms = amortizationTerms;
+    }
+
+    public Integer getTotAppTerms() {
+        return totAppTerms;
+    }
+
+    public void setTotAppTerms(Integer totAppTerms) {
+        this.totAppTerms = totAppTerms;
+    }
+
     public String getInstalmentType() {
         return instalmentType;
     }

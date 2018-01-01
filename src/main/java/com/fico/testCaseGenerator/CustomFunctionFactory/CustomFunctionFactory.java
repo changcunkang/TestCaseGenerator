@@ -665,8 +665,102 @@ public class CustomFunctionFactory {
 	}
 
 
+    public Double sumFilter(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
+
+	    SimpleField sumedSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(simpleFieldPath);
+
+	    SimpleField targetSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(targetSumSimpleFieldPath);
+
+	    List<TestCaseUnit> targetSumedTestDataList = this.findCrorrespondingTestCaseUnit(sumedSimpleField, targetSumSimpleFieldPath);
+
+	    TestCaseUnit testCaseUnit = sumedSimpleField.getTestData().getGeneratingTestCaseUnit();
+
+	    Object queryedValue = testCaseUnit.getFieldValue(queryBy);
+
+	    BigDecimal rtnBigDecimal = new BigDecimal(0);
+
+	    String queryStr = "/" + targetSimpleField.getTestData().getName() + "[" + targetQyeryFieldName + "=" + "'" + queryedValue.toString() + "']";
+
+	    List<TestCaseUnit> rtnTestCaseUnit = new ArrayList<TestCaseUnit>();
+
+	    for(TestCaseUnit tmpTestCaseUnit : targetSumedTestDataList){
+	        List tmpQueryResult = ClassUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
+
+	        if(tmpQueryResult != null && tmpQueryResult.size()>0){
+
+				BigDecimal tmpBig = new BigDecimal( tmpTestCaseUnit.getFieldValue(targetSimpleField.getName()).toString());
+				rtnBigDecimal = rtnBigDecimal.add(tmpBig);
+            }
+	    }
+
+	    return rtnBigDecimal.doubleValue();
+	}
+
+	public Double getNewInstalmentTotalAmt(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
+
+		SimpleField sumedSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(simpleFieldPath);
+
+		SimpleField targetSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(targetSumSimpleFieldPath);
+
+		List<TestCaseUnit> targetSumedTestDataList = this.findCrorrespondingTestCaseUnit(sumedSimpleField, targetSumSimpleFieldPath);
+
+		TestCaseUnit testCaseUnit = sumedSimpleField.getTestData().getGeneratingTestCaseUnit();
+
+		Object queryedValue = testCaseUnit.getFieldValue(queryBy);
+
+		BigDecimal rtnBigDecimal = new BigDecimal(0);
+
+		String queryStr = "/" + targetSimpleField.getTestData().getName() + "[" + targetQyeryFieldName + "=" + "'" + queryedValue.toString() + "' and currentInstalmentPeriod=1]";
+
+		List<TestCaseUnit> rtnTestCaseUnit = new ArrayList<TestCaseUnit>();
+
+		for(TestCaseUnit tmpTestCaseUnit : targetSumedTestDataList){
+			List tmpQueryResult = ClassUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
+
+			if(tmpQueryResult != null && tmpQueryResult.size()>0){
+
+				BigDecimal tmpBig = new BigDecimal( tmpTestCaseUnit.getFieldValue(targetSimpleField.getName()).toString());
+				rtnBigDecimal = rtnBigDecimal.add(tmpBig);
+			}
+		}
+
+		return rtnBigDecimal.doubleValue();
+	}
 
 
+	public Double getNewInstalmentMaxPeriod(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
+
+		SimpleField sumedSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(simpleFieldPath);
+
+		SimpleField targetSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(targetSumSimpleFieldPath);
+
+		List<TestCaseUnit> targetSumedTestDataList = this.findCrorrespondingTestCaseUnit(sumedSimpleField, targetSumSimpleFieldPath);
+
+		TestCaseUnit testCaseUnit = sumedSimpleField.getTestData().getGeneratingTestCaseUnit();
+
+		Object queryedValue = testCaseUnit.getFieldValue(queryBy);
+
+		Double rtnDouble = new Double(0);
+
+		String queryStr = "/" + targetSimpleField.getTestData().getName() + "[" + targetQyeryFieldName + "=" + "'" + queryedValue.toString() + "' and currentInstalmentPeriod=1]";
+
+		List<TestCaseUnit> rtnTestCaseUnit = new ArrayList<TestCaseUnit>();
+
+		for(TestCaseUnit tmpTestCaseUnit : targetSumedTestDataList){
+			List tmpQueryResult = ClassUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
+
+			if(tmpQueryResult != null && tmpQueryResult.size()>0){
+
+				Double tmpDouble = new Double( tmpTestCaseUnit.getFieldValue(targetSimpleField.getName()).toString());
+
+				if(rtnDouble < tmpDouble){
+					rtnDouble = tmpDouble;
+				}
+			}
+		}
+
+		return rtnDouble.doubleValue();
+	}
 
 	public Object sum(String query, String fieldName){
 		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);

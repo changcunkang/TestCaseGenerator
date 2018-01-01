@@ -87,6 +87,7 @@ public class TestCaseExpression {
     private static List<String> ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST = new ArrayList<String>();
 
     static {
+
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(TESTDATA_SIZE_FUNCTION_NAME);
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(MERGE_FUNCTION_NAME);
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(MAX_SIZE_FUNCTION_NAME);
@@ -102,6 +103,8 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastMonthlyRecordInfoNonEndInstalmentInstalmentType");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(TESTDATASIMPLEFIELDSETSIZE);
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("testDataSimpleFieldSetType");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("sumFilter");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getNewInstalmentTotalAmt");
 
     }
 
@@ -320,6 +323,7 @@ public class TestCaseExpression {
             if(recursiveParse(null, subPath, restriction)==null){
                 String a = "";
             }
+
             return leftBigDec.subtract( new BigDecimal( recursiveParse(null, subPath, restriction).toString() ) );
 
         }else if ("*".equals(operator)){
