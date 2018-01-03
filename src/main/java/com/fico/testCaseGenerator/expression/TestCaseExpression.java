@@ -106,6 +106,7 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("sumFilter");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getNewInstalmentTotalAmt");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("sumFilterCurInstalmentInfo");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getNewInstalmentMaxPeriod");
 
     }
 
@@ -149,6 +150,10 @@ public class TestCaseExpression {
                     String maxExp = restriction.getItem().get(i).getMaxExpression().replace(" ", "").trim();
 
                     if(minExp.equals(maxExp) || maxExp == null || "~".equals(maxExp)){
+
+                        if("$getNewInstalmentMaxPeriod(Application/Customer/Product/Account/MonthlyRecordInfo/InstalmentInfo/@maxInstalTerms/,Application/Customer/Product/Account/MonthlyRecordInfo/InstalmentDetail/@currentInstalmentPeriod/, instalsType, instalmentType)$".equals(maxExp)){
+                            String a = "";
+                        }
 
                         Object rtnVal = this.recursiveParse(null, minExp, restriction );
 

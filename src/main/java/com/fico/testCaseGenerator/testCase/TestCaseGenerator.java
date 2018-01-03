@@ -353,7 +353,15 @@ public abstract class TestCaseGenerator {
 
 	public void generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(TestCaseUnit parentTestCaseUnit, TestData testData){
 		for( SimpleField simpleField : testData.getSimpleFieldList() ){
+
+			if(simpleField.getName().equals( "maxInstalTerms") ){
+				String a = "";
+			}
+
 			if(simpleField.getExtendtion() != null){
+
+
+
 				generateSingleTestCaseAttributeValue(parentTestCaseUnit, simpleField);
 			}
 		}
@@ -632,7 +640,7 @@ public abstract class TestCaseGenerator {
 						if( this.isAllRelativeElementReady(unConsSimple) ){
 							int ii=0;
 							for(; ii< unConsSimple.getTestData().getTestCaseUnitList().size();ii++ ){
-								if(unConsSimple.getName().equals( "instalmentType") && unConsSimple.getTestData().getName().equals("InstalmentDetail_Old") ){
+								if(unConsSimple.getName().equals( "maxInstalTerms") ){
 									String a = "";
 								}
 								TestCaseUnit testCaseUnit = unConsSimple.getTestData().getTestCaseUnitList().get(ii);
