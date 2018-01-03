@@ -105,6 +105,7 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("testDataSimpleFieldSetType");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("sumFilter");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getNewInstalmentTotalAmt");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("sumFilterCurInstalmentInfo");
 
     }
 
@@ -641,10 +642,15 @@ public class TestCaseExpression {
                     testData = ((SimpleField)abstractTestData).getTestData();
                 }
 
-                Object[] functionArgs = new Object[2];
+                Object[] functionArgs = null;
+
+                functionArgs = new Object[rtn.length + 1];
 
                 functionArgs[0] = testData;
-                functionArgs[1] = rtn[0];
+
+                for(int i=1; i<=rtn.length; i++){
+                    functionArgs[i] = rtn[i-1];
+                }
 
                 return this.functionInvocation(targetFunctionName, functionArgs);
             }

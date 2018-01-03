@@ -117,20 +117,20 @@ public class CustomFunctionFactory {
 		return joinedEnumList.get( RandomFactory.randomIntBetween(0, joinedEnumList.size()-1) );
 	}
 
-	public Integer testDataSimpleFieldSetSize(TestData testData, String targetSimpleFieldPath){
+	public Integer testDataSimpleFieldSetSize(TestData testData, String targetSimpleFieldPath, String isCurrent){
 
-		Set set = setTestDataSimpleFieldSet(testData, targetSimpleFieldPath);
+		Set set = setTestDataSimpleFieldSet(testData, targetSimpleFieldPath, isCurrent);
 
 		return set.size();
 	}
 
-	public Object testDataSimpleFieldSetType( String simpleFieldPath, String targetPath ){
+	public Object testDataSimpleFieldSetType( String simpleFieldPath, String targetPath, String isCurrent ){
 
 		SimpleField simpleField = this.bomGenerator.getPathSimpleFieldMap().get(simpleFieldPath);
 
 		TestData testData = simpleField.getTestData();
 
-		Set set = setTestDataSimpleFieldSet(testData, targetPath);
+		Set set = setTestDataSimpleFieldSet(testData, targetPath, isCurrent);
 
 		int i=0;
 
@@ -165,7 +165,7 @@ public class CustomFunctionFactory {
 		return set.toArray()[0];
 	}
 
-	public Set setTestDataSimpleFieldSet(TestData testData, String targetSimpleFieldPath){
+	public Set setTestDataSimpleFieldSet(TestData testData, String targetSimpleFieldPath, String isCurrent){
 
 		// Todo 目前只有分期用，其它地方用可能有问题
 
@@ -176,6 +176,15 @@ public class CustomFunctionFactory {
 		TestData targetSimpleFieldTestData = tmpSimpleField.getTestData();
 
 		List<TestCaseUnit> testCaseUnitList = this.testCaseGenerator.findAllChildrenForOneParentTestCaseUnit( targetSimpleFieldTestData, callingParentMonthlyRecordInfo );
+
+		if(isCurrent != null && "1".equals(isCurrent)){
+			for(int i=0; i<testCaseUnitList.size(); i++){
+				TestCaseUnit tmpTestCaseUnit = testCaseUnitList.get(i);
+				if(tmpTestCaseUnit.getParentTestCaseUnit().getPositionInParent() != 0){
+					testCaseUnitList.remove( tmpTestCaseUnit );
+				}
+			}
+		}
 
 		Set rtnSet = new HashSet();
 
@@ -202,6 +211,10 @@ public class CustomFunctionFactory {
 	 * @return
 	 */
 	public Object testDataSize( AbstractTestData testData, String absTestDataPath ){
+
+		if(absTestDataPath == null){
+			String a = "";
+		}
 
 		if(absTestDataPath.contains("[")){
 
@@ -694,6 +707,40 @@ public class CustomFunctionFactory {
 	    }
 
 	    return rtnBigDecimal.doubleValue();
+	}
+
+	public Double sumFilterCurInstalmentInfo(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
+
+		SimpleField sumedSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(simpleFieldPath);
+
+		SimpleField targetSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(targetSumSimpleFieldPath);
+
+		List<TestCaseUnit> targetSumedTestDataList = this.findCrorrespondingTestCaseUnit(sumedSimpleField, targetSumSimpleFieldPath);
+
+		TestCaseUnit testCaseUnit = sumedSimpleField.getTestData().getGeneratingTestCaseUnit();
+
+		Object queryedValue = testCaseUnit.getFieldValue(queryBy);
+
+		BigDecimal rtnBigDecimal = new BigDecimal(0);
+
+		String queryStr = "/" + targetSimpleField.getTestData().getName() + "[" + targetQyeryFieldName + "=" + "'" + queryedValue.toString() + "']";
+
+		List<TestCaseUnit> rtnTestCaseUnit = new ArrayList<TestCaseUnit>();
+
+		for(TestCaseUnit tmpTestCaseUnit : targetSumedTestDataList){
+
+			if(tmpTestCaseUnit.getParentTestCaseUnit().getPositionInParent() != 0){
+				List tmpQueryResult = ClassUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
+
+				if(tmpQueryResult != null && tmpQueryResult.size()>0){
+					BigDecimal tmpBig = new BigDecimal( tmpTestCaseUnit.getFieldValue(targetSimpleField.getName()).toString());
+					rtnBigDecimal = rtnBigDecimal.add(tmpBig);
+				}
+
+			}
+		}
+
+		return rtnBigDecimal.doubleValue();
 	}
 
 	public Double getNewInstalmentTotalAmt(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
