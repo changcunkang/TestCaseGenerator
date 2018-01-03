@@ -107,6 +107,7 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getNewInstalmentTotalAmt");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("sumFilterCurInstalmentInfo");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getNewInstalmentMaxPeriod");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getCurInstalmentMaxPeriod");
 
     }
 
