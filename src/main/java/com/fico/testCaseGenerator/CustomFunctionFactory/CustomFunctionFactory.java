@@ -847,6 +847,83 @@ public class CustomFunctionFactory {
 	}
 
 
+	public Date getLastTransDate(String srcPath, String curBalanceField, String applicationDatePath, String monthlyRecordInfoPath, String monthlyRecordRelNumber){
+
+		TestData testData = this.bomGenerator.getPathSimpleFieldMap().get(srcPath).getTestData();
+
+		TestCaseUnit testCaseUnit = testData.getGeneratingTestCaseUnit();
+
+		SimpleField monthlyRecordBalance = this.bomGenerator.getPathSimpleFieldMap().get(monthlyRecordInfoPath);
+
+		SimpleField monthlyRecordRelNumberSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(monthlyRecordRelNumber);
+
+		TestData monthlyRecord = monthlyRecordBalance.getTestData();
+
+		Object curBalObj = testCaseUnit.getFieldValue(this.bomGenerator.getPathSimpleFieldMap().get(srcPath).getName());
+
+		Date businessDate = (Date)this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getFieldValue("businessDate");
+
+		if( curBalObj != null){
+			Double curBal = new Double(curBalObj.toString());
+			if(curBal > 0){
+
+				Date firstDate = this.getFirstDayOfMonth(businessDate);
+
+				return RandomFactory.randomDateBetween(firstDate, businessDate);
+			}
+		}
+
+		List<TestCaseUnit> targetMonthlyRecordInfoTestDataList = this.findCrorrespondingTestCaseUnit(testData, monthlyRecordInfoPath);
+
+		for(TestCaseUnit tmpTestCaseUnit : targetMonthlyRecordInfoTestDataList){
+			Object tmpMonthlyBal = tmpTestCaseUnit.getFieldValue(monthlyRecordBalance.getName());
+
+			if(tmpMonthlyBal != null && new Double(tmpMonthlyBal.toString()) >0){
+				Integer relativeCycleNumber = (Integer) tmpTestCaseUnit.getFieldValue(monthlyRecordRelNumberSimpleField.getName());
+
+				Calendar cal = Calendar.getInstance();//获取当前日期
+				cal.setTime(businessDate);
+				cal.add(Calendar.MONTH, relativeCycleNumber*-1);
+				cal.set(Calendar.DAY_OF_MONTH, 1);
+
+				Date firstDay = cal.getTime();
+
+				Calendar cal1 = Calendar.getInstance();//获取当前日期
+				cal1.setTime(businessDate);
+				cal1.add(Calendar.MONTH, relativeCycleNumber*-1 + 1);
+				cal1.set(Calendar.DAY_OF_MONTH, 0);
+
+				Date lasstDay = cal1.getTime();
+
+				return RandomFactory.randomDateBetween(firstDay, lasstDay);
+
+			}
+
+		}
+
+		return null;
+	}
+
+	public Date getFirstDayOfMonth(Date date){
+		Calendar cal = Calendar.getInstance();//获取当前日期
+
+		cal.setTime(date);
+
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+
+		return cal.getTime();
+	}
+
+	public Date getLastDayOfMonth(Date date){
+		Calendar cal = Calendar.getInstance();//获取当前日期
+
+		cal.setTime(date);
+
+		cal.add(Calendar.MONTH, 1);
+		cal.set(Calendar.DAY_OF_MONTH, 0);
+
+		return cal.getTime();
+	}
 
 	public Object sum(String query, String fieldName){
 		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);

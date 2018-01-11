@@ -108,6 +108,7 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("sumFilterCurInstalmentInfo");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getNewInstalmentMaxPeriod");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getCurInstalmentMaxPeriod");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastTransDate");
 
     }
 
@@ -546,7 +547,11 @@ public class TestCaseExpression {
         }
         else {
 
-            if(targeMasterSimpleFieldPos == targetMasterSimpleField.getTestCase().size()){
+            if(targetMasterSimpleField == null || targetMasterSimpleField.getTestCase() == null){
+                String a = "";
+            }
+
+            if(targeMasterSimpleFieldPos >= targetMasterSimpleField.getTestCase().size()){
                 String a = "";
                 return null;
             }
