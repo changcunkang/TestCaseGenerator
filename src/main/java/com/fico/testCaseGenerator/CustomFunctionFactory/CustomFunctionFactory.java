@@ -847,7 +847,7 @@ public class CustomFunctionFactory {
 	}
 
 
-	public Date getLastTransDate(String srcPath, String curBalanceField, String applicationDatePath, String monthlyRecordInfoPath, String monthlyRecordRelNumber){
+	public Date getLastTransDate(String srcPath, String curBalanceField, String applicationDatePath, String monthlyRecordInfoPath, String monthlyRecordRelNumber, String cycleDayPath){
 
 		TestData testData = this.bomGenerator.getPathSimpleFieldMap().get(srcPath).getTestData();
 
@@ -856,6 +856,9 @@ public class CustomFunctionFactory {
 		SimpleField monthlyRecordBalance = this.bomGenerator.getPathSimpleFieldMap().get(monthlyRecordInfoPath);
 
 		SimpleField monthlyRecordRelNumberSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(monthlyRecordRelNumber);
+
+		SimpleField cycleDaySF = this.bomGenerator.getPathSimpleFieldMap().get(cycleDayPath);
+
 
 		TestData monthlyRecord = monthlyRecordBalance.getTestData();
 
@@ -867,9 +870,11 @@ public class CustomFunctionFactory {
 			Double curBal = new Double(curBalObj.toString());
 			if(curBal > 0){
 
-				Date firstDate = this.getFirstDayOfMonth(businessDate);
+				List<TestCaseUnit> cycleDayTestDataUnit = this.findCrorrespondingTestCaseUnit(testData, cycleDayPath);
 
-				return RandomFactory.randomDateBetween(firstDate, businessDate);
+				Integer cycleDay = new Integer(cycleDayTestDataUnit.get(0).getFieldValue(cycleDaySF.getName()).toString());
+
+				return (Date)this.getLastCycleDay(businessDate, cycleDay);
 			}
 		}
 
