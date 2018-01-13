@@ -797,7 +797,19 @@ public class TestCaseExpression {
         Matcher m = p.matcher(exp);
 
         if ( m.find() ){
-            return Double.valueOf( m.group() );
+
+            AbstractTestData asbTestData = restriction.getExtendtion().getParentTestData();
+
+            if(asbTestData instanceof SimpleField){
+                SimpleField sf = (SimpleField)asbTestData;
+                if(sf.getFieldType() != SimpleField.TYPE_INT && sf.getFieldType() != SimpleField.TYPE_REAL){
+                     return m.group();
+                }
+            }
+            //m.group();
+            else{
+                return Double.valueOf( m.group() );
+            }
         }
 
         return null;

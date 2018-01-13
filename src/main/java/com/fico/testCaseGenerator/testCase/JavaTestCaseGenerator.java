@@ -105,7 +105,7 @@ public class JavaTestCaseGenerator extends TestCaseGenerator {
                 attValueObj = new SimpleDateFormat(TestCaseUtils.DATE_FORMAT).format(attributeValue);
             }
 
-            if("AmortizationTerms".equalsIgnoreCase(attributeName)){
+            if("instalmentType".equalsIgnoreCase(attributeName)){
                 String a = "";
             }
 

@@ -1032,6 +1032,7 @@ public class CustomFunctionFactory {
 			for(int i=0, j=0; i< testCaseUnitList.size(); i++){
 				TestCaseUnit tmpTestCaseUnit = testCaseUnitList.get(i);
 				if(tmpTestCaseUnit.getFieldValue(instalmentDetailTypePath.getName())!=null && tmpTestCaseUnit.getFieldValue(instalmentDetailTypePath.getName()).equals(sumType)){
+
 					if(j>0){
 						sb.append(",");
 					}
@@ -1129,7 +1130,8 @@ public class CustomFunctionFactory {
 	}
 
 	//added by kangchangcun at 2017/12/02
-	public Object left(String srcStr, Double doubleLen){
+	public Object left(String srcStr, Object doubleLenOjb){
+		Double doubleLen = new Double(doubleLenOjb.toString());
 		int intLen = doubleLen.intValue();
 		String Str = srcStr.substring(0,intLen);
 		return Str.replace('N','0');
@@ -1194,11 +1196,16 @@ public class CustomFunctionFactory {
 	/**
 	 *
 	 * @param targetInteger
-	 * @param numberLen 整数，取整位数；负数：小数
-	 * @param upDownFlag 0:向上取整，1：向下取整；2：四舍五入
+	 * @param numberLenObj 整数，取整位数；负数：小数
+	 * @param upDownFlagObj 0:向上取整，1：向下取整；2：四舍五入
 	 * @return
 	 */
-	public Object floor(Double targetInteger, Double numberLen, Double upDownFlag){
+	public Object floor(Double targetInteger, Object numberLenObj, Object upDownFlagObj){
+
+		Double numberLen = new Double(numberLenObj.toString());
+
+		Double upDownFlag = new Double(upDownFlagObj.toString());
+
 		if(numberLen >0){
 			Double tmpTargetInteger = targetInteger / Math.pow(10,numberLen) ;
 

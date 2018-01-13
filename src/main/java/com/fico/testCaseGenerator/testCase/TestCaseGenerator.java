@@ -373,6 +373,10 @@ public abstract class TestCaseGenerator {
 
 			if(this.isAllRelativeElementReady(simpleField)){
 
+				if(simpleField.getName().equals("instalmentType")){
+					String a = "";
+				}
+
 				Object expValue = this.testCaseExpression.parse(simpleField.getExtendtion().getRestriction());
 
 				this.setTestCaseElementValue(simpleField, parentTestCaseUnit, simpleField.getName(), expValue);
