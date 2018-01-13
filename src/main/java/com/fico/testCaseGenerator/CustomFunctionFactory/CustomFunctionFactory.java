@@ -475,7 +475,7 @@ public class CustomFunctionFactory {
 
 	public List<TestCaseUnit> findCrorrespondingTestCaseUnit(AbstractTestData testData, String absTestDataPath){
 
-		List<TestCaseUnit> rtn = new ArrayList<TestCaseUnit>();
+
 
 		TestData callIngTestData = getBelongingTestData(testData);
 
@@ -487,6 +487,8 @@ public class CustomFunctionFactory {
 			if(callIngTestData.getGeneratingTestCaseUnit() == null){
 				String a = "";
 			}
+
+			List<TestCaseUnit> rtn = new ArrayList<TestCaseUnit>();
 
 			rtn.add(callIngTestData.getGeneratingTestCaseUnit());
 			return rtn;
@@ -500,11 +502,20 @@ public class CustomFunctionFactory {
 			callingTestCaseUnit = callIngTestData.getGeneratingChildrenTestCaseUnit();
 		}
 
-		String sharedPath = this.testCaseGenerator.getSharedPath(testData.getPath(), absTestDataPath);
+		return findCrorrespondingTestCaseUnit(callingTestCaseUnit, targetTestData);
+	}
+
+	public List<TestCaseUnit> findCrorrespondingTestCaseUnit(TestCaseUnit testCaseUnit, TestData targetTestData){
+
+		List<TestCaseUnit> rtn = new ArrayList<TestCaseUnit>();
+
+		TestData testData = testCaseUnit.getTestData();
+
+		String sharedPath = this.testCaseGenerator.getSharedPath(testData.getPath(), targetTestData.getPath());
 
 		TestData sharedTestData = this.bomGenerator.getPathTestDataMap().get(sharedPath);
 
-		TestCaseUnit targetSharedTestCaseUnit = this.testCaseGenerator.getParentTestCaseUnitBaseOnChildTestCase(callingTestCaseUnit, sharedTestData);
+		TestCaseUnit targetSharedTestCaseUnit = this.testCaseGenerator.getParentTestCaseUnitBaseOnChildTestCase(testCaseUnit, sharedTestData);
 
 		for(TestCaseUnit tmpTargetDataTestCaseUnit : targetTestData.getTestCaseUnitList()){
 
@@ -907,6 +918,129 @@ public class CustomFunctionFactory {
 		}
 
 		return null;
+	}
+
+	public Double getOverdraftAmtTot(String overdraftAmtTotSrcPath, String unAmortizationPriPath, String currentInstalmentAmountPath, String poundage, String billPaymentAmtPath, String instalmentTypeVal, String monthlyBalance){
+
+		//自己
+		SimpleField overdraftAmtTotSF = this.bomGenerator.getPathSimpleFieldMap().get(overdraftAmtTotSrcPath);
+
+		TestData overdraftAmtTotTestData = overdraftAmtTotSF.getTestData();
+
+		//当前余额
+		SimpleField monthlyBalanceSF = this.bomGenerator.getPathSimpleFieldMap().get(monthlyBalance);
+
+		//未摊销本金
+		SimpleField unAmortizationPriSF = this.bomGenerator.getPathSimpleFieldMap().get(unAmortizationPriPath);
+
+		//当期摊销本金
+		SimpleField currentInstalmentAmountSF = this.bomGenerator.getPathSimpleFieldMap().get(currentInstalmentAmountPath);
+
+		//单期手续费
+		SimpleField poundageSF = this.bomGenerator.getPathSimpleFieldMap().get(poundage);
+
+		//账单已还款金额
+		SimpleField billPaymentAmtPathSF = this.bomGenerator.getPathSimpleFieldMap().get(billPaymentAmtPath);
+
+		//账单明细类型
+		SimpleField instalmentTypeSF = this.bomGenerator.getPathSimpleFieldMap().get(instalmentTypeVal);
+
+
+		TestCaseUnit generatingTestDataUnit = overdraftAmtTotTestData.getGeneratingTestCaseUnit();
+
+		if(generatingTestDataUnit.getPositionInParent() >= generatingTestDataUnit.getBrotherListForOneParent().length-1){
+			return null;
+		}
+
+		//上月
+		TestCaseUnit lastTestCaseUnit = generatingTestDataUnit.getBrotherListForOneParent()[ generatingTestDataUnit.getPositionInParent()+1 ];
+
+		List<TestCaseUnit> lastMonthInstalmentDetailList = this.findCrorrespondingTestCaseUnit(lastTestCaseUnit, unAmortizationPriSF.getTestData());
+
+		if(lastMonthInstalmentDetailList!= null && lastMonthInstalmentDetailList.size()>0){
+
+			double lastMonthCurrentInstalmentAmountSum = 0;
+
+			double lastMonthPoundageSum = 0;
+
+			//信用卡未摊销金额
+			double unAmortizationPriSum = 0;
+
+			for(TestCaseUnit tmpLastMonthInstalmentDetail : lastMonthInstalmentDetailList){
+
+
+
+				if("1234567".contains( tmpLastMonthInstalmentDetail.getFieldValue(instalmentTypeSF.getName()).toString())){
+
+					lastMonthCurrentInstalmentAmountSum += tmpLastMonthInstalmentDetail.getFieldValue(currentInstalmentAmountSF.getName()) == null?0:(Double)tmpLastMonthInstalmentDetail.getFieldValue(currentInstalmentAmountSF.getName());
+
+					lastMonthPoundageSum += tmpLastMonthInstalmentDetail.getFieldValue(currentInstalmentAmountSF.getName()) == null? 0 :  (Double)tmpLastMonthInstalmentDetail.getFieldValue(currentInstalmentAmountSF.getName());
+				}
+
+				unAmortizationPriSum += tmpLastMonthInstalmentDetail.getFieldValue(unAmortizationPriSF.getName()) == null?0d:(Double)tmpLastMonthInstalmentDetail.getFieldValue(unAmortizationPriSF.getName());
+			}
+
+			//当前账单已还款金额
+			Double billPaymentAmtPathVal = (Double)generatingTestDataUnit.getFieldValue(billPaymentAmtPathSF.getName());
+
+			Double rtn = null;
+
+			//当前余额
+			double monthlyBalanceVal = generatingTestDataUnit.getFieldValue( monthlyBalanceSF.getName()) == null?0d:(Double)generatingTestDataUnit.getFieldValue( monthlyBalanceSF.getName());
+
+
+			//1. 当上期大额分期摊销本金及手续费>当前账单已还款金额时：
+			//overdraftAmtTot¬=当前余额+信用卡分期未摊销金额-（当上期大额分期摊销本金及手续费-当前账单已还款金额）
+			if(lastMonthCurrentInstalmentAmountSum + lastMonthPoundageSum > billPaymentAmtPathVal){
+				rtn = monthlyBalanceVal + unAmortizationPriSum - ( lastMonthCurrentInstalmentAmountSum + lastMonthPoundageSum - billPaymentAmtPathVal );
+
+				return rtn;
+			}
+			else{
+				rtn = monthlyBalanceVal + unAmortizationPriSum;
+			}
+
+			return rtn;
+		}
+
+//		//上月摊销本金
+//		Double lastMonthCurrentInstalmentAmount = lastTestCaseUnit.getFieldValue(currentInstalmentAmountSF.getName()) == null?0:(Double)lastTestCaseUnit.getFieldValue(currentInstalmentAmountSF.getName());
+//
+//		//上月手续费
+//		Double lastMonthPoundage = lastTestCaseUnit.getFieldValue(currentInstalmentAmountSF.getName()) == null? 0 :  (Double)lastTestCaseUnit.getFieldValue(currentInstalmentAmountSF.getName());
+
+		return null;
+
+	}
+
+
+	public String instalmentIDSum(String srcPath, String idPath, String typePath, String sumType){
+
+		TestData srcTestData = this.bomGenerator.getPathSimpleFieldMap().get(srcPath).getTestData();
+
+		SimpleField instalmentDetailIDSF = this.bomGenerator.getPathSimpleFieldMap().get(idPath);
+
+		SimpleField instalmentDetailTypePath = this.bomGenerator.getPathSimpleFieldMap().get(typePath);
+
+		TestData instalmentDetail = instalmentDetailIDSF.getTestData();
+
+		List<TestCaseUnit> testCaseUnitList = this.findCrorrespondingTestCaseUnit(srcTestData, idPath);
+
+		StringBuffer sb = new StringBuffer();
+
+		if(testCaseUnitList!= null && testCaseUnitList.size()>0){
+			for(int i=0, j=0; i< testCaseUnitList.size(); i++){
+				TestCaseUnit tmpTestCaseUnit = testCaseUnitList.get(i);
+				if(tmpTestCaseUnit.getFieldValue(instalmentDetailTypePath.getName())!=null && tmpTestCaseUnit.getFieldValue(instalmentDetailTypePath.getName()).equals(sumType)){
+					if(j>0){
+						sb.append(",");
+					}
+					sb.append(tmpTestCaseUnit.getFieldValue(instalmentDetailIDSF.getName()));
+					j++;
+				}
+			}
+		}
+		return sb.toString();
 	}
 
 	public Date getFirstDayOfMonth(Date date){

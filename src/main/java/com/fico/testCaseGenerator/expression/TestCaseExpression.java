@@ -109,6 +109,8 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getNewInstalmentMaxPeriod");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getCurInstalmentMaxPeriod");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastTransDate");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getOverdraftAmtTot");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("instalmentIDSum");
 
     }
 
