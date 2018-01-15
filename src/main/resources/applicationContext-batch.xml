@@ -91,7 +91,7 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
     <bean:bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <bean:property name="dataSource" ref="dataSource"></bean:property>
         <bean:property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" ></bean:property>
-        <bean:property name="packagesToScan" value="com.cams.blaze.request"></bean:property>
+        <bean:property name="packagesToScan" value="com.cams.blaze.request,com.cams.blaze.response"></bean:property>
         <bean:property name="jpaProperties">
             <bean:props>
                 <bean:prop key="hibernate.current_session_context_class" >thread</bean:prop>

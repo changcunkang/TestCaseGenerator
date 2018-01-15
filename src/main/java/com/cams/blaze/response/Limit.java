@@ -2,7 +2,7 @@ package com.cams.blaze.response;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name="limit_blaze")
 public class Limit {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)

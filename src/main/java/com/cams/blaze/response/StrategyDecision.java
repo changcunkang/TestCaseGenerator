@@ -22,6 +22,9 @@ public class StrategyDecision {
 		this.id = id;
 	}
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumns(
+			@JoinColumn(name = "limit_id", referencedColumnName = "id")
+	)
 	private List<Limit> limit = new ArrayList<Limit>();
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<Action> action = new ArrayList<Action>();

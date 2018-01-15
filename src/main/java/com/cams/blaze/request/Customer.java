@@ -243,31 +243,23 @@ public class Customer {
     private	 Date reservedDate19;
 	@Column
     private	 Date reservedDate20;
-	@Transient
-//	@Column
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
-	@Transient
-//	@Column
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<PbocImportantTip> pbocImportantTip = new ArrayList<PbocImportantTip>();
-	@Transient
-//	@Column
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<PbocCreditScore> pbocCreditScore = new ArrayList<PbocCreditScore>();
-	@Transient
-//	@Column
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<PCustRef> pCustRef = new ArrayList<PCustRef>();
-	@Transient
-//	@Column
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<TXScore> TXScore = new ArrayList<TXScore>();
-	@Transient
-//	@Column
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<Pnote> pnote = new ArrayList<Pnote>();
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<Product> product = new ArrayList<Product>();
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-//	@Column
     private	 List<PbocReport> pbocReport = new ArrayList<PbocReport>();
-	@Transient
-//	@Column
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
 
 

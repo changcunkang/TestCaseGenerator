@@ -19,7 +19,7 @@ public class RuleDecision {
 	}
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<RuleAssociation> ruleAssociation=new ArrayList<RuleAssociation>();
-    @Column
+	@Column(name = "index_num")
 	private Integer index;
     @Column
 	private String rulesetName;

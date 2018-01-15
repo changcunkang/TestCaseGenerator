@@ -30,15 +30,15 @@ public class Application {
 	private Customer customer = new Customer();
 	/**输出响应*/
 	//@OneToOne(cascade = CascadeType.ALL)
-	@Transient
+	@OneToOne(cascade = CascadeType.ALL)
 	private DecisionResponse decisionResponse = new DecisionResponse();
 	/**处理历史*/
 	//@OneToOne(cascade = CascadeType.ALL)
-	@Transient
+	@OneToOne(cascade = CascadeType.ALL)
 	private ProcessingHistory processingHistory = new ProcessingHistory();
 	/**消息列表*/
 	//@OneToOne(cascade = CascadeType.ALL)
-	@Transient
+	@OneToOne(cascade = CascadeType.ALL)
 	private MessageList messageList = new MessageList();
 	/**入口点*/
 	@Column
@@ -52,6 +52,17 @@ public class Application {
 	/**调用类型(实时，批量)*/
 	@Column
 	private String callType;
+
+	@Lob
+	private String responseStr;
+
+	public String getResponseStr() {
+		return responseStr;
+	}
+
+	public void setResponseStr(String responseStr) {
+		this.responseStr = responseStr;
+	}
 
 	@Transient
 	private List<Temporary> temporary = new ArrayList<Temporary>();

@@ -22,7 +22,8 @@ public class DerivedVariable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@Column
+
+	@Column(name = "index_num")
 	private Integer index;
 	@Column
 	private String associationID;

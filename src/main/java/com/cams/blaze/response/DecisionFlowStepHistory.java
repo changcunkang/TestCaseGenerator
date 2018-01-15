@@ -35,7 +35,7 @@ public class DecisionFlowStepHistory {
     @Column
 	private String implementationName;
     /**函数结果*/
-    @Column
+    @Lob
 	private String functionResult;
 
 	public List<RulesetHistory> getRulesetHistory() {
