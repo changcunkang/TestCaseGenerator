@@ -43,12 +43,12 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
         <bean:property name="location" value="classpath:jdbc.properties" />
     </bean:bean>
 
-    <task:executor id="taskExecutor" pool-size="16" keep-alive="100" />
+    <task:executor id="taskExecutor" pool-size="8" keep-alive="100" />
 
     <job id="helloWorldJob">
         <step id="step_constructData">
             <tasklet transaction-manager="transactionManager">
-                <chunk commit-interval="10" reader="testCaseGeneratorItemReader" processor="asyncProcessor" writer="itemWriter" />
+                <chunk commit-interval="1" reader="testCaseGeneratorItemReader" processor="asyncProcessor" writer="itemWriter" />
             </tasklet>
         </step>
     </job>
@@ -73,6 +73,7 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
         <bean:property name="itemPreparedStatementSetter">
             <bean:bean class="springbatch.DestCreditBillItemPreparedStatementSetter"/>
         </bean:property>-->
+        <bean:property name="applicationDao" ref="applicationDao" />
         <bean:property name="executionConfiguration" ref="executionConfiguration" />
         <bean:property name="jdbcTemplate" ref="jdbcTemplate" />
         <bean:property name="insertSQL" value="INSERT INTO testcaseinstance (projectID, isinput, content, appID, finalOutput, finalResult) VALUES ( ?,?,?,?,?,? )" />
@@ -83,7 +84,7 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
     </bean:bean>
 
     <bean:bean id="executionConfiguration" class="com.fico.testCaseGenerator.batch.ExecutionConfiguration" >
-        <bean:property name="targetNumCases" value="10" />
+        <bean:property name="targetNumCases" value="500000" />
     </bean:bean>
 
     <!-- Spring Data JPA -->
@@ -95,7 +96,7 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
         <bean:property name="jpaProperties">
             <bean:props>
                 <bean:prop key="hibernate.current_session_context_class" >thread</bean:prop>
-                <bean:prop key="hibernate.hbm2ddl.auto">create-drop</bean:prop><!-- validate/update/create -->
+                <bean:prop key="hibernate.hbm2ddl.auto">update</bean:prop><!-- validate/update/create -->
                 <bean:prop key="hibernate.show_sql">false</bean:prop>
                 <bean:prop key="hibernate.format_sql">true</bean:prop>
                 <!-- 建表的命名规则 -->

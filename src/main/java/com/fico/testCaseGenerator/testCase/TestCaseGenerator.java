@@ -676,11 +676,10 @@ public abstract class TestCaseGenerator {
 
 				bothReduced ++;
 
-				if(bothReduced >= 1){
+				if(bothReduced >= 10){
 					System.out.println("None TestData nor SimpleField is reduced");
 				}
 
-				//break;
 			}else{
 				bothReduced = 0 ;
 			}

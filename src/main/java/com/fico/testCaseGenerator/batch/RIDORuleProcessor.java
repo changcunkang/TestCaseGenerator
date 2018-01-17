@@ -1,7 +1,11 @@
 package com.fico.testCaseGenerator.batch;
 
+import com.blazesoft.server.base.NdServerException;
+import com.blazesoft.server.local.NdLocalServerException;
+import com.cams.blaze.request.Application;
+import com.fico.testCaseGenerator.XSTream.XSTreamHelper;
+import com.fico.testCaseGenerator.blazeServer.BlazeServer;
 import com.fico.testCaseGenerator.blazeServer.BlazeServers;
-import com.fico.testCaseGenerator.facade.TestCaseGeneratorFacade;
 import com.fico.testCaseGenerator.testCase.RIDOInstance;
 import com.fico.testCaseGenerator.testCase.TestCaseInstance;
 import org.dom4j.*;
@@ -19,14 +23,46 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-public class RIDORuleProcessor implements ItemProcessor<RIDOInstance, RIDOInstance>, InitializingBean, DisposableBean {
+public class RIDORuleProcessor implements ItemProcessor<Object, Object>, InitializingBean, DisposableBean {
 
 
     private ExecutionConfiguration executionConfiguration;
 
-    public RIDOInstance process(RIDOInstance ridoInstance) throws Exception {
+    private static BlazeServer blazeServer = null;
 
-        return doProecssingTestCase(ridoInstance);
+    private BlazeServer getBlazeServer(){
+        if(blazeServer == null){
+            System.out.println("Creating Blaze Servers");
+            try {
+                blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\bom\\blaze.server");
+            } catch (NdLocalServerException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Creating Blaze Servers Successful");
+        }
+        return blazeServer;
+    }
+
+
+    public Object process(Object ridoInstance) throws Exception {
+
+       return invokingBlaze(ridoInstance);
+    }
+
+    public Object invokingBlaze(Object blazeInput){
+        Application blazeResponse = null;
+        try {
+            blazeResponse = getBlazeServer().invokeExternalMain((Application)blazeInput);
+
+            String responseStr = XSTreamHelper.getXStream().toXML(blazeResponse);
+
+            blazeResponse.setResponseStr(responseStr);
+
+        } catch (NdServerException e) {
+            e.printStackTrace();
+        }
+
+        return blazeResponse;
     }
 
     public void destroy() throws Exception {
@@ -34,9 +70,7 @@ public class RIDORuleProcessor implements ItemProcessor<RIDOInstance, RIDOInstan
     }
 
     public void afterPropertiesSet() throws Exception {
-
-        BlazeServers.createServers();
-
+        getBlazeServer();
     }
 
     public ExecutionConfiguration getExecutionConfiguration() {
@@ -47,7 +81,7 @@ public class RIDORuleProcessor implements ItemProcessor<RIDOInstance, RIDOInstan
         this.executionConfiguration = executionConfiguration;
     }
 
-    public RIDOInstance doProecssingTestCase(RIDOInstance ridoInstance) throws Exception {
+    public RIDOInstance doRIDOProecssingTestCase(RIDOInstance ridoInstance) throws Exception {
 
         clearResultReportMap();
 

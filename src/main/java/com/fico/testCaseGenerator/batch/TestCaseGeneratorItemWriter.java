@@ -1,7 +1,9 @@
 package com.fico.testCaseGenerator.batch;
 
+import com.cams.blaze.request.Application;
 import com.fico.testCaseGenerator.facade.TestCaseGeneratorFacade;
 import com.fico.testCaseGenerator.project.Project;
+import com.fico.testCaseGenerator.repository.ApplicationDao;
 import com.fico.testCaseGenerator.testCase.RIDOInstance;
 import com.fico.testCaseGenerator.testCase.TestCaseInstance;
 import org.dom4j.Document;
@@ -19,7 +21,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
-public class TestCaseGeneratorItemWriter implements ItemWriter<RIDOInstance> {
+public class TestCaseGeneratorItemWriter implements ItemWriter<Application> {
 
     private ExecutionConfiguration executionConfiguration;
 
@@ -27,13 +29,29 @@ public class TestCaseGeneratorItemWriter implements ItemWriter<RIDOInstance> {
 
     private String insertSQL = "";
 
-    public void write(List<? extends RIDOInstance> list) throws Exception {
+    private ApplicationDao applicationDao;
+
+    public ApplicationDao getApplicationDao() {
+        return applicationDao;
+    }
+
+    public void setApplicationDao(ApplicationDao applicationDao) {
+        this.applicationDao = applicationDao;
+    }
+
+    public void write(List<? extends Application> list) throws Exception {
 
         if(list != null && list.size()>0){
-            for(RIDOInstance ridoInstance : list){
-                processingWriteItem( ridoInstance );
+            for(Application application : list){
+                saveApplication( application );
+                this.executionConfiguration.setCurrentGeneratedNumCases( this.executionConfiguration.getCurrentGeneratedNumCases() + 1 );
+                System.out.println(this.executionConfiguration.getCurrentGeneratedNumCases() + "th cases saved completed");
             }
         }
+    }
+
+    private void saveApplication(Application application){
+        this.applicationDao.save(application);
     }
 
     public void processingWriteItem(RIDOInstance ridoInstance){

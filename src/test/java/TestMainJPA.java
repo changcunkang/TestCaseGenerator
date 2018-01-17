@@ -12,11 +12,13 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Date;
+
 public class TestMainJPA {
 
     public static void main(String[] args) throws Exception{
 
-        int loopCnt = 10;
+        int loopCnt = 10000;
 
         ApplicationContext context = new ClassPathXmlApplicationContext(
                 "applicationContext-batch.xml");
@@ -35,14 +37,14 @@ public class TestMainJPA {
         BlazeServer blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\bom\\blaze.server");
         System.out.println("Creating Blaze Server Complete.");
 
+        Long startMill = System.currentTimeMillis();
+        Date startDate = new Date();
 
-        for (int i=0; i<loopCnt; i++ ){
+        for (int i=1; i<=loopCnt; i++ ){
 
             System.out.println("Generating " + i + " TestCase.");
 
             Application testCase = (Application) cafsProject.generateTestCase();
-
-
 
             Application blazeResponse = blazeServer.invokeExternalMain( testCase );
 
@@ -52,11 +54,15 @@ public class TestMainJPA {
 
             appDao.save(blazeResponse);
 
-            System.out.println( + i + " TestCase Generating Complete");
+            System.out.println( "The " + i + "th TestCase Generating Complete");
 
         }
 
-        System.out.println("");
+        Long endMill = System.currentTimeMillis();
+
+        System.out.println(loopCnt + " testCases generated completed, use minutes : " + (endMill-startMill)/60/1000);
+        System.out.println(" TestCase Generating Start at " + startDate);
+        System.out.println(" TestCase Generating End at " + new Date());
 
     }
 }

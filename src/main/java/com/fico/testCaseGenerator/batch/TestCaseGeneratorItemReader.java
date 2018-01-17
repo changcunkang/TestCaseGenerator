@@ -1,5 +1,6 @@
 package com.fico.testCaseGenerator.batch;
 
+import com.cams.blaze.request.Application;
 import com.fico.testCaseGenerator.facade.TestCaseGeneratorFacade;
 import com.fico.testCaseGenerator.project.Project;
 import com.fico.testCaseGenerator.testCase.RIDOInstance;
@@ -10,11 +11,31 @@ import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.InitializingBean;
 
+import java.util.Date;
 import java.util.List;
 
-public class TestCaseGeneratorItemReader implements ItemReader<RIDOInstance>, InitializingBean {
+public class TestCaseGeneratorItemReader implements ItemReader<Object>, InitializingBean {
 
     private ExecutionConfiguration executionConfiguration;
+
+    private Project project;
+
+    public Project getProject() {
+        if(this.project == null){
+            TestCaseGeneratorFacade testCaseGeneratorFacade = new TestCaseGeneratorFacade();
+            testCaseGeneratorFacade.listProjects();
+            testCaseGeneratorFacade.loadAllProjects();
+
+            Project cafsProject = testCaseGeneratorFacade.getProject("cafs");
+            cafsProject.setProjectID(4L);
+            this.project = cafsProject;
+        }
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
     /**
      *
@@ -25,34 +46,30 @@ public class TestCaseGeneratorItemReader implements ItemReader<RIDOInstance>, In
     }
 
 
-    public RIDOInstance read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+    private Date startDate;
+
+    public Object read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+
+        if(executionConfiguration.getCurrentGeneratedNumCases() == 0){
+            startDate = new Date();
+            System.out.println("batch start at " + startDate);
+        }
 
         while(executionConfiguration.getCurrentGeneratedNumCases() < executionConfiguration.getTargetNumCases()){
 
             return generateTestCaseInstance();
         }
 
+        System.out.println("all " + executionConfiguration.getTargetNumCases() + " cases generated complete, batch start at " + startDate);
+
+        System.out.println("batch end at " + new Date());
+
         return null;
     }
 
 
-    private RIDOInstance generateTestCaseInstance(){
-        RIDOInstance rtnInstance = new RIDOInstance();
-
-        Project cafsProject = getTestCaseGeneratorFacade().getProject("cafs");
-        cafsProject.setProjectID(4L);
-        Object testCase = cafsProject.generateTestCase();
-
-        getTestCaseGeneratorFacade().manageProjectLevelMasterAndSlave();
-
-        TestCaseInstance cafsTestCaseInstance = new TestCaseInstance();
-        cafsTestCaseInstance.setSrcInput( testCase );
-        cafsTestCaseInstance.setProjectID(4L);
-        cafsTestCaseInstance.setIsInput("1");
-
-        rtnInstance.getRidoResultList().add(cafsTestCaseInstance);
-
-        return rtnInstance;
+    private Object generateTestCaseInstance(){
+        return this.getProject().generateTestCase();
     }
 
     public ExecutionConfiguration getExecutionConfiguration() {
