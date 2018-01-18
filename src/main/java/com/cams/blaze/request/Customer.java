@@ -59,20 +59,8 @@ public class Customer {
 	@Column
     private	 Integer cnsmrMobileValidFlag;
 	@Column
-    private	 String riskLevel;
-	@Column
-	private String riskLevel1;
-	@Column
-	private String riskLevel2;
-	@Column
-    private	 String txFlag;
-	@Column
-	private String txFlag1;
-	@Column
 	private String layerCoder2Acct;
 
-	@Column
-	private String layerCode2Acct;
 	@Column
 	private String layerCoder2Custr;
 	@Column
@@ -807,12 +795,6 @@ public class Customer {
 	public void setCnsmrMobileValidFlag(Integer cnsmrMobileValidFlag) {
 		this.cnsmrMobileValidFlag = cnsmrMobileValidFlag;
 	}
-	public String getRiskLevel() {
-		return riskLevel;
-	}
-	public void setRiskLevel(String riskLevel) {
-		this.riskLevel = riskLevel;
-	}
 	public List<Product> getProduct() {
 		return product;
 	}
@@ -940,12 +922,6 @@ public class Customer {
 	public void setFstPbocAppScore(Double fstPbocAppScore) {
 		this.fstPbocAppScore = fstPbocAppScore;
 	}
-	public String getTxFlag() {
-		return txFlag;
-	}
-	public void setTxFlag(String txFlag) {
-		this.txFlag = txFlag;
-	}
 	public Integer getFraudCusterFlag() {
 		return fraudCusterFlag;
 	}
@@ -959,29 +935,6 @@ public class Customer {
 		this.userDefinedField = userDefinedField;
 	}
 
-	public String getRiskLevel2() {
-		return riskLevel2;
-	}
-
-	public void setRiskLevel2(String riskLevel2) {
-		this.riskLevel2 = riskLevel2;
-	}
-
-	public String getRiskLevel1() {
-		return riskLevel1;
-	}
-
-	public void setRiskLevel1(String riskLevel1) {
-		this.riskLevel1 = riskLevel1;
-	}
-
-	public String getTxFlag1() {
-		return txFlag1;
-	}
-
-	public void setTxFlag1(String txFlag1) {
-		this.txFlag1 = txFlag1;
-	}
 
 	public String getLayerCoder2Custr() {
 		return layerCoder2Custr;
@@ -991,13 +944,6 @@ public class Customer {
 		this.layerCoder2Custr = layerCoder2Custr;
 	}
 
-	public String getLayerCode2Acct() {
-		return layerCode2Acct;
-	}
-
-	public void setLayerCode2Acct(String layerCode2Acct) {
-		this.layerCode2Acct = layerCode2Acct;
-	}
 
 	public Double getInnerFundRadix() {
 		return innerFundRadix;

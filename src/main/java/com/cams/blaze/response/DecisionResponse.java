@@ -15,6 +15,9 @@ public class DecisionResponse {
 	@Column
 	private Long id;
 
+	public DecisionResponse() {
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -37,7 +40,57 @@ public class DecisionResponse {
 	/**规则决策*/
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<RuleDecision> ruleDecision = new ArrayList<RuleDecision>();
-	
+
+
+	@Column
+	private String riskLevel;
+	@Column
+	private String riskLevel1;
+	@Column
+	private String riskLevel2;
+	@Column
+	private String txFlag;
+	@Column
+	private String txFlag1;
+	@Column
+	private String customerSegmentation;
+	@Column
+	private String customerSegmentation1;
+	@Column
+	private String customerSegmentation2;
+	@Column
+	private Double bScore;
+	@Column
+	private Double ptfqScore;
+	@Column
+	private Double defqScore;
+	@Column
+	private Double xhCuScore;
+	@Column
+	private Double gykbScore;
+	@Column
+	private Double score01;
+	@Column
+	private Double score02;
+	@Column
+	private Double score03;
+	@Column
+	private Double score04;
+	@Column
+	private Double score05;
+	@Column
+	private Double score06;
+	@Column
+	private Double score07;
+	@Column
+	private Double score08;
+	@Column
+	private Double score09;
+	@Column
+	private Double score10;
+
+
+
 	@Column
 	private String reservedString01;
 	@Column
@@ -201,8 +254,190 @@ public class DecisionResponse {
 	private Date reservedDate19;
 	@Column
 	private Date reservedDate20;
-	
-	
+
+	public String getRiskLevel() {
+		return riskLevel;
+	}
+
+	public void setRiskLevel(String riskLevel) {
+		this.riskLevel = riskLevel;
+	}
+
+	public String getRiskLevel1() {
+		return riskLevel1;
+	}
+
+	public void setRiskLevel1(String riskLevel1) {
+		this.riskLevel1 = riskLevel1;
+	}
+
+	public String getRiskLevel2() {
+		return riskLevel2;
+	}
+
+	public void setRiskLevel2(String riskLevel2) {
+		this.riskLevel2 = riskLevel2;
+	}
+
+	public String getTxFlag() {
+		return txFlag;
+	}
+
+	public void setTxFlag(String txFlag) {
+		this.txFlag = txFlag;
+	}
+
+	public String getTxFlag1() {
+		return txFlag1;
+	}
+
+	public void setTxFlag1(String txFlag1) {
+		this.txFlag1 = txFlag1;
+	}
+
+	public String getCustomerSegmentation() {
+		return customerSegmentation;
+	}
+
+	public void setCustomerSegmentation(String customerSegmentation) {
+		this.customerSegmentation = customerSegmentation;
+	}
+
+	public String getCustomerSegmentation1() {
+		return customerSegmentation1;
+	}
+
+	public void setCustomerSegmentation1(String customerSegmentation1) {
+		this.customerSegmentation1 = customerSegmentation1;
+	}
+
+	public String getCustomerSegmentation2() {
+		return customerSegmentation2;
+	}
+
+	public void setCustomerSegmentation2(String customerSegmentation2) {
+		this.customerSegmentation2 = customerSegmentation2;
+	}
+
+	public Double getbScore() {
+		return bScore;
+	}
+
+	public void setbScore(Double bScore) {
+		this.bScore = bScore;
+	}
+
+	public Double getPtfqScore() {
+		return ptfqScore;
+	}
+
+	public void setPtfqScore(Double ptfqScore) {
+		this.ptfqScore = ptfqScore;
+	}
+
+	public Double getDefqScore() {
+		return defqScore;
+	}
+
+	public void setDefqScore(Double defqScore) {
+		this.defqScore = defqScore;
+	}
+
+	public Double getXhCuScore() {
+		return xhCuScore;
+	}
+
+	public void setXhCuScore(Double xhCuScore) {
+		this.xhCuScore = xhCuScore;
+	}
+
+	public Double getGykbScore() {
+		return gykbScore;
+	}
+
+	public void setGykbScore(Double gykbScore) {
+		this.gykbScore = gykbScore;
+	}
+
+	public Double getScore01() {
+		return score01;
+	}
+
+	public void setScore01(Double score01) {
+		this.score01 = score01;
+	}
+
+	public Double getScore02() {
+		return score02;
+	}
+
+	public void setScore02(Double score02) {
+		this.score02 = score02;
+	}
+
+	public Double getScore03() {
+		return score03;
+	}
+
+	public void setScore03(Double score03) {
+		this.score03 = score03;
+	}
+
+	public Double getScore04() {
+		return score04;
+	}
+
+	public void setScore04(Double score04) {
+		this.score04 = score04;
+	}
+
+	public Double getScore05() {
+		return score05;
+	}
+
+	public void setScore05(Double score05) {
+		this.score05 = score05;
+	}
+
+	public Double getScore06() {
+		return score06;
+	}
+
+	public void setScore06(Double score06) {
+		this.score06 = score06;
+	}
+
+	public Double getScore07() {
+		return score07;
+	}
+
+	public void setScore07(Double score07) {
+		this.score07 = score07;
+	}
+
+	public Double getScore08() {
+		return score08;
+	}
+
+	public void setScore08(Double score08) {
+		this.score08 = score08;
+	}
+
+	public Double getScore09() {
+		return score09;
+	}
+
+	public void setScore09(Double score09) {
+		this.score09 = score09;
+	}
+
+	public Double getScore10() {
+		return score10;
+	}
+
+	public void setScore10(Double score10) {
+		this.score10 = score10;
+	}
 	public String getReservedString01() {
 		return reservedString01;
 	}
