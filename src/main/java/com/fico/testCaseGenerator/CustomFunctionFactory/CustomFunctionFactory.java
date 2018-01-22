@@ -31,9 +31,15 @@ public class CustomFunctionFactory {
 
 	private TestCaseGenerator testCaseGenerator;
 
+	private ClassUtil classUtil = null;
+
+	private RandomFactory randomFactory = null;
+
 	public CustomFunctionFactory(TestCaseGenerator testCaseGenerator){
 		this.bomGenerator = testCaseGenerator.getBomGenerator();
 		this.testCaseGenerator = testCaseGenerator;
+		classUtil = new ClassUtil();
+		randomFactory = new RandomFactory();
 	}
 	
 	public Object invokeCustomFunction(String functionName, Object... args){
@@ -49,10 +55,10 @@ public class CustomFunctionFactory {
 				try {
 
 					if(args == null){
-						rtn = method.invoke(this);
+						rtn = method.invoke(null);
 					}else{
 
-						rtn = method.invoke(this, args);
+						rtn = method.invoke(null, args);
 					}
 
 				} catch (IllegalAccessException e) {
@@ -114,7 +120,7 @@ public class CustomFunctionFactory {
 				e.printStackTrace();
 			}
 		}
-		return joinedEnumList.get( RandomFactory.randomIntBetween(0, joinedEnumList.size()-1) );
+		return joinedEnumList.get( randomFactory.randomIntBetween(0, joinedEnumList.size()-1) );
 	}
 
 	public Integer testDataSimpleFieldSetSize(TestData testData, String targetSimpleFieldPath, String isCurrent){
@@ -201,7 +207,7 @@ public class CustomFunctionFactory {
 	public Object randomString(Object... enumObj){
 		int len = enumObj.length;
 
-		return enumObj[ RandomFactory.randomIntBetween(0,len-1 ) ];
+		return enumObj[ randomFactory.randomIntBetween(0,len-1 ) ];
 	}
 
 	/**
@@ -218,7 +224,7 @@ public class CustomFunctionFactory {
 
 		if(absTestDataPath.contains("[")){
 
-			List rtnList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), absTestDataPath);
+			List rtnList = classUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), absTestDataPath);
 
 			return rtnList.size();
 
@@ -344,7 +350,7 @@ public class CustomFunctionFactory {
 		return null;
 	}
 
-	public Object getLastMonthlyRecordInfoNonEndInstalmentInstalmentType(String selfInstalmentSimpleFieldPath, String instalmentNewPath, String instalmentIDpath, String targetSimpleFieldpath){
+	public  Object getLastMonthlyRecordInfoNonEndInstalmentInstalmentType(String selfInstalmentSimpleFieldPath, String instalmentNewPath, String instalmentIDpath, String targetSimpleFieldpath){
 
 		SimpleField instalmentSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(selfInstalmentSimpleFieldPath);
 
@@ -395,7 +401,7 @@ public class CustomFunctionFactory {
 	}
 
 
-	private List<TestCaseUnit> getLastMonthSumInstalmentList(TestCaseUnit callingParentMonthlyRecordInfoPreviousSibling, TestData oldInstalmentTestData, TestData newInstalmentTestData){
+	private  List<TestCaseUnit> getLastMonthSumInstalmentList(TestCaseUnit callingParentMonthlyRecordInfoPreviousSibling, TestData oldInstalmentTestData, TestData newInstalmentTestData){
 
 		List<TestCaseUnit> previousOldTestDataList = this.testCaseGenerator.findAllChildrenForOneParentTestCaseUnit(oldInstalmentTestData ,callingParentMonthlyRecordInfoPreviousSibling );
 
@@ -432,7 +438,7 @@ public class CustomFunctionFactory {
 	 * @param testDataPath
 	 * @return
 	 */
-	public Object merge(TestData testData, String[] testDataPath){
+	public  Object merge(TestData testData, String[] testDataPath){
 
 		if(testData.getName().equalsIgnoreCase("LoanCard")){
 			String a = "";
@@ -452,7 +458,7 @@ public class CustomFunctionFactory {
 		return null;
 	}
 
-	public Object mergeFilter(TestData testData, String[] testDataPathFilterPairArr){
+	public  Object mergeFilter(TestData testData, String[] testDataPathFilterPairArr){
 
 		int pairLen = testDataPathFilterPairArr.length / 2;
 
@@ -461,7 +467,7 @@ public class CustomFunctionFactory {
 		for(int i=0; i<pairLen; i++){
 			List targetList = findCrorrespondingTestCaseUnit(testData, testDataPathFilterPairArr[i*2]);
 			for(Object obj : targetList){
-				Object tmpTargetMergeObj = ClassUtil.search(obj, testDataPathFilterPairArr[ i*2+1 ]);
+				Object tmpTargetMergeObj = classUtil.search(obj, testDataPathFilterPairArr[ i*2+1 ]);
 				if(tmpTargetMergeObj != null){
 					srcMergeList.add(tmpTargetMergeObj);
 				}
@@ -473,9 +479,7 @@ public class CustomFunctionFactory {
 		return null;
 	}
 
-	public List<TestCaseUnit> findCrorrespondingTestCaseUnit(AbstractTestData testData, String absTestDataPath){
-
-
+	public  List<TestCaseUnit> findCrorrespondingTestCaseUnit(AbstractTestData testData, String absTestDataPath){
 
 		TestData callIngTestData = getBelongingTestData(testData);
 
@@ -505,7 +509,7 @@ public class CustomFunctionFactory {
 		return findCrorrespondingTestCaseUnit(callingTestCaseUnit, targetTestData);
 	}
 
-	public List<TestCaseUnit> findCrorrespondingTestCaseUnit(TestCaseUnit testCaseUnit, TestData targetTestData){
+	public  List<TestCaseUnit> findCrorrespondingTestCaseUnit(TestCaseUnit testCaseUnit, TestData targetTestData){
 
 		List<TestCaseUnit> rtn = new ArrayList<TestCaseUnit>();
 
@@ -533,7 +537,7 @@ public class CustomFunctionFactory {
 
 
 
-	public TestData getBelongingTestData(AbstractTestData abstractTestData){
+	public  TestData getBelongingTestData(AbstractTestData abstractTestData){
 		if(abstractTestData instanceof TestData){
 			return (TestData)abstractTestData;
 		}else if(abstractTestData instanceof SimpleField){
@@ -542,7 +546,7 @@ public class CustomFunctionFactory {
 		return null;
 	}
 
-	public Boolean inStr(Object src, Object strArrObj){
+	public  Boolean inStr(Object src, Object strArrObj){
 		String srcStr = (String)src;
 		String strArr = (String)strArrObj;
 
@@ -553,7 +557,7 @@ public class CustomFunctionFactory {
 		}
 	}
 
-	public Object minSimpleField(String path){
+	public  Object minSimpleField(String path){
 		SimpleField simpleField = this.bomGenerator.getPathSimpleFieldMap().get(path);
 
 		List testCaseList = simpleField.getTestCase();
@@ -577,45 +581,9 @@ public class CustomFunctionFactory {
 		return sumD;
 	}
 
-	public Object maxFilter(String query, String fieldName){
+	public  Object maxFilter(String query, String fieldName){
 
-		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
-
-		Double sumD = new Double(0);
-
-		for(Object queryObj : queryedList){
-
-			Class queryObjCls = queryObj.getClass();
-
-			try {
-				Field field = queryObjCls.getDeclaredField(fieldName);
-
-				field.setAccessible(true);
-
-				Object doubleObj = field.get(queryObj);
-
-				if(doubleObj != null){
-					if(doubleObj instanceof Date){
-						Long dateMilsec = ((Date)doubleObj).getTime();
-						sumD = Math.min(new Double(dateMilsec), sumD );
-					}
-					else{
-						sumD = Math.min(new Double(doubleObj.toString()), sumD );
-					}
-
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return sumD;
-	}
-
-
-	public Object minFilter(String query, String fieldName){
-
-		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
+		List queryedList = classUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
 
 		Double sumD = new Double(0);
 
@@ -649,9 +617,45 @@ public class CustomFunctionFactory {
 	}
 
 
-	public Object avgFilter(String query, String fieldName){
+	public  Object minFilter(String query, String fieldName){
 
-		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
+		List queryedList = classUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
+
+		Double sumD = new Double(0);
+
+		for(Object queryObj : queryedList){
+
+			Class queryObjCls = queryObj.getClass();
+
+			try {
+				Field field = queryObjCls.getDeclaredField(fieldName);
+
+				field.setAccessible(true);
+
+				Object doubleObj = field.get(queryObj);
+
+				if(doubleObj != null){
+					if(doubleObj instanceof Date){
+						Long dateMilsec = ((Date)doubleObj).getTime();
+						sumD = Math.min(new Double(dateMilsec), sumD );
+					}
+					else{
+						sumD = Math.min(new Double(doubleObj.toString()), sumD );
+					}
+
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return sumD;
+	}
+
+
+	public  Object avgFilter(String query, String fieldName){
+
+		List queryedList = classUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
 
 		Double sumD = new Double(0);
 
@@ -689,7 +693,7 @@ public class CustomFunctionFactory {
 	}
 
 
-    public Double sumFilter(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
+    public  Double sumFilter(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
 
 	    SimpleField sumedSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(simpleFieldPath);
 
@@ -708,7 +712,7 @@ public class CustomFunctionFactory {
 	    List<TestCaseUnit> rtnTestCaseUnit = new ArrayList<TestCaseUnit>();
 
 	    for(TestCaseUnit tmpTestCaseUnit : targetSumedTestDataList){
-	        List tmpQueryResult = ClassUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
+	        List tmpQueryResult = classUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
 
 	        if(tmpQueryResult != null && tmpQueryResult.size()>0){
 
@@ -720,7 +724,7 @@ public class CustomFunctionFactory {
 	    return rtnBigDecimal.doubleValue();
 	}
 
-	public Double sumFilterCurInstalmentInfo(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
+	public  Double sumFilterCurInstalmentInfo(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
 
 		SimpleField sumedSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(simpleFieldPath);
 
@@ -741,7 +745,7 @@ public class CustomFunctionFactory {
 		for(TestCaseUnit tmpTestCaseUnit : targetSumedTestDataList){
 
 			if(tmpTestCaseUnit.getParentTestCaseUnit().getPositionInParent() != 0){
-				List tmpQueryResult = ClassUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
+				List tmpQueryResult = classUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
 
 				if(tmpQueryResult != null && tmpQueryResult.size()>0){
 					BigDecimal tmpBig = new BigDecimal( tmpTestCaseUnit.getFieldValue(targetSimpleField.getName()).toString());
@@ -754,7 +758,7 @@ public class CustomFunctionFactory {
 		return rtnBigDecimal.doubleValue();
 	}
 
-	public Double getNewInstalmentTotalAmt(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
+	public  Double getNewInstalmentTotalAmt(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
 
 		SimpleField sumedSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(simpleFieldPath);
 
@@ -773,7 +777,7 @@ public class CustomFunctionFactory {
 		List<TestCaseUnit> rtnTestCaseUnit = new ArrayList<TestCaseUnit>();
 
 		for(TestCaseUnit tmpTestCaseUnit : targetSumedTestDataList){
-			List tmpQueryResult = ClassUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
+			List tmpQueryResult = classUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
 
 			if(tmpQueryResult != null && tmpQueryResult.size()>0){
 
@@ -786,7 +790,7 @@ public class CustomFunctionFactory {
 	}
 
 
-	public Double getNewInstalmentMaxPeriod(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
+	public  Double getNewInstalmentMaxPeriod(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
 
 		SimpleField sumedSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(simpleFieldPath);
 
@@ -805,7 +809,7 @@ public class CustomFunctionFactory {
 		List<TestCaseUnit> rtnTestCaseUnit = new ArrayList<TestCaseUnit>();
 
 		for(TestCaseUnit tmpTestCaseUnit : targetSumedTestDataList){
-			List tmpQueryResult = ClassUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
+			List tmpQueryResult = classUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
 
 			if(tmpQueryResult != null && tmpQueryResult.size()>0){
 
@@ -820,7 +824,7 @@ public class CustomFunctionFactory {
 		return rtnDouble.doubleValue();
 	}
 
-	public Double getCurInstalmentMaxPeriod(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
+	public  Double getCurInstalmentMaxPeriod(String simpleFieldPath, String targetSumSimpleFieldPath, String queryBy, String targetQyeryFieldName){
 
 		SimpleField sumedSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(simpleFieldPath);
 
@@ -841,7 +845,7 @@ public class CustomFunctionFactory {
 		for(TestCaseUnit tmpTestCaseUnit : targetSumedTestDataList){
 
 			if(tmpTestCaseUnit.getParentTestCaseUnit().getPositionInParent() == 0){
-				List tmpQueryResult = ClassUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
+				List tmpQueryResult = classUtil.search(tmpTestCaseUnit.getTestCaseInstance(), queryStr);
 
 				if(tmpQueryResult != null && tmpQueryResult.size()>0){
 
@@ -858,7 +862,7 @@ public class CustomFunctionFactory {
 	}
 
 
-	public Date getLastTransDate(String srcPath, String curBalanceField, String applicationDatePath, String monthlyRecordInfoPath, String monthlyRecordRelNumber, String cycleDayPath){
+	public  Date getLastTransDate(String srcPath, String curBalanceField, String applicationDatePath, String monthlyRecordInfoPath, String monthlyRecordRelNumber, String cycleDayPath){
 
 		TestData testData = this.bomGenerator.getPathSimpleFieldMap().get(srcPath).getTestData();
 
@@ -911,7 +915,7 @@ public class CustomFunctionFactory {
 
 				Date lasstDay = cal1.getTime();
 
-				return RandomFactory.randomDateBetween(firstDay, lasstDay);
+				return randomFactory.randomDateBetween(firstDay, lasstDay);
 
 			}
 
@@ -920,7 +924,7 @@ public class CustomFunctionFactory {
 		return null;
 	}
 
-	public Double getOverdraftAmtTot(String overdraftAmtTotSrcPath, String unAmortizationPriPath, String currentInstalmentAmountPath, String poundage, String billPaymentAmtPath, String instalmentTypeVal, String monthlyBalance){
+	public  Double getOverdraftAmtTot(String overdraftAmtTotSrcPath, String unAmortizationPriPath, String currentInstalmentAmountPath, String poundage, String billPaymentAmtPath, String instalmentTypeVal, String monthlyBalance){
 
 		//自己
 		SimpleField overdraftAmtTotSF = this.bomGenerator.getPathSimpleFieldMap().get(overdraftAmtTotSrcPath);
@@ -1014,7 +1018,7 @@ public class CustomFunctionFactory {
 	}
 
 
-	public String instalmentIDSum(String srcPath, String idPath, String typePath, String sumType){
+	public  String instalmentIDSum(String srcPath, String idPath, String typePath, String sumType){
 
 		TestData srcTestData = this.bomGenerator.getPathSimpleFieldMap().get(srcPath).getTestData();
 
@@ -1044,7 +1048,7 @@ public class CustomFunctionFactory {
 		return sb.toString();
 	}
 
-	public Date getFirstDayOfMonth(Date date){
+	public  Date getFirstDayOfMonth(Date date){
 		Calendar cal = Calendar.getInstance();//获取当前日期
 
 		cal.setTime(date);
@@ -1054,7 +1058,7 @@ public class CustomFunctionFactory {
 		return cal.getTime();
 	}
 
-	public Date getLastDayOfMonth(Date date){
+	public  Date getLastDayOfMonth(Date date){
 		Calendar cal = Calendar.getInstance();//获取当前日期
 
 		cal.setTime(date);
@@ -1065,8 +1069,8 @@ public class CustomFunctionFactory {
 		return cal.getTime();
 	}
 
-	public Object sum(String query, String fieldName){
-		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
+	public  Object sum(String query, String fieldName){
+		List queryedList = classUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
 
 		Double sumD = new Double(0);
 
@@ -1098,8 +1102,8 @@ public class CustomFunctionFactory {
 		return sumD;
 	}
 
-	public Object setSum(String query, String fieldName){
-		List queryedList = ClassUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
+	public  Object setSum(String query, String fieldName){
+		List queryedList = classUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
 
 		Double sumD = new Double(0);
 
@@ -1130,7 +1134,7 @@ public class CustomFunctionFactory {
 	}
 
 	//added by kangchangcun at 2017/12/02
-	public Object left(String srcStr, Object doubleLenOjb){
+	public  Object left(String srcStr, Object doubleLenOjb){
 		Double doubleLen = new Double(doubleLenOjb.toString());
 		int intLen = doubleLen.intValue();
 		String Str = srcStr.substring(0,intLen);
@@ -1142,19 +1146,23 @@ public class CustomFunctionFactory {
 
 		Date stateEndDateD = (Date)stateEndDate;
 
+		if(stateEndDateD == null){
+			String a = "";
+		}
+
 		return new SimpleDateFormat("yyyy.MM").format(stateEndDateD);
 
 	}
 
-	public Object NowDate(){
+	public  Object NowDate(){
 		return new Date();
 	}
 
-	public Object getBeginMonth(Object stateEndDate){
+	public  Object getBeginMonth(Object stateEndDate){
 		return getstateEndMonth( stateEndDate);
 	}
 
-	public Object getLatest24State(){
+	public  Object getLatest24State(){
 
 		StringBuffer tmp = new StringBuffer("0");
 
@@ -1164,7 +1172,7 @@ public class CustomFunctionFactory {
 
 		for(; i<24; i++){
 
-			int randomInt = RandomFactory.randomIntBetween(1,100);
+			int randomInt = randomFactory.randomIntBetween(1,100);
 
 			if( ! isOverDue ){
 				if(randomInt <= percentMoreThan1){
@@ -1182,7 +1190,7 @@ public class CustomFunctionFactory {
 				if(randomInt < overDueUpLevel){
 					tmp.append( newDueNum );
 				}else{
-					int nextDueNum = RandomFactory.randomIntBetween(0,newDueNum);
+					int nextDueNum = randomFactory.randomIntBetween(0,newDueNum);
 					tmp.append( nextDueNum );
 					if(newDueNum == 0){
 						isOverDue = false;
@@ -1200,7 +1208,7 @@ public class CustomFunctionFactory {
 	 * @param upDownFlagObj 0:向上取整，1：向下取整；2：四舍五入
 	 * @return
 	 */
-	public Object floor(Double targetInteger, Object numberLenObj, Object upDownFlagObj){
+	public  Object floor(Double targetInteger, Object numberLenObj, Object upDownFlagObj){
 
 		Double numberLen = new Double(numberLenObj.toString());
 
@@ -1222,7 +1230,7 @@ public class CustomFunctionFactory {
 		return null;
 	}
 
-	public Double min(Object minVal, Object maxVal){
+	public  Double min(Object minVal, Object maxVal){
 
 		if(minVal == null || maxVal == null){
 			return null;
@@ -1248,7 +1256,7 @@ public class CustomFunctionFactory {
 	}
 
 
-	public Double max(Object minVal, Object maxVal){
+	public  Double max(Object minVal, Object maxVal){
 
 		Double minValDouble = new Double(minVal.toString());
 
@@ -1259,7 +1267,7 @@ public class CustomFunctionFactory {
 
 	private int guid = 100;
 
-	public String generateApplicationID() {
+	public  String generateApplicationID() {
 
 		guid += 1;
 
@@ -1288,15 +1296,15 @@ public class CustomFunctionFactory {
 	 * @return
 	 */
 	//滚动率
-	private static final double overDueUpLevel = 15;
+	private  final double overDueUpLevel = 15;
 	//N的比率
-	private static final double percentN = 50;
+	private  final double percentN = 50;
 	//0的比率
-	private static final double percentZero = 45;
+	private  final double percentZero = 45;
 	//大于等于1的比率
-	private static final double percentMoreThan1 = 5;
+	private  final double percentMoreThan1 = 5;
 
-	public Object getEStmtOdue120(Integer mob){
+	public  Object getEStmtOdue120(Integer mob){
 
 		StringBuffer tmp = new StringBuffer("0");
 
@@ -1306,7 +1314,7 @@ public class CustomFunctionFactory {
 
 		for(; i<mob-1; i++){
 
-			int randomInt = RandomFactory.randomIntBetween(1,100);
+			int randomInt = randomFactory.randomIntBetween(1,100);
 
 			if( ! isOverDue ){
 				if(randomInt <= percentMoreThan1){
@@ -1324,7 +1332,7 @@ public class CustomFunctionFactory {
 				if(randomInt < overDueUpLevel){
 					tmp.append( newDueNum );
 				}else{
-					int nextDueNum = RandomFactory.randomIntBetween(0,newDueNum);
+					int nextDueNum = randomFactory.randomIntBetween(0,newDueNum);
 					tmp.append( nextDueNum );
 					if(newDueNum == 0){
 						isOverDue = false;
@@ -1335,11 +1343,11 @@ public class CustomFunctionFactory {
 		return tmp.reverse().toString();
 	}
 
-	private Object getLastRepaymentDate(){
+	private  Object getLastRepaymentDate(){
 		return "1";
 	}
 
-	public Object getDelinquentCycle(String due123, Object relativeCycleNum){
+	public  Object getDelinquentCycle(String due123, Object relativeCycleNum){
 		Integer relativeCycleNumInt = new Integer( new Double(relativeCycleNum.toString()).intValue() );
 
 		String convertedDue123Str = due123.replace('N','0');
@@ -1353,7 +1361,7 @@ public class CustomFunctionFactory {
 //end  modified by kangchangcun at 20171202
 	}
 
-	public Object getDayNumber(String due123, Object cycleNumber, Object businessDateObj){
+	public  Object getDayNumber(String due123, Object cycleNumber, Object businessDateObj){
 
 		Date businessDate = (Date)businessDateObj;
 
@@ -1373,7 +1381,7 @@ public class CustomFunctionFactory {
 			rtn = 30;
 		}
 		else {
-			rtn = RandomFactory.randomIntBetween( 1, dayOfBusinessDateMonth );
+			rtn = randomFactory.randomIntBetween( 1, dayOfBusinessDateMonth );
 		}
 		//end  modified by kangchangcun at 20171202
 		return rtn;
@@ -1381,7 +1389,7 @@ public class CustomFunctionFactory {
 
 
 
-	public Object getLastCycleDay(Object businessDateObj, Object cycleDayObj){
+	public  Object getLastCycleDay(Object businessDateObj, Object cycleDayObj){
 
 		Date businessDate = (Date)businessDateObj;
 
@@ -1404,7 +1412,7 @@ public class CustomFunctionFactory {
 
 			lastMonthCalendar.add(Calendar.DAY_OF_YEAR,  cycleDay - calDay);
 
-			rtnTime = RandomFactory.randomLongBetween(lastMonthCalendar.getTimeInMillis(), businessDate.getTime());
+			rtnTime = randomFactory.randomLongBetween(lastMonthCalendar.getTimeInMillis(), businessDate.getTime());
 		}else{
 			Calendar cycleCalendar=Calendar.getInstance();
 
@@ -1412,14 +1420,14 @@ public class CustomFunctionFactory {
 
 			cycleCalendar.add(Calendar.DAY_OF_YEAR, cycleDay - calDay);
 
-			rtnTime = RandomFactory.randomLongBetween(cycleCalendar.getTimeInMillis(), businessDate.getTime());
+			rtnTime = randomFactory.randomLongBetween(cycleCalendar.getTimeInMillis(), businessDate.getTime());
 
 		}
 
 		return new Date(rtnTime);
 	}
 
-	public Object getLastHistoryCycleDay(Object businessDateObj, Object cycleObj, Object cycleNumberObj){
+	public  Object getLastHistoryCycleDay(Object businessDateObj, Object cycleObj, Object cycleNumberObj){
 		Date businessDate = (Date)businessDateObj;
 
 		if(cycleNumberObj == null){
@@ -1444,16 +1452,16 @@ public class CustomFunctionFactory {
 
 		Long lastMonthMilSec = calendar.getTimeInMillis();
 
-		return new Date( RandomFactory.randomLongBetween(lastMonthMilSec, thisMonthMilSec));
+		return new Date( randomFactory.randomLongBetween(lastMonthMilSec, thisMonthMilSec));
 	}
 
-	public Object getStmtOdue120(String eStmtOdue120){
+	public  Object getStmtOdue120(String eStmtOdue120){
 
 		char[] tmpChar = new char[eStmtOdue120.length()] ;
 
 		for(int i=0; i<tmpChar.length; i++) {
 
-			double randomDouble = RandomFactory.randomDoubleBetween(0, 1);
+			double randomDouble = randomFactory.randomDoubleBetween(0, 1);
 //modified by kangchangcun at 20171202
 //			if (i == 0) {
 //				if (randomDouble >= 0 || randomDouble < 0.9) {
@@ -1489,7 +1497,7 @@ public class CustomFunctionFactory {
 	}
 
 
-	public Object getMthsOdueAmt(String due123, Object relativeCycleNum,  Object balance){
+	public  Object getMthsOdueAmt(String due123, Object relativeCycleNum,  Object balance){
 
 		Double balanceDouble = new Double(balance.toString());
 
@@ -1503,11 +1511,11 @@ public class CustomFunctionFactory {
 			return new Double(0);
 		}
 		else {
-			return new Double( RandomFactory.randomDoubleBetween(0d, balanceDouble) );
+			return new Double( randomFactory.randomDoubleBetween(0d, balanceDouble) );
 		}
 	}
 
-	public String generateInternalInfoApplicationType(
+	public  String generateInternalInfoApplicationType(
 			AbstractTestData parentTest, AbstractTestData currentTetsData) {
 
 		SimpleField sf = (SimpleField) currentTetsData;
@@ -1523,16 +1531,21 @@ public class CustomFunctionFactory {
 		return rtn;
 	}
 
-	public Object random(Object minDouble, Object maxDouble){
+	public  Object random(Object minDouble, Object maxDouble){
 
 		Double minD = new Double(minDouble.toString());
 
 		Double maxD = new Double(maxDouble.toString());
 
-		return RandomFactory.randomDoubleBetween(minD, maxD);
+		return randomFactory.randomDoubleBetween(minD, maxD);
 	}
 
-	public Object rightLast24States(String srcStr){
+	public  Object rightLast24States(String srcStr){
+
+		if(srcStr == null){
+			String a = "";
+		}
+
 		String lastChar = srcStr.substring(srcStr.length() - 1);
 
 		Pattern p = Pattern.compile(TestCaseExpression.FIND_PURE_NUMBERIC_PATH_EXP);
@@ -1551,7 +1564,7 @@ public class CustomFunctionFactory {
 //		String rtn = "";
 //
 //		for (int i = 0; i < 24; i++) {
-//			if (RandomFactory.randomDoubleBetween(1, 100) < 0.5) {
+//			if (randomFactory.randomDoubleBetween(1, 100) < 0.5) {
 //				rtn += "1";
 //			} else {
 //				rtn += "0";
@@ -1562,7 +1575,7 @@ public class CustomFunctionFactory {
 //
 
 
-	private Map<Integer, String> nodeInforNodeIDPosIDMap = new ConcurrentHashMap<Integer, String>();
+	private  Map<Integer, String> nodeInforNodeIDPosIDMap = new ConcurrentHashMap<Integer, String>();
 
 	{
 		nodeInforNodeIDPosIDMap.put(0, "N000000");
@@ -1613,7 +1626,7 @@ public class CustomFunctionFactory {
 
 	private int nodeInfoNodeTypeCnt = 0;
 
-	public String generateNodeInfoNodeIDElement(AbstractTestData parentTest,
+	public  String generateNodeInfoNodeIDElement(AbstractTestData parentTest,
 			AbstractTestData currentTetsData) {
 
 		String rtn = nodeInforNodeIDPosIDMap.get(nodeInfoNodeIDCnt % 31);
@@ -1624,7 +1637,7 @@ public class CustomFunctionFactory {
 
 	}
 
-	public Integer getAge(Object applicationDateObj, Object birthDateObj){
+	public  Integer getAge(Object applicationDateObj, Object birthDateObj){
 		Date applicationDate = (Date)applicationDateObj;
 		Date birthDate = (Date)birthDateObj;
 
@@ -1633,20 +1646,20 @@ public class CustomFunctionFactory {
 
 	private static String randomCharAll = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-	public Object randomChar(Object lenObj){
+	public  Object randomChar(Object lenObj){
 		Integer len = new Double(lenObj.toString()).intValue();
 
 		StringBuffer sb = new StringBuffer();
 
 		for(int i=0; i<len; i++){
-			int random = RandomFactory.randomIntBetween(0, randomCharAll.length()-1);
+			int random = randomFactory.randomIntBetween(0, randomCharAll.length()-1);
 			sb.append( randomCharAll.charAt(random) );
 		}
 
 		return sb.toString();
 	}
 
-	public String generateNodeInfoNodeTypeElement(AbstractTestData parentTest,
+	public  String generateNodeInfoNodeTypeElement(AbstractTestData parentTest,
 			AbstractTestData currentTetsData) {
 
 		String rtn = nodeInforNodeTypeMap.get(nodeInfoNodeTypeCnt % 31);
@@ -1660,7 +1673,7 @@ public class CustomFunctionFactory {
 		return rtn;
 	}
 
-	public boolean findCusteomFunctionByName(String functionName) {
+	public  boolean findCusteomFunctionByName(String functionName) {
 		Method[] mArr = CustomFunctionFactory.class.getMethods();
 
 		for (Method method : mArr) {
@@ -1671,12 +1684,12 @@ public class CustomFunctionFactory {
 		return false;
 	}
 
-	public void manageCreditSummaryCueHouseLoanCount(
+	public  void manageCreditSummaryCueHouseLoanCount(
 			AbstractTestData parentTest, AbstractTestData currentTetsData) {
 
 	}
 
-	public void handleStateEndDate(AbstractTestData parentTest,
+	public  void handleStateEndDate(AbstractTestData parentTest,
 			AbstractTestData currentTetsData) {
 		SimpleField stateEndDate = (SimpleField) currentTetsData;
 
@@ -1685,7 +1698,7 @@ public class CustomFunctionFactory {
 
 	private int getMonthItemMonthCnt = 0;
 	// add by kcc at 20170717
-	public String getMonthItemMonth(AbstractTestData parentTest,
+	public  String getMonthItemMonth(AbstractTestData parentTest,
 			AbstractTestData currentTetsData) throws Exception {
 
 		SimpleField simpleField = (SimpleField)parentTest;
@@ -1713,7 +1726,7 @@ public class CustomFunctionFactory {
 	// end by kcc at 20170717
 	//added by kcc at 20170719
 	
-	public String getIDNumber(AbstractTestData parentTest, AbstractTestData currentTetsData) {
+	public  String getIDNumber(AbstractTestData parentTest, AbstractTestData currentTetsData) {
 
 		String rtn = null;
 		

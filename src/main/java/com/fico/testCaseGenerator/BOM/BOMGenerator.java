@@ -20,7 +20,8 @@ public abstract class BOMGenerator {
 	protected Map<String,Extendtion> configurationMap;
 
 	public BOMGenerator(){
-		List<Extendtion> list = LoadConfiguration.readExcelData("C:\\projects\\testCaseGenerator\\eclipse_work_space\\TestCaseGeneratorWeb\\BOM\\cafs\\test2.xls");
+		loadconf = new LoadConfiguration("");
+		List<Extendtion> list = loadconf.readExcelData("C:\\projects\\testCaseGenerator\\eclipse_work_space\\TestCaseGeneratorWeb\\BOM\\cafs\\test2.xls");
 		configurationMap = new HashMap<String, Extendtion>();
 		for(int i=0;i<list.size();i++){
 

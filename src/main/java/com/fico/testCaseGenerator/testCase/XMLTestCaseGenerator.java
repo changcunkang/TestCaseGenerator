@@ -25,6 +25,8 @@ public class XMLTestCaseGenerator extends TestCaseGenerator {
 
 	}
 
+	private RandomFactory randomFactory = new RandomFactory();
+
 	@Override
 	public Object generateRootTestCaseData(TestData testData) {
 		XMLTestData xmlTestData = (XMLTestData)testData;
@@ -185,13 +187,13 @@ public class XMLTestCaseGenerator extends TestCaseGenerator {
 		
 		if(simpleField.getFieldType() == SimpleField.TYPE_INT){
 			
-			int eleValueInt = RandomFactory.randomIntBetween(new Double(min).intValue(), new Double(max).intValue() );
+			int eleValueInt = randomFactory.randomIntBetween(new Double(min).intValue(), new Double(max).intValue() );
 			
 			rtn = String.valueOf(eleValueInt);
 			
 		}else if( simpleField.getFieldType() == SimpleField.TYPE_REAL ){
 			
-			double eleValueDouble = RandomFactory.randomDoubleBetween(Double.parseDouble( min ), Double.parseDouble( max ) );
+			double eleValueDouble = randomFactory.randomDoubleBetween(Double.parseDouble( min ), Double.parseDouble( max ) );
 			
 			
 			rtn = String.valueOf(new Double(eleValueDouble));
@@ -202,7 +204,7 @@ public class XMLTestCaseGenerator extends TestCaseGenerator {
 			
 			Date dateMax = this.getDateTypeDataFormat().parse(max);	
 			
-			Date rntDate = RandomFactory.randomDateBetween(dateMin, dateMax);
+			Date rntDate = randomFactory.randomDateBetween(dateMin, dateMax);
 			
 			rtn = this.getDateTypeDataFormat().format(rntDate);
 			
@@ -212,7 +214,7 @@ public class XMLTestCaseGenerator extends TestCaseGenerator {
 			
 			Date dateMax = this.getDateTimeTypeDataFormat().parse(max);	
 			
-			Date rntDate = RandomFactory.randomDateBetween(dateMin, dateMax);
+			Date rntDate = randomFactory.randomDateBetween(dateMin, dateMax);
 			
 			rtn = this.getDateTimeTypeDataFormat().format(rntDate);
 		}

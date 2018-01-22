@@ -6,6 +6,8 @@ import com.cams.blaze.request.Application;
 import com.fico.testCaseGenerator.XSTream.XSTreamHelper;
 import com.fico.testCaseGenerator.blazeServer.BlazeServer;
 import com.fico.testCaseGenerator.blazeServer.BlazeServers;
+import com.fico.testCaseGenerator.facade.TestCaseGeneratorFacade;
+import com.fico.testCaseGenerator.project.Project;
 import com.fico.testCaseGenerator.testCase.RIDOInstance;
 import com.fico.testCaseGenerator.testCase.TestCaseInstance;
 import org.dom4j.*;
@@ -25,16 +27,30 @@ import java.util.Vector;
 
 public class RIDORuleProcessor implements ItemProcessor<Object, Object>, InitializingBean, DisposableBean {
 
-
     private ExecutionConfiguration executionConfiguration;
 
     private static BlazeServer blazeServer = null;
+
+    private Project project;
+
+    public Project getProject() {
+        if(this.project == null){
+            TestCaseGeneratorFacade testCaseGeneratorFacade = new TestCaseGeneratorFacade();
+            testCaseGeneratorFacade.listProjects();
+            testCaseGeneratorFacade.loadAllProjects();
+
+            Project cafsProject = testCaseGeneratorFacade.getProject("cafs");
+            cafsProject.setProjectID(4L);
+            this.project = cafsProject;
+        }
+        return project;
+    }
 
     private BlazeServer getBlazeServer(){
         if(blazeServer == null){
             System.out.println("Creating Blaze Servers");
             try {
-                blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\bom\\blaze.server");
+                blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\adb\\CAMS_RDS\\adb\\CAMS_RDS_ser.server");
             } catch (NdLocalServerException e) {
                 e.printStackTrace();
             }
@@ -46,7 +62,9 @@ public class RIDORuleProcessor implements ItemProcessor<Object, Object>, Initial
 
     public Object process(Object ridoInstance) throws Exception {
 
-       return invokingBlaze(ridoInstance);
+       Object blazeInput = this.getProject().generateTestCase();;
+
+       return invokingBlaze(blazeInput);
     }
 
     public Object invokingBlaze(Object blazeInput){
@@ -54,7 +72,7 @@ public class RIDORuleProcessor implements ItemProcessor<Object, Object>, Initial
         try {
             blazeResponse = getBlazeServer().invokeExternalMain((Application)blazeInput);
 
-            String responseStr = XSTreamHelper.getXStream().toXML(blazeResponse);
+            String responseStr = new XSTreamHelper().getXStream().toXML(blazeResponse);
 
             blazeResponse.setResponseStr(responseStr);
 
@@ -70,7 +88,7 @@ public class RIDORuleProcessor implements ItemProcessor<Object, Object>, Initial
     }
 
     public void afterPropertiesSet() throws Exception {
-        getBlazeServer();
+        //getBlazeServer();
     }
 
     public ExecutionConfiguration getExecutionConfiguration() {

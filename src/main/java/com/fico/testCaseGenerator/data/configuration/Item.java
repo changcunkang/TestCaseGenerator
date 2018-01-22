@@ -35,17 +35,6 @@ public class Item {
 		this.restrictionID = restrictionID;
 	}
 
-	private List<String> resultIdList;
-
-	public List<String> getResultIdList() {
-		
-		if( this.resultIdList == null ){
-			this.resultIdList = new ArrayList<String>();
-		}
-		
-		return this.resultIdList;
-	}
-
 	public long getResultMaxNum() {
 		return resultMaxNum;
 	}

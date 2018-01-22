@@ -1,0 +1,5 @@
+-- 统计规则集个数
+select count(*) as totalNumber, ruleset_code, ruleset_name from ruleset_history GROUP BY ruleset_code;
+-- 统计触发规则的案例个数
+SELECT count(*) from decision_response where id in( SELECT decision_response from decision_response_rule_decision ) ;
+

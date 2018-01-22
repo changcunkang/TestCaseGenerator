@@ -43,12 +43,12 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
         <bean:property name="location" value="classpath:jdbc.properties" />
     </bean:bean>
 
-    <task:executor id="taskExecutor" pool-size="8" keep-alive="100" />
+    <task:executor id="taskExecutor" pool-size="5" keep-alive="50" />
 
     <job id="helloWorldJob">
         <step id="step_constructData">
             <tasklet transaction-manager="transactionManager">
-                <chunk commit-interval="1" reader="testCaseGeneratorItemReader" processor="asyncProcessor" writer="itemWriter" />
+                <chunk commit-interval="10" reader="testCaseGeneratorItemReader" processor="asyncProcessor" writer="itemWriter" />
             </tasklet>
         </step>
     </job>

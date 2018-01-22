@@ -23,12 +23,12 @@ public class TestMain {
         System.out.println("TestCase Generating Complete.");
 
         System.out.println("Creating Blaze Server.");
-        BlazeServer blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\bom\\blaze.server");
+        BlazeServer blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\adb\\CAMS_RDS\\adb\\CAMS_RDS_ser.server");
         System.out.println("Creating Blaze Server Complete.");
 
         Application blazeResponse = blazeServer.invokeExternalMain( testCase );
 
-        System.out.println(XSTreamHelper.getXStream().toXML(blazeResponse) );
+        System.out.println(new XSTreamHelper().getXStream().toXML(blazeResponse) );
 
         System.out.println("111");
     }

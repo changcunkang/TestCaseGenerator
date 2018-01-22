@@ -75,21 +75,6 @@ public abstract class SimpleField extends AbstractTestData {
 		this.simpleImplementField = simpleImplementField;
 	}
 
-
-
-	public List<Integer> getDependencySimpleFieldPosition() {
-
-		if(dependencySimpleFieldPosition == null){
-			dependencySimpleFieldPosition = new ArrayList<Integer>();
-		}
-
-		return dependencySimpleFieldPosition;
-	}
-
-	public void setDependencySimpleFieldPosition(List<Integer> dependencySimpleFieldPosition) {
-		this.dependencySimpleFieldPosition = dependencySimpleFieldPosition;
-	}
-
 	@Override
 	public String toString(){
 		return this.getName();

@@ -48,6 +48,8 @@ public class TestCaseGeneratorItemReader implements ItemReader<Object>, Initiali
 
     private Date startDate;
 
+    private String tmpRtn = "";
+
     public Object read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
 
         if(executionConfiguration.getCurrentGeneratedNumCases() == 0){
@@ -57,7 +59,9 @@ public class TestCaseGeneratorItemReader implements ItemReader<Object>, Initiali
 
         while(executionConfiguration.getCurrentGeneratedNumCases() < executionConfiguration.getTargetNumCases()){
 
-            return generateTestCaseInstance();
+            return tmpRtn;
+
+            //return generateTestCaseInstance();
         }
 
         System.out.println("all " + executionConfiguration.getTargetNumCases() + " cases generated complete, batch start at " + startDate);

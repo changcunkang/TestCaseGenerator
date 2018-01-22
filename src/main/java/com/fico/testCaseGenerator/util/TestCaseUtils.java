@@ -22,7 +22,7 @@ public class TestCaseUtils {
      * @param exp
      * @return
      */
-    public static List<String> getAllAbsTestData(String exp){
+    public List<String> getAllAbsTestData(String exp){
 
         List<String> rtnPathList = new ArrayList<String>();
 

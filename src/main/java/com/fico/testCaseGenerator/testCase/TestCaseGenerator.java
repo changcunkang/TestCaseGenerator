@@ -678,6 +678,9 @@ public abstract class TestCaseGenerator {
 
 				if(bothReduced >= 10){
 					System.out.println("None TestData nor SimpleField is reduced");
+					if(unGeneratedSlaveSimpleFieldList.size() ==0 && unGeneratedSlaveTestDataList.size()==0){
+						break;
+					}
 				}
 
 			}else{
@@ -721,7 +724,8 @@ public abstract class TestCaseGenerator {
 
 		for(SimpleField sf : testData.getSimpleFieldList()){
 			sf.setGenerateTestCaseFinish(flag);
-			sf.setDependencySimpleFieldPosition(new ArrayList<Integer>());
+			sf.setTestCase(null);
+			//sf.setDependencySimpleFieldPosition(new ArrayList<Integer>());
 		}
 
 		for(TestData childTestData : testData.getCustomFieldList()){

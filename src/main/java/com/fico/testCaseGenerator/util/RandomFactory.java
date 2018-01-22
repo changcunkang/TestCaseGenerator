@@ -8,24 +8,26 @@ import java.util.Random;
 
 public class RandomFactory {
 
-	private static NumberFormat nf = NumberFormat.getNumberInstance();
+	private RandomDataGenerator randomDataGenerator = new RandomDataGenerator();
+
+	private  NumberFormat nf = NumberFormat.getNumberInstance();
 	
-	static {
+	 {
 		nf.setMaximumFractionDigits(2); 
 	}
 	
-	private static Random random = new Random();
+	private  Random random = new Random();
 	
-	public static double random100(double para){
+	public   double random100(double para){
 		return random.nextDouble() * para;
 	}
 	
-	public static double random(){
+	public   double random(){
 		return random.nextDouble();
 	}
 	
 	//左闭右闭
-	public static int randomIntBetween(int min, int max){
+	public   int randomIntBetween(int min, int max){
 
 		if(min == max){
 			return min;
@@ -34,11 +36,11 @@ public class RandomFactory {
 		if(min>max){
 			return max;
 		}
-		return new RandomDataGenerator().nextInt(min, max);
+		return randomDataGenerator.nextInt(min, max);
 	}
 
 	//左闭右闭
-	public static long randomLongBetween(long min, long max){
+	public   long randomLongBetween(long min, long max){
 
 		if(min == max){
 			return min;
@@ -48,10 +50,10 @@ public class RandomFactory {
 			return max;
 		}
 
-		return new RandomDataGenerator().nextLong(min, max);
+		return randomDataGenerator.nextLong(min, max);
 	}
 
-	public static Double randomDoubleBetween(double min, double max){
+	public   Double randomDoubleBetween(double min, double max){
 
 		if(max == min){
 			return max;
@@ -63,7 +65,7 @@ public class RandomFactory {
 		return (double)Math.round( rtnDouble *100)/100;
 	}
 	
-	public static Date randomDateBetween(Date datemin, Date datemax){
+	public   Date randomDateBetween(Date datemin, Date datemax){
 		Long minDateTime = datemin.getTime();
 		
 		Long maxDateTime = datemax.getTime();
@@ -81,10 +83,5 @@ public class RandomFactory {
 		
 		return rtnDate ;
 	}
-	
-	public static void main(String[] args){
-		for( int i=0; i<20; i++ ){
-			System.out.println( random() );
-		}
-	}
+
 }

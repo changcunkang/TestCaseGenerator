@@ -11,6 +11,8 @@ import com.fico.testCaseGenerator.testCase.TestCaseGenerator;
 import com.fico.testCaseGenerator.util.RandomFactory;
 import com.fico.testCaseGenerator.util.TestCaseUtils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -84,9 +86,18 @@ public class TestCaseExpression {
 
     public static final String SETSUM_SIZE_FUNCTION_NAME = "setSum";
 
-    private static List<String> ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST = new ArrayList<String>();
+    private  List<String> ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST = new ArrayList<String>();
 
-    static {
+    private TestCaseUtils testCaseUtils = new TestCaseUtils();
+
+    private CustomFunctionFactory customFunctionFactory = null;
+
+    private RandomFactory randomFactory = new RandomFactory();
+
+    public TestCaseExpression(TestCaseGenerator testCaseGenerator){
+        this.bomGenerator = testCaseGenerator.getBomGenerator();
+        this.customFunctionFactory = new CustomFunctionFactory(testCaseGenerator);
+
 
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(TESTDATA_SIZE_FUNCTION_NAME);
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add(MERGE_FUNCTION_NAME);
@@ -111,14 +122,6 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastTransDate");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getOverdraftAmtTot");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("instalmentIDSum");
-
-    }
-
-    private CustomFunctionFactory customFunctionFactory = null;
-
-    public TestCaseExpression(TestCaseGenerator testCaseGenerator){
-        this.bomGenerator = testCaseGenerator.getBomGenerator();
-        this.customFunctionFactory = new CustomFunctionFactory(testCaseGenerator);
     }
 
     /**
@@ -130,11 +133,11 @@ public class TestCaseExpression {
 
         double nullPercent = restriction.getNullPercentage();
 
-        double nullPercentHit = RandomFactory.random();
+        double nullPercentHit = randomFactory.random();
 
         if( nullPercentHit >= nullPercent ){
 
-            double notNullPercentHit = RandomFactory.random();
+            double notNullPercentHit = randomFactory.random();
 
             double minPercent = 0;
 
@@ -194,10 +197,10 @@ public class TestCaseExpression {
             int simpleFieldType = simpleField.getFieldType();
             switch (simpleFieldType){
                 case SimpleField.TYPE_INT :
-                    return new Integer( RandomFactory.randomIntBetween( convertObjectValToInteger(minValue), convertObjectValToInteger(maxValue) ) );
+                    return new Integer( randomFactory.randomIntBetween( convertObjectValToInteger(minValue), convertObjectValToInteger(maxValue) ) );
 
                 case SimpleField.TYPE_REAL:
-                    return new Double( RandomFactory.randomDoubleBetween( convertObjectValToInteger(minValue), convertObjectValToInteger(maxValue) ) );
+                    return new Double( randomFactory.randomDoubleBetween( convertObjectValToInteger(minValue), convertObjectValToInteger(maxValue) ) );
 
                 case SimpleField.TYPE_DATE:
 
@@ -219,7 +222,7 @@ public class TestCaseExpression {
                             return null;
                         }
 
-                        long randomBetweenInt = RandomFactory.randomLongBetween(randomMinDateInt, randomMaxDateInt);
+                        long randomBetweenInt = randomFactory.randomLongBetween(randomMinDateInt, randomMaxDateInt);
                         return new Date(randomBetweenInt);
 
                     } catch (ParseException e) {
@@ -227,7 +230,7 @@ public class TestCaseExpression {
                     }
             }
         }else if(abstractTestData instanceof TestData){
-            return new Integer( RandomFactory.randomIntBetween( new Double(minValue.toString()).intValue(), new Double(maxValue.toString()).intValue() ) ) ;
+            return new Integer( randomFactory.randomIntBetween( new Double(minValue.toString()).intValue(), new Double(maxValue.toString()).intValue() ) ) ;
         }
         return null;
     }
@@ -522,7 +525,39 @@ public class TestCaseExpression {
         if(functionName.equals("testDataSimpleFieldSetType")){
             String a = "";
         }
-        return this.customFunctionFactory.invokeCustomFunction(functionName, args);
+        return invokeCustomFunction(functionName, args);
+    }
+
+    private Object invokeCustomFunction(String functionName, Object... args){
+        Method[] mArr = CustomFunctionFactory.class.getMethods();
+
+        if(functionName.equals("getDayNumber") || functionName.equals("getStmtOdue120")){
+            String a = "";
+        }
+
+        for (Method method : mArr) {
+            if (method.getName().equals(functionName)) {
+                Object rtn = null;
+                try {
+
+                    if(args == null){
+                        rtn = method.invoke(this.customFunctionFactory);
+                    }else{
+
+                        rtn = method.invoke(this.customFunctionFactory, args);
+                    }
+
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                return rtn;
+            }
+        }
+        return null;
     }
 
     private Object recursiveFunctionInvocation(Restriction restriction, String path, String[] rtn){
@@ -754,7 +789,9 @@ public class TestCaseExpression {
             String a = "";
         }
 
-        return testCaseUnit.getFieldValue(getFieldNameFromPath(path));
+        String fieldVal = getFieldNameFromPath(path);
+
+        return testCaseUnit.getFieldValue(fieldVal);
     }
 
 
@@ -772,7 +809,7 @@ public class TestCaseExpression {
      * @return
      */
     public List<String> getAllAbsTestData(String exp){
-        return TestCaseUtils.getAllAbsTestData(exp);
+        return testCaseUtils.getAllAbsTestData(exp);
     }
 
     /**

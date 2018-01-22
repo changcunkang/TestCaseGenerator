@@ -18,23 +18,16 @@ public class TestMainJPA {
 
     public static void main(String[] args) throws Exception{
 
-        int loopCnt = 10000;
+        int loopCnt = 30;
 
         ApplicationContext context = new ClassPathXmlApplicationContext(
                 "applicationContext-batch.xml");
         ApplicationDao appDao = (ApplicationDao) context.getBean(ApplicationDao.class);
 
-        RIDOInstance rtnInstance = new RIDOInstance();
-
-        TestCaseGeneratorFacade testCaseGeneratorFacade = new TestCaseGeneratorFacade();
-        testCaseGeneratorFacade.listProjects();
-        testCaseGeneratorFacade.loadAllProjects();
-
-        Project cafsProject = testCaseGeneratorFacade.getProject("cafs");
-        cafsProject.setProjectID(4L);
+        Project cafsProject = new Project("cafs",Project.PROJECT_TYPE_XMLBOM);
 
         System.out.println("Creating Blaze Server.");
-        BlazeServer blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\bom\\blaze.server");
+        BlazeServer blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\adb\\CAMS_RDS\\adb\\CAMS_RDS_ser.server");
         System.out.println("Creating Blaze Server Complete.");
 
         Long startMill = System.currentTimeMillis();
@@ -48,7 +41,7 @@ public class TestMainJPA {
 
             Application blazeResponse = blazeServer.invokeExternalMain( testCase );
 
-            String responseStr = XSTreamHelper.getXStream().toXML(blazeResponse);
+            String responseStr = new XSTreamHelper().getXStream().toXML(blazeResponse);
 
             blazeResponse.setResponseStr(responseStr);
 

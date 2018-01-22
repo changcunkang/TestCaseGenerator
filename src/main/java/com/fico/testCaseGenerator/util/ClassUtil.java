@@ -9,7 +9,7 @@ import java.util.*;
 
 public class ClassUtil {
 	
-	 public static List<Object> search(Object o, String query)
+	 public List<Object> search(Object o, String query)
 	  {
 	   // System.out.println(o);
 	    List objects = new ArrayList();
@@ -41,7 +41,7 @@ public class ClassUtil {
 	    return objects;
 	  }
 
-	  private static void searchField(List objects, Object o, Field field, String query) {
+	  private void searchField(List objects, Object o, Field field, String query) {
 	    String[] querys = parseQuery(query);
 	    if (Collection.class.isAssignableFrom(field.getType()))
 	    {
@@ -50,8 +50,8 @@ public class ClassUtil {
 	        Collection collection = (Collection)field.get(o);
 	        
 	        if(collection != null){
-	        	 for (Iterator localIterator = collection.iterator(); localIterator.hasNext(); ) 
-	 	        { 
+	        	 for (Iterator localIterator = collection.iterator(); localIterator.hasNext(); )
+	 	        {
 	 	        	Object o1 = localIterator.next();
 	 	        	objects.addAll(search(o1, query)); 
 	 	          }
@@ -104,7 +104,7 @@ public class ClassUtil {
 	    }
 	  }
 
-	  private static boolean isBasicType(Class fieldType){
+	  private boolean isBasicType(Class fieldType){
 		  if(fieldType.isPrimitive() ||
 				  fieldType == Integer.class || fieldType == Double.class ||
 				  fieldType == Float.class || fieldType == String.class ||
@@ -118,7 +118,7 @@ public class ClassUtil {
 		  return false;
 	  }
 	  
-	  private static boolean filter(Object o, String exp)
+	  private boolean filter(Object o, String exp)
 	  {
 	    if (o == null) {
 	      return false;
@@ -131,7 +131,7 @@ public class ClassUtil {
 	    String[] strings = s.split(" ");
 	    List objects = new ArrayList();
 	    for (String s0 : strings) {
-	      if (!s0.isEmpty()) {
+	      if (s0!=null && !"".equals(s0) ) {
 	        objects.add(s0);
 	      }
 	    }
@@ -148,7 +148,7 @@ public class ClassUtil {
 	    return f;
 	  }
 
-	  private static List parseExp(Object o, List exp, String con)
+	  private List parseExp(Object o, List exp, String con)
 	  {
 	    for (int i = 0; i < exp.size(); i++) {
 	      if (exp.get(i).toString().equalsIgnoreCase(con)) {
@@ -189,7 +189,7 @@ public class ClassUtil {
 	    return exp;
 	  }
 
-	  private static boolean filterExp(Object o, String exp) {
+	  private boolean filterExp(Object o, String exp) {
 	    if (exp == null) {
 	      return true;
 	    }
@@ -236,7 +236,7 @@ public class ClassUtil {
 	    return false;
 	  }
 
-	  private static Object[] parseExp(Object o, String exp, String connector) {
+	  private Object[] parseExp(Object o, String exp, String connector) {
 	    Object[] objects = new Object[2];
 	    String[] strings = exp.split(connector);
 	    String attr = strings[0].replace("@", "");
@@ -256,7 +256,7 @@ public class ClassUtil {
 	    return objects;
 	  }
 
-	  private static String[] parseQuery(String query) {
+	  private  String[] parseQuery(String query) {
 	    String[] strings = new String[4];
 	    char[] chars = query.toCharArray();
 	    StringBuilder builder = new StringBuilder();
@@ -288,22 +288,7 @@ public class ClassUtil {
 	    return strings;
 	  }
 
-	  public static boolean isNull(Object o) {
+	  public  boolean isNull(Object o) {
 	    return o == null;
-	  }
-	  
-	  public static void main(String[] args) throws Exception {
-		  Loancard l1 = new Loancard();
-
-		  l1.setCue("123");
-		  l1.setOpenDate(new SimpleDateFormat(TestCaseUtils.DATE_FORMAT).parse("2017-12-27"));
-
-		  Loancard l2 = new Loancard();
-
-		  l2.setCue("456");
-
-		  Object o1 = ClassUtil.search(l1, "/Loancard[openDate='2017-12-27']");
-
-		  System.out.println("1234");;
 	  }
 }

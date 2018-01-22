@@ -19,11 +19,11 @@ import java.util.*;
  */
 public class XSTreamHelper {
 
-    private static XStream xStream = null;
+    private XStream xStream = null;
 
-    private static Map<String, Class> SIMPLE_NAME_JAVACLASS_MAP = new HashMap<String, Class>();
+    private Map<String, Class> SIMPLE_NAME_JAVACLASS_MAP = new HashMap<String, Class>();
 
-    public static XStream getXStream(){
+    public XStream getXStream(){
         if(xStream == null){
             xStream = new XStream( new DomDriver(null,new XmlFriendlyNameCoder("_-", "_"))  );
 
@@ -42,7 +42,7 @@ public class XSTreamHelper {
         return xStream;
     }
 
-    private static void buildDataStructor(XStream tmpXstream) throws Exception{
+    private  void buildDataStructor(XStream tmpXstream) throws Exception{
 
         String applicationClassFullPackageName = ResourceBundle.getBundle("javaBOM").getString("rootApplicationFullName");
 
@@ -96,24 +96,24 @@ public class XSTreamHelper {
         }
     }
 
-    public static Object readApplication(String filePath){
+    public  Object readApplication(String filePath){
         return getXStream().fromXML(new File(filePath));
     }
 
-    public static synchronized Object fromXMLToObject(String xmlStr){
+    public  synchronized Object fromXMLToObject(String xmlStr){
         return getXStream().fromXML(xmlStr);
     }
 
-    public static synchronized String fromObjectToXML(Object object){
+    public  synchronized String fromObjectToXML(Object object){
         return getXStream().toXML(object);
     }
 
-    public static Class getJavaBomBySimpleName(String classSimpleName){
+    public  Class getJavaBomBySimpleName(String classSimpleName){
         return SIMPLE_NAME_JAVACLASS_MAP.get(classSimpleName);
     }
 
 
-    public static boolean isBasicType(Class fieldType){
+    public  boolean isBasicType(Class fieldType){
         if(fieldType.isPrimitive() ||
                 fieldType == Integer.class || fieldType == Double.class ||
                 fieldType == Float.class || fieldType == String.class ||
@@ -127,7 +127,7 @@ public class XSTreamHelper {
         return false;
     }
 
-//    private static String convertJavaBeanToXMLStr(Object obj ) throws Exception{
+//    private  String convertJavaBeanToXMLStr(Object obj ) throws Exception{
 //        String result = null;
 //
 //        JAXBContext context = JAXBContext.newInstance(obj.getClass());
@@ -142,7 +142,7 @@ public class XSTreamHelper {
 //        return result;
 //    }
 //
-//    public static Application converyToJavaBean(String xml) throws Exception {
+//    public  Application converyToJavaBean(String xml) throws Exception {
 //        Application rtnApp = null;
 //
 //        JAXBContext context = JAXBContext.newInstance(Application.class);

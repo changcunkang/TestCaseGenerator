@@ -38,7 +38,7 @@ public class LoadConfiguration {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static List<Extendtion> readExcelData(String fileName) {
+	public List<Extendtion> readExcelData(String fileName) {
 		List<Extendtion> extendtionList = new ArrayList<Extendtion>();
 		int parentAndNodeRowNumber = 0;
 		int fieldNameRowNumber = 0;
@@ -275,8 +275,6 @@ public class LoadConfiguration {
 
 	public static void main(String args[]) {
 		//广州银行
-		List<Extendtion> list = readExcelData("C:\\projects\\testCaseGenerator\\eclipse_work_space\\TestCaseGeneratorWeb\\BOM\\cafs\\test2.xls");
-		
 		System.out.println("111111111111");
 	}
 
