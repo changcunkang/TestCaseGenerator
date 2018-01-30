@@ -16,14 +16,14 @@ public class RandomFactory {
 		nf.setMaximumFractionDigits(2); 
 	}
 	
-	private  Random random = new Random();
+	//private  Random random = new Random();
 	
 	public   double random100(double para){
-		return random.nextDouble() * para;
+		return new Random().nextDouble() * para;
 	}
 	
 	public   double random(){
-		return random.nextDouble();
+		return new Random().nextDouble()*100;
 	}
 	
 	//左闭右闭
@@ -59,7 +59,7 @@ public class RandomFactory {
 			return max;
 		}
 		
-		double rtnDouble = random.nextDouble()*(max - min) + min;
+		double rtnDouble = new Random().nextDouble()*(max - min) + min;
 		
 		//现在去小数后4位
 		return (double)Math.round( rtnDouble *100)/100;
@@ -75,7 +75,7 @@ public class RandomFactory {
 			return datemin;
 		}
 		
-		long rtnDateTime = new Double(random.nextDouble()*(maxDateTime - minDateTime) + minDateTime).longValue();
+		long rtnDateTime = new Double(new Random().nextDouble()*(maxDateTime - minDateTime) + minDateTime).longValue();
 		
 		Date rtnDate = new Date();
 		
