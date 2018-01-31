@@ -122,6 +122,8 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastTransDate");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getOverdraftAmtTot");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("instalmentIDSum");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getInstalmentDetail_New_CurrentInstalmentPeriod");
+
     }
 
     /**
@@ -131,7 +133,7 @@ public class TestCaseExpression {
      */
     public Object parse(Restriction restriction){
 
-        double nullPercent = restriction.getNullPercentage();
+        double nullPercent = restriction.getNullPercentage()/100;
 
         double nullPercentHit = randomFactory.random();
 

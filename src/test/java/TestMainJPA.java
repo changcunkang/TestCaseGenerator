@@ -18,7 +18,7 @@ public class TestMainJPA {
 
     public static void main(String[] args) throws Exception{
 
-        int loopCnt = 30;
+        int loopCnt = 1;
 
         ApplicationContext context = new ClassPathXmlApplicationContext(
                 "applicationContext-batch.xml");

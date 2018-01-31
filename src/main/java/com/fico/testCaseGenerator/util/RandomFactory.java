@@ -23,7 +23,7 @@ public class RandomFactory {
 	}
 	
 	public   double random(){
-		return new Random().nextDouble()*100;
+		return new Random().nextDouble();
 	}
 	
 	//左闭右闭

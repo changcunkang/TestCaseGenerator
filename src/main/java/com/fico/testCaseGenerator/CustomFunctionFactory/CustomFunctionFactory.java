@@ -350,6 +350,30 @@ public class CustomFunctionFactory {
 		return null;
 	}
 
+	public Integer getInstalmentDetail_New_CurrentInstalmentPeriod(String selfPath, String monthRecordRelativeCycleNumber, String totalPeriod){
+
+		SimpleField selfSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(selfPath);
+
+		SimpleField totalFieldVal = this.bomGenerator.getPathSimpleFieldMap().get(totalPeriod);
+
+		SimpleField monthRecordRelativeCycleNumberSF = this.bomGenerator.getPathSimpleFieldMap().get(monthRecordRelativeCycleNumber);
+
+		List<TestCaseUnit> crorrespondingTestCaseUnitList = this.findCrorrespondingTestCaseUnit( selfSimpleField, monthRecordRelativeCycleNumber);
+
+		TestCaseUnit crorrespondingTestCaseUnit = crorrespondingTestCaseUnitList.get(0);
+
+		TestCaseUnit crorrespondingTotalPeriodTU = this.findCrorrespondingTestCaseUnit( selfSimpleField, totalPeriod).get(0);
+
+		Integer crorrespondingTotalPeriodValue = (Integer)crorrespondingTotalPeriodTU.getFieldValue(totalFieldVal.getName());
+
+		if(crorrespondingTestCaseUnit.getFieldValue(monthRecordRelativeCycleNumberSF.getName()).equals( new Integer(1) )){
+			return randomFactory.randomIntBetween(1,crorrespondingTotalPeriodValue );
+		}
+		else{
+			return crorrespondingTotalPeriodValue;
+		}
+	}
+
 	public  Object getLastMonthlyRecordInfoNonEndInstalmentInstalmentType(String selfInstalmentSimpleFieldPath, String instalmentNewPath, String instalmentIDpath, String targetSimpleFieldpath){
 
 		SimpleField instalmentSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(selfInstalmentSimpleFieldPath);

@@ -354,7 +354,7 @@ public abstract class TestCaseGenerator {
 	public void generateAllSimpleFeildTestCaseValueForOneTestCaseInstance(TestCaseUnit parentTestCaseUnit, TestData testData){
 		for( SimpleField simpleField : testData.getSimpleFieldList() ){
 
-			if(simpleField.getName().equals( "maxInstalTerms") ){
+			if(simpleField.getName().equals( "firstCashDate") ){
 				String a = "";
 			}
 
@@ -373,7 +373,7 @@ public abstract class TestCaseGenerator {
 
 			if(this.isAllRelativeElementReady(simpleField)){
 
-				if(simpleField.getName().equals("instalmentType")){
+				if(simpleField.getName().equals("firstCashDate")){
 					String a = "";
 				}
 

@@ -16,9 +16,7 @@ public class TestMainThread {
 
         int threadNum = 8;
 
-       BlazeServer blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\adb\\CAMS_RDS\\adb\\CAMS_RDS.server");
-
-        //TestCaseInstanceExecutor.getBlazeServer();
+        BlazeServer blazeServer = (BlazeServer)BlazeServer.createServer("C:\\FICO\\CAMS\\adb\\CAMS_RDS\\adb\\CAMS_RDS.server");
 
         Thread[] threadArr = new Thread[ threadNum ];
 

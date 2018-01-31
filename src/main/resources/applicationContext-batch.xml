@@ -26,13 +26,30 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
 
     <bean:import resource="applicationContext.xml"/>
 
-    <bean:bean id="dataSource"
+    <!--
+    <bean:bean id="dataSource1"
                class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <bean:property name="driverClassName" value="${jdbc.driver}"/>
         <bean:property name="url" value="${jdbc.url}"/>
         <bean:property name="username" value="${jdbc.username}"/>
         <bean:property name="password" value="${jdbc.password}"/>
     </bean:bean>
+    -->
+
+    <bean:bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" >
+        <bean:property  name="driverClassName" value="${jdbc.driver}" />
+        <bean:property name="url" value="${jdbc.url}"/>
+        <bean:property name="username" value="${jdbc.username}"/>
+        <bean:property name="password" value="${jdbc.password}"/>
+
+        <bean:property name="maxOpenPreparedStatements" value="20"/>
+
+        <bean:property name="maxIdle" value="10"/>
+
+        <bean:property name="maxWaitMillis" value="120000"/>
+
+    </bean:bean>
+
 
     <bean:bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <bean:property name = "dataSource" ref="dataSource"/>
@@ -96,9 +113,10 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
         <bean:property name="jpaProperties">
             <bean:props>
                 <bean:prop key="hibernate.current_session_context_class" >thread</bean:prop>
-                <bean:prop key="hibernate.hbm2ddl.auto">update</bean:prop><!-- validate/update/create -->
+                <bean:prop key="hibernate.hbm2ddl.auto">create</bean:prop><!-- validate/update/create -->
                 <bean:prop key="hibernate.show_sql">false</bean:prop>
                 <bean:prop key="hibernate.format_sql">true</bean:prop>
+                <bean:prop key="hibernat.connection.autoReconnect">true</bean:prop>
                 <!-- 建表的命名规则 -->
                 <bean:prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</bean:prop>
             </bean:props>
