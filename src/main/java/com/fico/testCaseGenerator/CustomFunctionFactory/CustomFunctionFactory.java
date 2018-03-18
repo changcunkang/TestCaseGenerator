@@ -1326,7 +1326,7 @@ public class CustomFunctionFactory {
 	//0的比率
 	private  final double percentZero = 45;
 	//大于等于1的比率
-	private  final double percentMoreThan1 = 1;
+	private  final double percentMoreThan1 = 2;
 
 	public  Object getEStmtOdue120(Integer mob){
 
