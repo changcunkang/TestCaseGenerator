@@ -7,7 +7,7 @@ import java.util.*;
 public class Product {
 
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
 
@@ -19,12 +19,13 @@ public class Product {
 		this.id = id;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-    private	 List<Account> account = new ArrayList<Account>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-    private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
-	@Transient
-    private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
+	@Column(name="customer_id")
+	private	 Long customer_id;
+
+	public void setCustomer_id(Long customer_id) {
+		this.customer_id = customer_id;
+	}
+
 	@Column
     private	 String productNumber;
 	@Column
@@ -798,18 +799,6 @@ public class Product {
 	public void setApplyInstalAmt(Double applyInstalAmt) {
 		this.applyInstalAmt = applyInstalAmt;
 	}
-	public List<Account> getAccount() {
-		return account;
-	}
-	public void setAccount(List<Account> account) {
-		this.account = account;
-	}
-	public List<EnabledDecisionArea> getEnabledDecisionArea() {
-		return enabledDecisionArea;
-	}
-	public void setEnabledDecisionArea(List<EnabledDecisionArea> enabledDecisionArea) {
-		this.enabledDecisionArea = enabledDecisionArea;
-	}
 	public String getChannelType() {
 		return channelType;
 	}
@@ -821,12 +810,6 @@ public class Product {
 	}
 	public void setApplyInstalTerms(Integer applyInstalTerms) {
 		this.applyInstalTerms = applyInstalTerms;
-	}
-	public List<UserDefinedField> getUserDefinedField() {
-		return userDefinedField;
-	}
-	public void setUserDefinedField(List<UserDefinedField> userDefinedField) {
-		this.userDefinedField = userDefinedField;
 	}
 	public String getAdjustLimitReason() {
 		return adjustLimitReason;
