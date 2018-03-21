@@ -21,16 +21,10 @@ public class RulesetHistory {
     }
 
 
-
-    @Column(name="decisionFlowStepHistory_id")
-    private	 Long decisionFlowStepHistory_id;
-    public void setDecisionFlowStepHistory_id(Long decisionFlowStepHistory_id) {
-        this.decisionFlowStepHistory_id = decisionFlowStepHistory_id;
-    }
     public void setId(Long id) {
         this.id = id;
     }
-    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
 	private List<RuleHistory> ruleHistory=new ArrayList<RuleHistory>();
 
     @Column
@@ -57,5 +51,14 @@ public class RulesetHistory {
     public void setRulesetCode(String value) {
         this.rulesetCode = value;
     }
+    @Column
+    private Long parent_id;
 
+    public Long getParent_id() {
+        return parent_id;
+    }
+
+    public void setParent_id(Long parent_id) {
+        this.parent_id = parent_id;
+    }
 }

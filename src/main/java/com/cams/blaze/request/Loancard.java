@@ -8,12 +8,6 @@ public class Loancard {
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
-	@Column(name="pbocReport_id")
-	private	 Long pbocReport_id;
-
-	public void setPbocReport_id(Long pbocReport_id) {
-		this.pbocReport_id = pbocReport_id;
-	}
 	public Long getId() {
 		return id;
 	}
@@ -21,9 +15,9 @@ public class Loancard {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
 	private List<SpecialTrade> specialTrade = new ArrayList<SpecialTrade>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
 	private List<OverdueRecord> overdueRecord = new ArrayList<OverdueRecord>();
 	@Column
 	private String state;

@@ -9,11 +9,6 @@ public class RuleDecision {
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
-	@Column(name="decisionResponse_id")
-	private	 Long decisionResponse_id;
-	public void setDecisionResponse_id(Long decisionResponse_id) {
-		this.decisionResponse_id = decisionResponse_id;
-	}
 	public Long getId() {
 		return id;
 	}
@@ -21,7 +16,7 @@ public class RuleDecision {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
 	private List<RuleAssociation> ruleAssociation=new ArrayList<RuleAssociation>();
 	@Column(name = "index_num")
 	private Integer index;
@@ -119,5 +114,14 @@ public class RuleDecision {
 	public void setRulesetType(String rulesetType) {
 		this.rulesetType = rulesetType;
 	}
+	@Column
+	private Long parent_id;
 
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
+	}
 }

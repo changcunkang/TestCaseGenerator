@@ -8,12 +8,6 @@ public class AdjustLimitHistory {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
-	@Column(name="account_id")
-	private	 Long account_id;
-	public void setAccount_id(Long account_id) {
-		this.account_id = account_id;
-	}
-
 	private Long id;
 
 	public Long getId() {
@@ -76,5 +70,15 @@ public class AdjustLimitHistory {
 
 	public void setAdjustLimitDirection(String adjustLimitDirection) {
 		this.adjustLimitDirection = adjustLimitDirection;
+	}
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }

@@ -13,11 +13,7 @@ public class Action {
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
-	@Column(name="strategyDecision_id")
-	private	 Long strategyDecision_id;
-	public void setStrategyDecision_id(Long strategyDecision_id) {
-		this.strategyDecision_id = strategyDecision_id;
-	}
+
 	public Long getId() {
 		return id;
 	}
@@ -45,5 +41,15 @@ public class Action {
 
 	public void setActionValue(String actionValue) {
 		this.actionValue = actionValue;
+	}
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }

@@ -10,11 +10,6 @@ public class MonthlyRecordInfo {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
-	@Column(name="account_id")
-	private	 Long account_id;
-	public void setAccount_id(Long account_id) {
-		this.account_id = account_id;
-	}
 
 	@Column
 	private Long id;
@@ -359,5 +354,15 @@ public class MonthlyRecordInfo {
 
 	public void setInstalmentDetail(List<InstalmentDetail> instalmentDetail) {
 		this.instalmentDetail = instalmentDetail;
+	}
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }

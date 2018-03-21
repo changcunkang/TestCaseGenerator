@@ -10,13 +10,6 @@ public class RuleAssociation {
 	private Long id;
 
 
-
-	@Column(name="ruleDecision_id")
-	private	 Long ruleDecision_id;
-
-	public void setRuleDecision_id(Long ruleDecision_id) {
-		this.ruleDecision_id = ruleDecision_id;
-	}
 	public Long getId() {
 		return id;
 	}
@@ -33,5 +26,15 @@ public class RuleAssociation {
 
 	public void setAssociationID(String associationID) {
 		this.associationID = associationID;
+	}
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }

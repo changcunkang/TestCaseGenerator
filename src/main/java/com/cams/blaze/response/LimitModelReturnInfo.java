@@ -9,12 +9,6 @@ public class LimitModelReturnInfo {
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
-	@Column(name="decisionResponse_id")
-	private	 Long decisionResponse_id;
-	public void setDecisionResponse_id(Long decisionResponse_id) {
-		this.decisionResponse_id = decisionResponse_id;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -60,5 +54,15 @@ public class LimitModelReturnInfo {
 	}
 	public void setLimitAction(List<LimitAction> limitAction) {
 		this.limitAction = limitAction;
+	}
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }

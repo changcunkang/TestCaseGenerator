@@ -21,13 +21,13 @@ public class Account {
 
 	@Transient
     private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
     private	 List<MonthlyRecordInfo> monthlyRecordInfo = new ArrayList<MonthlyRecordInfo>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
     private	 List<CurInstalmentInfo> curInstalmentInfo = new ArrayList<CurInstalmentInfo>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
     private	 List<CardsBlkInfo> cardsBlkInfo = new ArrayList<CardsBlkInfo>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
     private	 List<AdjustLimitHistory> adjustLimitHistory = new ArrayList<AdjustLimitHistory>();
 	@Transient
     private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();

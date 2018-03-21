@@ -14,14 +14,6 @@ public class ScoredCharacteristic{
   @Column
   private Long id;
 
-
-
-  @Column(name="scoreModelReturnInfo_id")
-  private	 Long scoreModelReturnInfo_id;
-  public void setScoreModelReturnInfo_id(Long scoreModelReturnInfo_id) {
-    this.scoreModelReturnInfo_id = scoreModelReturnInfo_id;
-  }
-
   public Long getId() {
     return id;
   }
@@ -112,5 +104,15 @@ public void setMappedFieldName(String mappedFieldName) {
   }
   public void setWeight(Double weight) {
     this.weight = weight;
+  }
+  @Column
+  private Long parent_id;
+
+  public Long getParent_id() {
+    return parent_id;
+  }
+
+  public void setParent_id(Long parent_id) {
+    this.parent_id = parent_id;
   }
 }

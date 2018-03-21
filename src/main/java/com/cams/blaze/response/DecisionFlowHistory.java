@@ -15,13 +15,6 @@ public class DecisionFlowHistory {
 	@Column
 	private Long id;
 
-
-
-	@Column(name="processingHistory_id")
-	private	 Long processingHistory_id;
-	public void setProcessingHistory_id(Long processingHistory_id) {
-		this.processingHistory_id = processingHistory_id;
-	}
 	public Long getId() {
 		return id;
 	}
@@ -30,7 +23,7 @@ public class DecisionFlowHistory {
 		this.id = id;
 	}
 	/**决策流步骤信息*/
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
 	private List<DecisionFlowStepHistory> decisionFlowStepHistory=new ArrayList<DecisionFlowStepHistory>();
     /**决策流名称*/
     @Column
@@ -48,5 +41,14 @@ public class DecisionFlowHistory {
 	public void setFlowName(String flowName) {
 		this.flowName = flowName;
 	}
+	@Column
+	private Long parent_id;
 
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
+	}
 }

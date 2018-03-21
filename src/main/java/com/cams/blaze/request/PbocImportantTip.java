@@ -6,11 +6,6 @@ import java.util.Date;
 public class PbocImportantTip {
 	@Id
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
-	@Column(name="customer_id")
-	private	 Long customer_id;
-	public void setCustomer_id(Long customer_id) {
-		this.customer_id = customer_id;
-	}
 	@Column
 	private Long id;
 

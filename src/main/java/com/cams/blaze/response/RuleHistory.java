@@ -13,11 +13,6 @@ public class RuleHistory {
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
     @Column
     private Long id;
-    @Column(name="rulesetHistory_id")
-    private	 Long rulesetHistory_id;
-    public void setRulesetHistory_id(Long rulesetHistory_id) {
-        this.rulesetHistory_id = rulesetHistory_id;
-    }
 
     public Long getId() {
         return id;
@@ -43,5 +38,14 @@ public class RuleHistory {
     public void setRuleCode(String value) {
         this.ruleCode = value;
     }
+    @Column
+    private Long parent_id;
 
+    public Long getParent_id() {
+        return parent_id;
+    }
+
+    public void setParent_id(Long parent_id) {
+        this.parent_id = parent_id;
+    }
 }

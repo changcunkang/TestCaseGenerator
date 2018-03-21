@@ -9,14 +9,6 @@ public class LimitItem {
 	@Column
 	private Long id;
 
-
-
-	@Column(name="limitModelReturnInfo_id")
-	private	 Long limitModelReturnInfo_id;
-	public void setLimitModelReturnInfo_id(Long limitModelReturnInfo_id) {
-		this.limitModelReturnInfo_id = limitModelReturnInfo_id;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -40,5 +32,15 @@ public class LimitItem {
 	}
 	public void setLimitItemValue(Double limitItemValue) {
 		this.limitItemValue = limitItemValue;
+	}
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }

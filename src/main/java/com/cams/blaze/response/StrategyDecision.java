@@ -13,12 +13,6 @@ public class StrategyDecision {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
-
-	@Column(name="decisionResponse_id")
-	private	 Long decisionResponse_id;
-	public void setDecisionResponse_id(Long decisionResponse_id) {
-		this.decisionResponse_id = decisionResponse_id;
-	}
 	@Column
 	private Long id;
 
@@ -227,5 +221,15 @@ public class StrategyDecision {
 
 	public void setRiskSegment5(String riskSegment5) {
 		this.riskSegment5 = riskSegment5;
+	}
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }

@@ -16,11 +16,6 @@ public class ScoreModelReturnInfo
   @GeneratedValue(strategy= GenerationType.SEQUENCE)
   @Column
   private Long id;
-  @Column(name="decisionResponse_id")
-  private	 Long decisionResponse_id;
-  public void setDecisionResponse_id(Long decisionResponse_id) {
-    this.decisionResponse_id = decisionResponse_id;
-  }
   public Long getId() {
     return id;
   }
@@ -28,7 +23,7 @@ public class ScoreModelReturnInfo
   public void setId(Long id) {
     this.id = id;
   }
-  @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+  @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
 	private List<ScoredCharacteristic> scoredCharacteristic = new ArrayList<ScoredCharacteristic>();
   @Column
 	private String associationID;
@@ -123,4 +118,15 @@ public String getVersionID() {
 public void setVersionID(String versionID) {
 	this.versionID = versionID;
 }
+
+  @Column
+  private Long parent_id;
+
+  public Long getParent_id() {
+    return parent_id;
+  }
+
+  public void setParent_id(Long parent_id) {
+    this.parent_id = parent_id;
+  }
 }

@@ -9,11 +9,6 @@ public class FellbackSum {
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	private Long id;
 
-	@Column(name="pbocReport_id")
-	private	 Long pbocReport_id;
-	public void setPbocReport_id(Long pbocReport_id) {
-		this.pbocReport_id = pbocReport_id;
-	}
 	public Long getId() {
 		return id;
 	}

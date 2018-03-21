@@ -8,11 +8,6 @@ public class Limit {
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
-	@Column(name="strategyDecision_id")
-	private	 Long strategyDecision_id;
-	public void setStrategyDecision_id(Long strategyDecision_id) {
-		this.strategyDecision_id = strategyDecision_id;
-	}
 	public Long getId() {
 		return id;
 	}
@@ -36,5 +31,15 @@ public class Limit {
 	}
 	public void setLimitItemID(String limitItemID) {
 		this.limitItemID = limitItemID;
+	}
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }
