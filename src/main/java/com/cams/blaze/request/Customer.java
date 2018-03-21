@@ -233,7 +233,6 @@ public class Customer {
     private	 Date reservedDate20;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name="parent_id")
     private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
