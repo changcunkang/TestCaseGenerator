@@ -4,8 +4,15 @@ import javax.persistence.*;
 
 @Entity
 public class HighRiskTrans {
+
+
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
+	@Column(name="monthlyRecordInfo_id")
+	private	 Long monthlyRecordInfo_id;
+	public void setMonthlyRecordInfo_id(Long monthlyRecordInfo_id) {
+		this.monthlyRecordInfo_id = monthlyRecordInfo_id;
+	}
 	private Long id;
 
 	public Long getId() {

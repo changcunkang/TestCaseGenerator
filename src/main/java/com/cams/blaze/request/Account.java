@@ -6,8 +6,15 @@ import java.util.*;
 @Entity
 public class Account {
 
+
+
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
+	@Column(name="product_id")
+	private	 Long product_id;
+	public void setProduct_id(Long product_id) {
+		this.product_id = product_id;
+	}
 	@Column
 	private Long id;
 

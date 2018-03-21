@@ -4,8 +4,16 @@ import javax.persistence.*;
 
 @Entity
 public class CardsBlkInfo {
+
+
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
+	@Column(name="account_id")
+	private	 Long account_id;
+	public void setAccount_id(Long account_id) {
+		this.account_id = account_id;
+	}
+
     private Long id;
 
     public Long getId() {
