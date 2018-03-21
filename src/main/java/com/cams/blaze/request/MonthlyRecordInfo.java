@@ -39,6 +39,7 @@ public class MonthlyRecordInfo {
     private	 List<HighRiskTrans> highRiskTrans = new ArrayList<HighRiskTrans>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinTable(name="mr_udf")
 	private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
 
 	@Column

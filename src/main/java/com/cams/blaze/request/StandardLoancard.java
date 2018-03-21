@@ -18,9 +18,11 @@ public class StandardLoancard {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinTable(name="sdcard_st")
 	private List<SpecialTrade> specialTrade = new ArrayList<SpecialTrade>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinTable(name="sdcard_odr")
 	private List<OverdueRecord> overdueRecord = new ArrayList<OverdueRecord>();
 
 	@Column
