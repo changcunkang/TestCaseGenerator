@@ -231,9 +231,25 @@ public class Customer {
     private	 Date reservedDate19;
 	@Column
     private	 Date reservedDate20;
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private	 List<PbocImportantTip> pbocImportantTip = new ArrayList<PbocImportantTip>();
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private	 List<PbocCreditScore> pbocCreditScore = new ArrayList<PbocCreditScore>();
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private	 List<PCustRef> pCustRef = new ArrayList<PCustRef>();
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private	 List<TXScore> TXScore = new ArrayList<TXScore>();
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private	 List<Pnote> pnote = new ArrayList<Pnote>();
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private	 List<Product> product = new ArrayList<Product>();
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private	 List<PbocReport> pbocReport = new ArrayList<PbocReport>();
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="customer_id")
-	private	 List<Product> product = new ArrayList<Product>();
 
 	public Long getId() {
 		return id;
@@ -731,6 +747,12 @@ public class Customer {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}	
+	public List<TXScore> getTXScore() {
+		return TXScore;
+	}
+	public void setTXScore(List<TXScore> tXScore) {
+		TXScore = tXScore;
+	}
 	public Double getAnnualIncome() {
 		return annualIncome;
 	}
@@ -846,11 +868,47 @@ public class Customer {
 	public void setStrategyRandomDigit10(Integer strategyRandomDigit10) {
 		this.strategyRandomDigit10 = strategyRandomDigit10;
 	}
+	public List<EnabledDecisionArea> getEnabledDecisionArea() {
+		return enabledDecisionArea;
+	}
+	public void setEnabledDecisionArea(List<EnabledDecisionArea> enabledDecisionArea) {
+		this.enabledDecisionArea = enabledDecisionArea;
+	}
 	public Integer getCycleDay() {
 		return cycleDay;
 	}
 	public void setCycleDay(Integer cycleDay) {
 		this.cycleDay = cycleDay;
+	}
+	public List<PbocImportantTip> getPbocImportantTip() {
+		return pbocImportantTip;
+	}
+	public void setPbocImportantTip(List<PbocImportantTip> pbocImportantTip) {
+		this.pbocImportantTip = pbocImportantTip;
+	}
+	public List<PbocCreditScore> getPbocCreditScore() {
+		return pbocCreditScore;
+	}
+	public void setPbocCreditScore(List<PbocCreditScore> pbocCreditScore) {
+		this.pbocCreditScore = pbocCreditScore;
+	}
+	public List<Pnote> getPnote() {
+		return pnote;
+	}
+	public void setPnote(List<Pnote> pnote) {
+		this.pnote = pnote;
+	}
+	public List<PbocReport> getPbocReport() {
+		return pbocReport;
+	}
+	public void setPbocReport(List<PbocReport> pbocReport) {
+		this.pbocReport = pbocReport;
+	}
+	public List<PCustRef> getpCustRef() {
+		return pCustRef;
+	}
+	public void setpCustRef(List<PCustRef> pCustRef) {
+		this.pCustRef = pCustRef;
 	}
 	public Double getLstPbocAppScore() {
 		return lstPbocAppScore;
@@ -869,6 +927,12 @@ public class Customer {
 	}
 	public void setFraudCusterFlag(Integer fraudCusterFlag) {
 		this.fraudCusterFlag = fraudCusterFlag;
+	}
+	public List<UserDefinedField> getUserDefinedField() {
+		return userDefinedField;
+	}
+	public void setUserDefinedField(List<UserDefinedField> userDefinedField) {
+		this.userDefinedField = userDefinedField;
 	}
 
 
