@@ -26,6 +26,17 @@ public class Product {
 		this.customer_id = customer_id;
 	}
 
+	@Transient
+	private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
+
+	public List<EnabledDecisionArea> getEnabledDecisionArea() {
+		return enabledDecisionArea;
+	}
+
+	public void setEnabledDecisionArea(List<EnabledDecisionArea> enabledDecisionArea) {
+		this.enabledDecisionArea = enabledDecisionArea;
+	}
+
 	@Column
     private	 String productNumber;
 	@Column

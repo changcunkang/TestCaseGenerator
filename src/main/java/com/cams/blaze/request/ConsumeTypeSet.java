@@ -9,6 +9,7 @@ public class ConsumeTypeSet {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
+
 	@Column(name="monthlyRecordInfo_id")
 	private	 Long monthlyRecordInfo_id;
 	public void setMonthlyRecordInfo_id(Long monthlyRecordInfo_id) {
@@ -54,4 +55,15 @@ public class ConsumeTypeSet {
 		this.consumeAmt = consumeAmt;
 	}
 
+
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
+	}
 }

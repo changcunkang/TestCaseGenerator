@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class EnabledDecisionArea {
 
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	private Long id;
 
 	public Long getId() {

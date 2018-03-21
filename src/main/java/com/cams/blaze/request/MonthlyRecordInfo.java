@@ -15,6 +15,7 @@ public class MonthlyRecordInfo {
 	public void setAccount_id(Long account_id) {
 		this.account_id = account_id;
 	}
+
 	@Column
 	private Long id;
 
@@ -26,16 +27,21 @@ public class MonthlyRecordInfo {
 		this.id = id;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
     private	 List<ConsumeTypeSet> consumeTypeSet = new ArrayList<ConsumeTypeSet>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
     private	 List<TransRecords> transRecords = new ArrayList<TransRecords>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
     private	 List<InstalmentInfo> instalmentInfo = new ArrayList<InstalmentInfo>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
     private	 List<HighRiskTrans> highRiskTrans = new ArrayList<HighRiskTrans>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-    private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
+
+	//@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
+    @Transient
+	private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
 
 	@Column
     private	 Integer relativeCycleNumber;

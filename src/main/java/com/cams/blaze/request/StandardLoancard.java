@@ -22,10 +22,13 @@ public class StandardLoancard {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
 	private List<SpecialTrade> specialTrade = new ArrayList<SpecialTrade>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
 	private List<OverdueRecord> overdueRecord = new ArrayList<OverdueRecord>();
+
 	@Column
 	private String state;
 	@Column
@@ -207,5 +210,14 @@ public class StandardLoancard {
 		this.specialTrade = specialTrade;
 	}
 
+	@Column
+	private Long parent_id;
 
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
+	}
 }

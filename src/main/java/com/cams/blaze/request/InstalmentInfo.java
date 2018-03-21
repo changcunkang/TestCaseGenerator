@@ -14,6 +14,7 @@ public class InstalmentInfo {
 	public void setMonthlyRecordInfo_id(Long monthlyRecordInfo_id) {
 		this.monthlyRecordInfo_id = monthlyRecordInfo_id;
 	}
+
 	private Long id;
 
 	public Long getId() {
@@ -111,7 +112,16 @@ public class InstalmentInfo {
 	public void setMaxInstalTerms(Integer maxInstalTerms) {
 		this.maxInstalTerms = maxInstalTerms;
 	}
-	
-	
 
+
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
+	}
 }

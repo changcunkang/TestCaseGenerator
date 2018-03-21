@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class OverdueRecord {
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
 
@@ -41,5 +41,14 @@ public class OverdueRecord {
 		this.amount = amount;
 	}
 
+	@Column
+	private Long parent_id;
 
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
+	}
 }

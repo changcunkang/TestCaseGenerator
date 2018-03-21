@@ -26,7 +26,7 @@ public class CreditSummaryCue {
 	private String firstLoancardOpenMonth;
 	@Column
 	private Integer standardLoancardCount;
-	@Column
+	@Column( name = "FIRST_NEARCREDIT_MONTH" )
 	private String firstStandardLoancardOpenMonth;
 	public Integer getHouseLoanCount() {
 		return houseLoanCount;
@@ -70,5 +70,16 @@ public class CreditSummaryCue {
 	public void setFirstStandardLoancardOpenMonth(
 			String firstStandardLoancardOpenMonth) {
 		this.firstStandardLoancardOpenMonth = firstStandardLoancardOpenMonth;
+	}
+
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }
