@@ -4,7 +4,7 @@ import javax.persistence.*;
 @Entity
 public class CreditSummaryCue {
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	private Long id;
 
 	public Long getId() {
