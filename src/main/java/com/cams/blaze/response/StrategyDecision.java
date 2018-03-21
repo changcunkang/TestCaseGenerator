@@ -23,14 +23,14 @@ public class StrategyDecision {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumns(
-			@JoinColumn(name = "limit_id", referencedColumnName = "id")
-	)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
+//	@JoinColumns(
+//			@JoinColumn(name = "limit_id", referencedColumnName = "id")
+//	)
 	private List<Limit> limit = new ArrayList<Limit>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
 	private List<Action> action = new ArrayList<Action>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
 	private List<ReasonCodeSet> reasonCodeSet= new ArrayList<ReasonCodeSet>();
 	
 	@Column
