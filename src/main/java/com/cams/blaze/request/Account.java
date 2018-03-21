@@ -6,8 +6,6 @@ import java.util.*;
 @Entity
 public class Account {
 
-
-
 	@Id
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column(name="product_id")

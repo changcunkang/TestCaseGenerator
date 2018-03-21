@@ -26,6 +26,9 @@ public class Product {
 		this.customer_id = customer_id;
 	}
 
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	private	 List<Account> account = new ArrayList<Account>();
+
 	@Transient
 	private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
 
@@ -237,8 +240,14 @@ public class Product {
     private	 Date reservedDate19;
 	@Column
     private	 Date reservedDate20;
-	
 
+	public List<Account> getAccount() {
+		return account;
+	}
+
+	public void setAccount(List<Account> account) {
+		this.account = account;
+	}
 
 	public Double getPreALAmt1() {
 		return preALAmt1;
