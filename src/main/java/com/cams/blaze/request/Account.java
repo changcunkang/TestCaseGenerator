@@ -8,12 +8,6 @@ public class Account {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
-	@Column(name="product_id")
-	private	 Long product_id;
-	public void setProduct_id(Long product_id) {
-		this.product_id = product_id;
-	}
-
 	@Column
 	private Long id;
 
@@ -951,5 +945,16 @@ public class Account {
 	}
 	public void setUserDefinedField(List<UserDefinedField> userDefinedField) {
 		this.userDefinedField = userDefinedField;
+	}
+
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }
