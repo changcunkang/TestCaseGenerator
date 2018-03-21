@@ -15,6 +15,7 @@ public class Account {
 	public void setProduct_id(Long product_id) {
 		this.product_id = product_id;
 	}
+
 	@Column
 	private Long id;
 
@@ -68,7 +69,7 @@ public class Account {
     private	 String eStmtOdue120;
 	@Column
     private	 String stmtOdue120;
-	@Column
+	@Column( name = "TLMT_END" )
     private	 Date lastTempAdjustLimitExpiredDate;
 	@Column
     private	 Date firstCashDate;
