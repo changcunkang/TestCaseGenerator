@@ -10,9 +10,17 @@ import javax.persistence.*;
 @Entity
 public class ScoredCharacteristic{
   @Id
-  @GeneratedValue(strategy= GenerationType.IDENTITY)
+  @GeneratedValue(strategy= GenerationType.SEQUENCE)
   @Column
   private Long id;
+
+
+
+  @Column(name="scoreModelReturnInfo_id")
+  private	 Long scoreModelReturnInfo_id;
+  public void setScoreModelReturnInfo_id(Long scoreModelReturnInfo_id) {
+    this.scoreModelReturnInfo_id = scoreModelReturnInfo_id;
+  }
 
   public Long getId() {
     return id;

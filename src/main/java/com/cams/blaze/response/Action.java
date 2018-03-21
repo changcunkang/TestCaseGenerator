@@ -10,10 +10,14 @@ import javax.persistence.*;
 @Entity
 public class Action {
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
-
+	@Column(name="strategyDecision_id")
+	private	 Long strategyDecision_id;
+	public void setStrategyDecision_id(Long strategyDecision_id) {
+		this.strategyDecision_id = strategyDecision_id;
+	}
 	public Long getId() {
 		return id;
 	}

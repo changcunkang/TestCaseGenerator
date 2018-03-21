@@ -9,8 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 @Entity
 public class StrategyDecision {
+
+
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
+
+	@Column(name="decisionResponse_id")
+	private	 Long decisionResponse_id;
+	public void setDecisionResponse_id(Long decisionResponse_id) {
+		this.decisionResponse_id = decisionResponse_id;
+	}
 	@Column
 	private Long id;
 

@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 public class RulesetHistory {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     @Column
     private Long id;
 
@@ -20,6 +20,13 @@ public class RulesetHistory {
         return id;
     }
 
+
+
+    @Column(name="decisionFlowStepHistory_id")
+    private	 Long decisionFlowStepHistory_id;
+    public void setDecisionFlowStepHistory_id(Long decisionFlowStepHistory_id) {
+        this.decisionFlowStepHistory_id = decisionFlowStepHistory_id;
+    }
     public void setId(Long id) {
         this.id = id;
     }

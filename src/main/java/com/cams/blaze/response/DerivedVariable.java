@@ -11,10 +11,14 @@ import java.util.Date;
 @Entity
 public class DerivedVariable {
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
-
+	@Column(name="decisionResponse_id")
+	private	 Long decisionResponse_id;
+	public void setDecisionResponse_id(Long decisionResponse_id) {
+		this.decisionResponse_id = decisionResponse_id;
+	}
 	public Long getId() {
 		return id;
 	}

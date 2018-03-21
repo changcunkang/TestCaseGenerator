@@ -5,10 +5,18 @@ import javax.persistence.*;
 @Entity
 public class RuleAssociation {
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
 
+
+
+	@Column(name="ruleDecision_id")
+	private	 Long ruleDecision_id;
+
+	public void setRuleDecision_id(Long ruleDecision_id) {
+		this.ruleDecision_id = ruleDecision_id;
+	}
 	public Long getId() {
 		return id;
 	}

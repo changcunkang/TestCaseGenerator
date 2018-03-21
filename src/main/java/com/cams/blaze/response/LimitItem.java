@@ -5,9 +5,17 @@ import javax.persistence.*;
 @Entity
 public class LimitItem {
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
+
+
+
+	@Column(name="limitModelReturnInfo_id")
+	private	 Long limitModelReturnInfo_id;
+	public void setLimitModelReturnInfo_id(Long limitModelReturnInfo_id) {
+		this.limitModelReturnInfo_id = limitModelReturnInfo_id;
+	}
 
 	public Long getId() {
 		return id;

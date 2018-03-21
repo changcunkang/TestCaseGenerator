@@ -11,10 +11,17 @@ import java.util.List;
 @Entity
 public class DecisionFlowHistory {
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	@Column
 	private Long id;
 
+
+
+	@Column(name="processingHistory_id")
+	private	 Long processingHistory_id;
+	public void setProcessingHistory_id(Long processingHistory_id) {
+		this.processingHistory_id = processingHistory_id;
+	}
 	public Long getId() {
 		return id;
 	}

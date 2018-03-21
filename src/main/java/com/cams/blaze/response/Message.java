@@ -11,10 +11,14 @@ import javax.persistence.*;
 public class Message
 {
   @Id
-  @GeneratedValue(strategy= GenerationType.IDENTITY)
+  @GeneratedValue(strategy= GenerationType.SEQUENCE)
   @Column
   private Long id;
-
+  @Column(name="messageList_id")
+  private	 Long messageList_id;
+  public void setMessageList_id(Long messageList_id) {
+    this.messageList_id = messageList_id;
+  }
   public Long getId() {
     return id;
   }

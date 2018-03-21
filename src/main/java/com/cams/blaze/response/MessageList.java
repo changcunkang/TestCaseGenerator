@@ -12,7 +12,7 @@ import java.util.List;
 public class MessageList
 {
   @Id
-  @GeneratedValue(strategy= GenerationType.IDENTITY)
+  @GeneratedValue(strategy= GenerationType.SEQUENCE)
   @Column
   private Long id;
 

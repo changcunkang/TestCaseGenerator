@@ -10,9 +10,14 @@ import javax.persistence.*;
 @Entity
 public class RuleHistory {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     @Column
     private Long id;
+    @Column(name="rulesetHistory_id")
+    private	 Long rulesetHistory_id;
+    public void setRulesetHistory_id(Long rulesetHistory_id) {
+        this.rulesetHistory_id = rulesetHistory_id;
+    }
 
     public Long getId() {
         return id;
