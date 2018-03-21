@@ -21,35 +21,23 @@ public class Account {
 
 	@Transient
     private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<MonthlyRecordInfo> monthlyRecordInfo = new ArrayList<MonthlyRecordInfo>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<CurInstalmentInfo> curInstalmentInfo = new ArrayList<CurInstalmentInfo>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<CardsBlkInfo> cardsBlkInfo = new ArrayList<CardsBlkInfo>();
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<AdjustLimitHistory> adjustLimitHistory = new ArrayList<AdjustLimitHistory>();
-	@Transient
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
 	@Transient
 	private List<AccountTemporary> accountTemporary = new ArrayList<AccountTemporary>();
 
-
-	public List<AccountTemporary> getAccountTemporary() {
-		return accountTemporary;
-	}
-
-	public void setAccountTemporary(List<AccountTemporary> accountTemporary) {
-		this.accountTemporary = accountTemporary;
-	}
-
-	public Date getLastTransDate() {
-		return lastTransDate;
-	}
-
-	public void setLastTransDate(Date lastTransDate) {
-		this.lastTransDate = lastTransDate;
-	}
 
 	@Column
     private	 String accountNumber;
@@ -269,6 +257,23 @@ public class Account {
     private	 Date reservedDate19;
 	@Column
     private	 Date reservedDate20;
+
+
+	public List<AccountTemporary> getAccountTemporary() {
+		return accountTemporary;
+	}
+
+	public void setAccountTemporary(List<AccountTemporary> accountTemporary) {
+		this.accountTemporary = accountTemporary;
+	}
+
+	public Date getLastTransDate() {
+		return lastTransDate;
+	}
+
+	public void setLastTransDate(Date lastTransDate) {
+		this.lastTransDate = lastTransDate;
+	}
 
 
 	public Integer getIsCurbillFqAcct() {

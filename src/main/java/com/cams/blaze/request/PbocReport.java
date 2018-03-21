@@ -17,52 +17,68 @@ public class PbocReport {
 		this.id = id;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<CreditSummaryCue> creditSummaryCue = new ArrayList<CreditSummaryCue>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<FellbackSum> fellbackSum = new ArrayList<FellbackSum>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<OverdueSum> overdueSum = new ArrayList<OverdueSum>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<ShareAndDebtSum> shareAndDebtSum = new ArrayList<ShareAndDebtSum>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<GuaranteeSum> guaranteeSum = new ArrayList<GuaranteeSum>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<Loancard> loancard = new ArrayList<Loancard>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<StandardLoancard> standardLoancard = new ArrayList<StandardLoancard>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<Loan> loan = new ArrayList<Loan>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<AccFund> accFund = new ArrayList<AccFund>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<AssetDisposition> assetDisposition = new ArrayList<AssetDisposition>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<AssurerRepay> assurerRepay = new ArrayList<AssurerRepay>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<ForceExecution> forceExecution = new ArrayList<ForceExecution>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<AdminPunishment> adminPunishment = new ArrayList<AdminPunishment>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<RecordDetail> recordDetail = new ArrayList<RecordDetail>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<LoanGuaranteeDetail> loanGuaranteeDetail = new ArrayList<LoanGuaranteeDetail>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private List<CreditGuaranteeDetail> creditGuaranteeDetail = new ArrayList<CreditGuaranteeDetail>();
 
 	@Column

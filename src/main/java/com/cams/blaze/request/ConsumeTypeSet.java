@@ -5,11 +5,8 @@ import javax.persistence.*;
 @Entity
 public class ConsumeTypeSet {
 
-
-
 	@Id
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
-
 	@Column
 	private Long id;
 
@@ -27,6 +24,19 @@ public class ConsumeTypeSet {
 	private Double consumeAmt;
 	@Column
 	private Integer consumeTimes;
+
+
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
+	}
+
 
 	public Integer getConsumeTimes() {
 		return consumeTimes;
@@ -49,15 +59,4 @@ public class ConsumeTypeSet {
 		this.consumeAmt = consumeAmt;
 	}
 
-
-	@Column
-	private Long parent_id;
-
-	public Long getParent_id() {
-		return parent_id;
-	}
-
-	public void setParent_id(Long parent_id) {
-		this.parent_id = parent_id;
-	}
 }

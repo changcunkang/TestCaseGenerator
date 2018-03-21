@@ -232,31 +232,40 @@ public class Customer {
 	@Column
     private	 Date reservedDate20;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<PbocImportantTip> pbocImportantTip = new ArrayList<PbocImportantTip>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<PbocCreditScore> pbocCreditScore = new ArrayList<PbocCreditScore>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER
+	)@JoinColumn(name="parent_id")
     private	 List<PCustRef> pCustRef = new ArrayList<PCustRef>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<TXScore> TXScore = new ArrayList<TXScore>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<Pnote> pnote = new ArrayList<Pnote>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<Product> product = new ArrayList<Product>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<PbocReport> pbocReport = new ArrayList<PbocReport>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<UserDefinedField> userDefinedField = new ArrayList<UserDefinedField>();
 
 

@@ -19,10 +19,11 @@ public class Product {
 		this.id = id;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	private	 List<Account> account = new ArrayList<Account>();
 
-	@Transient
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private	 List<EnabledDecisionArea> enabledDecisionArea = new ArrayList<EnabledDecisionArea>();
 
 	public List<EnabledDecisionArea> getEnabledDecisionArea() {
@@ -234,7 +235,8 @@ public class Product {
 	@Column
     private	 Date reservedDate20;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
 	public List<Account> getAccount() {
 		return account;
 	}
