@@ -24,7 +24,7 @@ public class RulesetHistory {
     public void setId(Long id) {
         this.id = id;
     }
-    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
 	private List<RuleHistory> ruleHistory=new ArrayList<RuleHistory>();
 
     @Column

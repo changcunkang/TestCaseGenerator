@@ -24,7 +24,7 @@ public class DecisionFlowStepHistory {
 		this.id = id;
 	}
 	/**规则集历史ʷ*/
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
 	private List<RulesetHistory> rulesetHistory=new ArrayList<RulesetHistory>();
     /**步骤序号*/
     @Column

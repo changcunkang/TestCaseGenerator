@@ -23,7 +23,7 @@ public class ScoreModelReturnInfo
   public void setId(Long id) {
     this.id = id;
   }
-  @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
+  @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
 	private List<ScoredCharacteristic> scoredCharacteristic = new ArrayList<ScoredCharacteristic>();
   @Column
 	private String associationID;

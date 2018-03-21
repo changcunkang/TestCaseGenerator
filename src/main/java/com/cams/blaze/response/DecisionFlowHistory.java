@@ -23,7 +23,7 @@ public class DecisionFlowHistory {
 		this.id = id;
 	}
 	/**决策流步骤信息*/
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
 	private List<DecisionFlowStepHistory> decisionFlowStepHistory=new ArrayList<DecisionFlowStepHistory>();
     /**决策流名称*/
     @Column

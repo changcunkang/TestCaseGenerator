@@ -23,7 +23,7 @@ public class MessageList
   public void setId(Long id) {
     this.id = id;
   }
-  @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
+  @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
 	private List<Message> message = new ArrayList<Message>();
   @Column
 	private Integer statusCode;
