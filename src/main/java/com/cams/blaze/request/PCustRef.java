@@ -38,5 +38,14 @@ public class PCustRef {
 		this.custRef = custRef;
 	}
 
+	@Column
+	private Long parent_id;
 
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
+	}
 }

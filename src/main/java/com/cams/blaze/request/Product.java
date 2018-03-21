@@ -19,13 +19,6 @@ public class Product {
 		this.id = id;
 	}
 
-	@Column(name="customer_id")
-	private	 Long customer_id;
-
-	public void setCustomer_id(Long customer_id) {
-		this.customer_id = customer_id;
-	}
-
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private	 List<Account> account = new ArrayList<Account>();
 
@@ -836,5 +829,16 @@ public class Product {
 	}
 	public void setAdjustLimitReason(String adjustLimitReason) {
 		this.adjustLimitReason = adjustLimitReason;
+	}
+
+	@Column
+	private Long parent_id;
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }
