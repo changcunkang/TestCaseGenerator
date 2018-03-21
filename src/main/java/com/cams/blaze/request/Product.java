@@ -19,7 +19,7 @@ public class Product {
 		this.id = id;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
 	private	 List<Account> account = new ArrayList<Account>();
 
 	@Transient
