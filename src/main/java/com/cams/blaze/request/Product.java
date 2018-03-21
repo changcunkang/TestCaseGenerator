@@ -19,7 +19,7 @@ public class Product {
 		this.id = id;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "parent_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
 	private	 List<Account> account = new ArrayList<Account>();
 
 	@Transient
@@ -234,6 +234,7 @@ public class Product {
 	@Column
     private	 Date reservedDate20;
 
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)@JoinColumn(name="parent_id")
 	public List<Account> getAccount() {
 		return account;
 	}
