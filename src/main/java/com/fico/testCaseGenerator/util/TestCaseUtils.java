@@ -28,12 +28,26 @@ public class TestCaseUtils {
 
         Pattern p = Pattern.compile(TestCaseExpression.FIND_ALL_PATH_EXP);
 
-        Matcher m = p.matcher( exp );
+        String realExp = exp;
+
+        if(realExp.contains("[")){
+            realExp = convertExpression( realExp );
+        }
+
+        Matcher m = p.matcher( realExp );
 
         while (m.find() ){
             rtnPathList.add( m.group() );
         }
         return rtnPathList;
+    }
+
+    private String convertExpression (String exp){
+        String rtn = exp.replace('[', '/');
+
+        rtn = rtn.replace('>', '/').replace('<', '/').replace('!', '/').replace('=', '/');
+
+        return rtn;
     }
 
 }
