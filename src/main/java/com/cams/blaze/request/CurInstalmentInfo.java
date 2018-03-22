@@ -38,6 +38,16 @@ public class CurInstalmentInfo {
 	private Double totAppAmt;
 	@Column
 	private Integer maxInstalTerms;
+	@Column
+	private Double unAmortizationFee;
+	public Double getUnAmortizationFee() {
+		return unAmortizationFee;
+	}
+
+	public void setUnAmortizationFee(Double unAmortizationFee) {
+		this.unAmortizationFee = unAmortizationFee;
+	}
+
 	public String getInstalsType() {
 		return instalsType;
 	}

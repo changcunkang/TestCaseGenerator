@@ -17,6 +17,15 @@ public class InstalmentDetail {
         this.instalmentID = instalmentID;
     }
 
+    public Double getUnAmortizationFee() {
+        return unAmortizationFee;
+    }
+
+    public void setUnAmortizationFee(Double unAmortizationFee) {
+        this.unAmortizationFee = unAmortizationFee;
+    }
+
+    private Double unAmortizationFee;
 
     //类型
     private String instalmentType;

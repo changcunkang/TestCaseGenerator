@@ -24,6 +24,10 @@ public class MonthlyRecordInfo {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="parent_id")
+	private	 List<InstalmentKeys> instalmentKeys = new ArrayList<InstalmentKeys>();
+
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="parent_id")
     private	 List<ConsumeTypeSet> consumeTypeSet = new ArrayList<ConsumeTypeSet>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
@@ -103,6 +107,16 @@ public class MonthlyRecordInfo {
 	private Integer cashAmtOccupiedDays;
 	@Column
 	private Integer limitUsedDays;
+
+	@Column
+	private Double transferCashAmt;
+	public Double getTransferCashAmt() {
+		return transferCashAmt;
+	}
+
+	public void setTransferCashAmt(Double transferCashAmt) {
+		this.transferCashAmt = transferCashAmt;
+	}
 
 	@Transient
 	private List<InstalmentDetail_New> instalmentDetail_New = new ArrayList<InstalmentDetail_New>();
@@ -294,6 +308,13 @@ public class MonthlyRecordInfo {
 	}
 	public void setConsumeTypeSet(List<ConsumeTypeSet> consumeTypeSet) {
 		this.consumeTypeSet = consumeTypeSet;
+	}
+	public List<InstalmentKeys> getInstalmentKeys() {
+		return instalmentKeys;
+	}
+
+	public void setInstalmentKeys(List<InstalmentKeys> instalmentKeys) {
+		this.instalmentKeys = instalmentKeys;
 	}
 	public List<HighRiskTrans> getHighRiskTrans() {
 		return highRiskTrans;

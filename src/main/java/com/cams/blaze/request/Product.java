@@ -235,8 +235,19 @@ public class Product {
 	@Column
     private	 Date reservedDate20;
 
+
+	@Column
+	private Double interestRate;
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="parent_id")
+
+	public Double getInterestRate() {
+		return interestRate;
+	}
+
+	public void setInterestRate(Double interestRate) {
+		this.interestRate = interestRate;
+	}
 	public List<Account> getAccount() {
 		return account;
 	}
