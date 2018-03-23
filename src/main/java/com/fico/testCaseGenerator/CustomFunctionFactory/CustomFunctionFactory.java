@@ -645,7 +645,7 @@ public class CustomFunctionFactory {
 
 		List queryedList = classUtil.search(this.bomGenerator.getRootTestData().getTestCaseUnitList().get(0).getTestCaseInstance(), query);
 
-		Double sumD = new Double(0);
+		Double sumD = new Double(999999999);
 
 		for(Object queryObj : queryedList){
 
