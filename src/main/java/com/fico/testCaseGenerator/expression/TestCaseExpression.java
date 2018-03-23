@@ -122,6 +122,7 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getLastTransDate");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getOverdraftAmtTot");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("instalmentIDSum");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("instalmentIDSumNewID");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getInstalmentDetail_New_CurrentInstalmentPeriod");
 
     }
@@ -784,6 +785,9 @@ public class TestCaseExpression {
         pos = Math.min( pos, targetTestCaseUnit.size()-1 );
         // end of 这块逻辑有点不好理解，以后可能有问题
 
+        if(pos == -1){
+            String a = "";
+        }
 
         TestCaseUnit testCaseUnit = targetTestCaseUnit.get( pos );
 

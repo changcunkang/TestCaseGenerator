@@ -1041,6 +1041,36 @@ public class CustomFunctionFactory {
 
 	}
 
+	public  String instalmentIDSumNewID(String srcPath, String idPath, String typePath, String sumType){
+
+		TestData srcTestData = this.bomGenerator.getPathSimpleFieldMap().get(srcPath).getTestData();
+
+		SimpleField instalmentDetailIDSF = this.bomGenerator.getPathSimpleFieldMap().get(idPath);
+
+		SimpleField instalmentDetailTypePath = this.bomGenerator.getPathSimpleFieldMap().get(typePath);
+
+		TestData instalmentDetail = instalmentDetailIDSF.getTestData();
+
+		List<TestCaseUnit> testCaseUnitList = this.findCrorrespondingTestCaseUnit(srcTestData, idPath);
+
+		int position = srcTestData.getGeneratingTestCaseUnit().getPositionInParent();
+
+		StringBuffer sb = new StringBuffer();
+
+		if(testCaseUnitList!= null && testCaseUnitList.size()>0){
+			for(int i=0, j=0; i< testCaseUnitList.size(); i++){
+				TestCaseUnit tmpTestCaseUnit = testCaseUnitList.get(i);
+				if(tmpTestCaseUnit.getFieldValue(instalmentDetailTypePath.getName())!=null && sumType.contains( tmpTestCaseUnit.getFieldValue(instalmentDetailTypePath.getName()).toString() ) ){
+					if(position == j){
+						return	tmpTestCaseUnit.getFieldValue(instalmentDetailIDSF.getName()).toString();
+					}else{
+						j ++;
+					}
+				}
+			}
+		}
+		return null;
+	}
 
 	public  String instalmentIDSum(String srcPath, String idPath, String typePath, String sumType){
 
