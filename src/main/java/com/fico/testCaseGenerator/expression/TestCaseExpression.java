@@ -123,6 +123,7 @@ public class TestCaseExpression {
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getOverdraftAmtTot");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("instalmentIDSum");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("instalmentIDSumNewID");
+        ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("instalmentIDSumNewType");
         ABSTRACT_TESTDATA_OPERATION_FUNCTION_NAME_LIST.add("getInstalmentDetail_New_CurrentInstalmentPeriod");
 
     }
