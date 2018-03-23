@@ -1057,8 +1057,11 @@ public class CustomFunctionFactory {
 		TestData instalmentDetail = instalmentDetailIDSF.getTestData();
 
 		List<TestCaseUnit> testCaseUnitList = this.findCrorrespondingTestCaseUnit(srcTestData, idPath);
+		String curID="";
+		if(srcTestData.getGeneratingTestCaseUnit().getFieldValue( selfIDPathSimpleField.getName() )!=null){
+			curID = srcTestData.getGeneratingTestCaseUnit().getFieldValue( selfIDPathSimpleField.getName() ).toString();
+		}
 
-		String curID = srcTestData.getGeneratingTestCaseUnit().getFieldValue( selfIDPathSimpleField.getName() ).toString();
 
 		StringBuffer sb = new StringBuffer();
 
