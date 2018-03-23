@@ -1041,6 +1041,41 @@ public class CustomFunctionFactory {
 
 	}
 
+
+	public  String instalmentIDSumNewType(String srcPath, String idPath, String typePath, String selfIDPath){
+
+		TestData srcTestData = this.bomGenerator.getPathSimpleFieldMap().get(srcPath).getTestData();
+
+		SimpleField instalmentDetailIDSF = this.bomGenerator.getPathSimpleFieldMap().get(idPath);
+
+		SimpleField instalmentDetailTypePath = this.bomGenerator.getPathSimpleFieldMap().get(typePath);
+
+		SimpleField selfIDPathSimpleField = this.bomGenerator.getPathSimpleFieldMap().get(selfIDPath);
+
+
+
+		TestData instalmentDetail = instalmentDetailIDSF.getTestData();
+
+		List<TestCaseUnit> testCaseUnitList = this.findCrorrespondingTestCaseUnit(srcTestData, idPath);
+
+		String curID = srcTestData.getGeneratingTestCaseUnit().getFieldValue( selfIDPathSimpleField.getName() ).toString();
+
+		StringBuffer sb = new StringBuffer();
+
+		if(testCaseUnitList!= null && testCaseUnitList.size()>0){
+			for(int i=0, j=0; i< testCaseUnitList.size(); i++){
+				TestCaseUnit tmpTestCaseUnit = testCaseUnitList.get(i);
+				if(tmpTestCaseUnit.getFieldValue(instalmentDetailIDSF.getName())!=null && curID.equals( tmpTestCaseUnit.getFieldValue(instalmentDetailIDSF.getName()).toString() ) ){
+					return tmpTestCaseUnit.getFieldValue(instalmentDetailTypePath.getName()).toString();
+				}
+			}
+		}
+		return null;
+	}
+
+
+
+
 	public  String instalmentIDSumNewID(String srcPath, String idPath, String typePath, String sumType){
 
 		TestData srcTestData = this.bomGenerator.getPathSimpleFieldMap().get(srcPath).getTestData();
